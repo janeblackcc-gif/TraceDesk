@@ -127,6 +127,8 @@ class Service:
         evidence = retrieved[:4]
         if profile == 'ollama':
             result = self.provider.generate(effective, evidence)
+            if 'generation_assessment' in result:
+                response['generation_assessment'] = result['generation_assessment']
             claims = self.validate_claims(result, evidence)
             if claims is None:
                 response.update(actual_profile='evidence', warning='模型引用校验失败，已明确降级为原文摘录；下方不是模型生成结论。')

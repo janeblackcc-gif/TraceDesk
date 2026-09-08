@@ -1,0 +1,7 @@
+{
+  "frozen_at_utc": "2026-09-08T14:03:32.2552834Z",
+  "cases_sha256": "692ba16da94572657bad405a83e45f975d7b87e543f3df3f5114a0fe4755a0c3",
+  "protocol_sha256": "361fac19046e86e1985c7508750116f8f28366cbd4f089244a2a0a12a4b1a4a0",
+  "cases": 8,
+  "notice": "Frozen before first model call; AI-authored controlled generation-only transfer fixture."
+}

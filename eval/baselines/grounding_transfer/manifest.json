@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-09-08T14:22:21.189604+00:00",
+  "freeze": {
+    "frozen_at_utc": "2026-09-08T14:03:32.2552834Z",
+    "cases_sha256": "692ba16da94572657bad405a83e45f975d7b87e543f3df3f5114a0fe4755a0c3",
+    "protocol_sha256": "361fac19046e86e1985c7508750116f8f28366cbd4f089244a2a0a12a4b1a4a0",
+    "cases": 8,
+    "notice": "Frozen before first model call; AI-authored controlled generation-only transfer fixture."
+  },
+  "completed_cases": 8,
+  "notice": "AI-authored fixed-evidence transfer fixture; generation-only, not retrieval or human accuracy.",
+  "max_seconds": 600,
+  "http_timeout_seconds": 120,
+  "code_sha256": {
+    "app/providers.py": "5f988d8a01fcdeca8dd4e8b4382cccb68ef29f67677e747a9642f1ac3613c866",
+    "app/service.py": "6c227a87ceeea432bafd3d30c4a547d87f539a9d4ea62c1c58a78282bd45060a",
+    "app/citations.py": "815c7c365d858d5664e49615230bda08892dcb0f6f7a784d3b4dabb9f7247288"
+  },
+  "status": "completed",
+  "finished_at": "2026-09-08T14:22:57.330539+00:00",
+  "original_results_sha256": "c4539b2778250a0e44b09843ebd38b9fcf7071468b5ddb54edd062b85a95cc03",
+  "export_notice": "Public synthetic fixture only; records reserialized with LF, without host paths or database records. Original hash binds the unchanged private results.",
+  "exported_sha256": {
+    "results.jsonl": "0eeb75c3dcc3634f1857774a152e6efa723d537648d44b648c52a710beca238d",
+    "semantic_review.json": "7a92885f4213b5deea9dbcfb5280c5f670ee9e52d8eff5b35c1f339a5f934cfe",
+    "summary.json": "a1665b287fde998a48826c701832fa34ae26e9ccdeca9f126568025fc38c2180"
+  }
+}

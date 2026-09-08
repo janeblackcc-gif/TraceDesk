@@ -1,0 +1,77 @@
+{
+  "notice": "本轮是证据优先生成修复后的开发回归，复用了已观察并分析过的冻结题集；不是首次未见挑战、独立盲测或真实用户评测。原始题集 provenance 的冻结说明保持不变。",
+  "methods": [
+    "bm25",
+    "dense",
+    "hybrid"
+  ],
+  "method_order": "rotate bm25,dense,hybrid by question index; each case gets a new conversation",
+  "code_sha256": {
+    "app/__init__.py": "4f158033b1bd28be7ae656de743a2df5867867483ddd18cd3480884d74b14561",
+    "app/evaluation.py": "21b99396e7ccf47d51fe5d161fa62254a8b496a16be598dcffd03e8d650a8404",
+    "app/batch_evaluation.py": "8e3c113e9849ed9d6ad4f8b275cad1aa80cf8affe0a9490700431ae25002216c",
+    "scripts/run_baseline.py": "594506ba10632959138955aa062ae2a31656084b68cd9043f6da0c7ab1318cb1",
+    "app/service.py": "6c227a87ceeea432bafd3d30c4a547d87f539a9d4ea62c1c58a78282bd45060a",
+    "app/retrieval.py": "f93822a1815456282c162ab42cf4cd83323e79d667dd4e063a2b8fa74b148001",
+    "app/providers.py": "5f988d8a01fcdeca8dd4e8b4382cccb68ef29f67677e747a9642f1ac3613c866",
+    "app/store.py": "406bba9028afb77770db5ddd59f4d7b23438d8e03d7d6bfadbc8d8639406b0ad",
+    "app/ingest.py": "d80197fdbfbf2106d365f6d9da8a22ac1d682b5a8bd7782752bf173cb47acf77",
+    "app/config.py": "99f7f85b4fa05a801bc5c928bdd0ac152b2416d288d6130c0e1f4b3c612e07fa",
+    "app/citations.py": "815c7c365d858d5664e49615230bda08892dcb0f6f7a784d3b4dabb9f7247288"
+  },
+  "embedding": "qwen3-embedding:0.6b-q8_0",
+  "generation": "qwen3.5:4b-q4_K_M",
+  "model_digests": {
+    "qwen3.5:4b-q4_K_M": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "qwen3-embedding:0.6b-q8_0": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "ollama_version": "0.33.3",
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "completed",
+  "completed_cases": 72,
+  "dataset_id": "fastapi_zh_challenge_v1",
+  "dataset": {
+    "documents_sha256": {
+      "advanced_settings.txt": "f22d6f508d0657cd0b7ae001213e57d000461531b9484b620a20d5bf4868c30a",
+      "background_tasks.txt": "ad62814e6eca0f4946e7679f9f039786c00260823d61757ea6a374f2b468f7d8",
+      "deployment_concepts.txt": "06055ec750479af6220bab0dee84668b25ae7d9f071b0814755ae15f033007eb",
+      "deployment_docker.txt": "e3859952a40c53eaf67751dd925737491b0e9d230b515845fa92510edbc19589",
+      "handling_errors.txt": "89fb081d6ac6a5c364e2820dcce6facdbaa10cc8e751a65cddc123dde21a866b",
+      "server_workers.txt": "b9c4a0c9ab00342c2c1d008cdfb7c93c51043ba14936111d275e45ab8e11ee2a"
+    },
+    "questions_sha256": "6b1c766ff67e90fd0a711af871d97a73e3b25df4294cd1b17e3972b24a796869",
+    "questions_path": "questions.test.jsonl",
+    "supplemental_sha256": {
+      "rubric.json": "7744c8235cda0ee741d6953ca99a02e5db9a64f15102186770a6252411d1f197",
+      "README.md": "e58dc6b791441565f531c9f7dba4e9e061f11e95bab17b7b1bdec2a2711c2a67",
+      "sources.json": "a816be1c97694d2f097fc110d219a9240e754a7e8d9e0b58a709bdbdf708caf7",
+      "UPSTREAM_LICENSE": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e"
+    }
+  },
+  "dataset_source": {
+    "repository_directory": "datasets/fastapi_zh_challenge_v1",
+    "upstream": {
+      "repository": "https://github.com/fastapi/fastapi",
+      "commit": "50113da16fec53b66b80d75e80a89296de4fa5a5",
+      "license": "MIT"
+    },
+    "provenance_sha256": "cf79fcbab635d2292aed6bdd7988b5b6e2618050af260090ce2a3773e17610f4"
+  },
+  "scope": {
+    "collection": "FastAPI 中文官方文档挑战集",
+    "version": "50113da16fec5",
+    "chunk_count": 133,
+    "vector_count": 133,
+    "dimension": 1024,
+    "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "original_results_sha256": "e29acdd48cd918ee8701facb530871a3d30f2fb65c5dfad65a542f65f6c2261a",
+  "export_notice": "Records reserialized; request IDs, host paths, setup calls and embedding arrays omitted. Chat requests/replies preserved. Semantic review hash refers to the private original results; exported file hashes are below.",
+  "exported_sha256": {
+    "results.jsonl": "4629cb22027876c5c0e64ce8f1e3a51c4c36637bce507990ce5a8b7fa7cefd7f",
+    "summary.json": "4953c7b0afbc3e625d43cfb157b4aa019d1d0e73aae3f63e349016a7c416cb8f",
+    "semantic_review.json": "b938b402f5bd6d601ed0f1835791c8d21607469e0ab24a0095a45bdc040e2ad6",
+    "semantic_summary.json": "c72563ac7c52234f4d2d4d34d3d3a2d551aa495521c61301016432fb629aaf2b"
+  }
+}

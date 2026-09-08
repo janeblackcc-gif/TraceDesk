@@ -1,5 +1,7 @@
 # 评测与已知限制
 
+最新开发修复、72+36条回归与8条新迁移样例见[证据规划与拒答修复回归](grounding-repair.md)。下文的引用协议对照和浏览器验收对应RC1时期，不代表后续修改的完整验收。
+
 ## 题集
 
 当前公开题集包含Atlas虚构技术文档回归、[tracedesk_ops开发集](../datasets/tracedesk_ops/README.md)，以及运行前冻结的[FastAPI外部文档挑战集](../datasets/fastapi_zh_challenge_v1/README.md)。tracedesk_ops为3份依据v0.1时期真实代码与本机配置整理的短文档，共17个分块，12道AI拟定问题，其中10道可答、2道不可答。

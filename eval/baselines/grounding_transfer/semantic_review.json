@@ -1,0 +1,74 @@
+[
+  {
+    "id": "XFER_A01",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "strict_pass": false,
+    "direct_question_complete": true,
+    "notes": "45秒、800条及保留期限不改变采样间隔均正确且有引用。冻结mandatory额外包含3天，但题干没有直接询问期限数值；正文未复述3天，按冻结规则判不完整。属于标注额外要求，不据此判定未回答直接问题。"
+  },
+  {
+    "id": "XFER_A02",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "strict_pass": false,
+    "direct_question_complete": false,
+    "notes": "冻结answerable题被整体拒答。原文禁止自动删除，题干是否允许删除未明确限定自动或人工；模型识别了人工删除范围缺口，却连已知条件与处理步骤也未交付。该题有范围歧义，仍按冻结规则计误拒答。空claims无无支持断言。"
+  },
+  {
+    "id": "XFER_A03",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "notes": "少于21天轮换及48小时校验失败时保留证书、暂停切换、critical告警、禁止绕过和记录成功均完整，各自引用支持。"
+  },
+  {
+    "id": "XFER_A04",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "notes": "计算对象、2.5GiB单包和18GiB自然日额度、deferred及legal_hold跳过清理完整，各自引用支持。"
+  },
+  {
+    "id": "XFER_N01",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "notes": "未给出唯一密码套件，正确拒答且指出缺失名称。"
+  },
+  {
+    "id": "XFER_N02",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "notes": "次数与各次退避秒数均缺失，正确整体拒答，未猜默认值。"
+  },
+  {
+    "id": "XFER_N03",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "notes": "具体城市和序列号均缺失，未由选择条件推断名单。"
+  },
+  {
+    "id": "XFER_N04",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "strict_pass": true,
+    "direct_question_complete": false,
+    "notes": "负责人姓名缺失，按冻结全问拒答协议通过。可见claims未交付已知02:30；自然的部分回答预期与本版本整问拒答规则不同，单独披露。"
+  }
+]

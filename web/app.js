@@ -75,6 +75,7 @@ function exportAnswer(result) {
     claim.citations.forEach(cite => {const source = result.sources.find(s => s.id === cite.chunk_id); if (source) sections.push(`> 来源：${source.filename} · ${source.version} · 第 ${source.page} 页 · 解析行 ${source.start_line}—${source.end_line}\n> ${cite.quote.replaceAll('\n', '\n> ')}`);});
   }
   if (result.warning) sections.push(`提示：${result.warning}`);
+  if (result.generation_assessment) sections.push(['生成记录（模型判断，不代表事实已验证）：', '```json', JSON.stringify(result.generation_assessment, null, 2), '```'].join('\n'));
   sections.push(`Trace ID：${result.trace_id}`);
   const blob = new Blob([sections.join('\n\n')], {type: 'text/markdown;charset=utf-8'});
   const url = URL.createObjectURL(blob); const anchor = el('a'); anchor.href = url; anchor.download = `TraceDesk-${result.version}-${result.trace_id.slice(0, 8)}.md`; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -123,7 +124,7 @@ function renderAnswer(result) {
   footer.append(el('span', '', `${scoreNotice} · ${result.sources.length} 个候选 · ${result.latency_ms} ms · 本次服务端耗时`));
   const actions = el('div'); const exportButton = el('button', 'text-button', '导出 Markdown'); exportButton.addEventListener('click', () => exportAnswer(result)); actions.append(exportButton); footer.append(actions); card.append(footer);
   const details = el('details', 'trace-details'); details.append(el('summary', '', `查看检索追踪 · ${result.trace_id.slice(0, 8)}`));
-  const pre = el('pre', '', JSON.stringify({实际问题: result.effective_question, 知识库: result.collection, 版本: result.version, 实际模式: result.actual_profile, 向量模型: result.model_key || '未调用', 检索耗时ms: result.retrieval_ms, 引用检查边界: result.citation_check}, null, 2)); details.append(pre); card.append(details);
+  const pre = el('pre', '', JSON.stringify({实际问题: result.effective_question, 知识库: result.collection, 版本: result.version, 实际模式: result.actual_profile, 向量模型: result.model_key || '未调用', 检索耗时ms: result.retrieval_ms, 引用检查边界: result.citation_check, 生成记录_模型判断: result.generation_assessment}, null, 2)); details.append(pre); card.append(details);
   return card;
 }
 async function submitQuestion(event) {

@@ -183,7 +183,9 @@ def test_ollama_http_contract_mock(monkeypatch):
         captured.append(request)
         if request.url.path == '/api/tags': return httpx.Response(200, json={'models': [{'name': 'qwen3-embedding:0.6b-q8_0', 'digest': 'abc'}]})
         if request.url.path == '/api/embed': return httpx.Response(200, json={'embeddings': [[1., 0.]]})
-        return httpx.Response(200, json={'message': {'content': '{"abstain":true,"claims":[]}'}})
+        plan = {'requirements': [{'required_fact': 'hello', 'source_ids': [],
+            'evidence_finding': 'No evidence provided.', 'supported': False, 'answer': ''}]}
+        return httpx.Response(200, json={'done': True, 'done_reason': 'stop', 'message': {'content': json.dumps(plan)}})
     provider = Ollama(transport=httpx.MockTransport(handler))
     assert provider.model_key().endswith('@abc')
     assert provider.embed(['one']) == [[1, 0]]
@@ -194,7 +196,7 @@ def test_ollama_http_contract_mock(monkeypatch):
     generation_payload = json.loads(captured[-1].content)
     assert generation_payload['model'] == 'qwen3.5:4b-q4_K_M'
     assert generation_payload['stream'] is False and generation_payload['think'] is False
-    assert generation_payload['options'] == {'temperature': 0, 'num_ctx': 8192, 'num_predict': 768, 'seed': 42}
+    assert generation_payload['options'] == {'temperature': 0, 'num_ctx': 8192, 'num_predict': 1536, 'seed': 42}
     provider.client.close()
 
 def test_ollama_truncated_output_rejected_even_when_json_is_valid():

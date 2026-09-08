@@ -42,4 +42,6 @@ htmlcov/
 !/scripts/browser_smoke.py
 !/scripts/export_baseline.py
 !/scripts/import_eval_dataset.py
+!/scripts/run_grounding_transfer.py
+!/docs/grounding-repair.md
 /datasets/tracedesk_ops/preflight.json

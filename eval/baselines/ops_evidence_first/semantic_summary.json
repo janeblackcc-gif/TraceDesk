@@ -1,0 +1,77 @@
+{
+  "reviewed_at": "2026-09-08T14:29:03.974739+00:00",
+  "notice": "本轮是证据优先生成修复后的开发回归，复用了已观察并分析过的冻结题集；不是首次未见挑战、独立盲测或真实用户评测。原始题集 provenance 的冻结说明保持不变。",
+  "results_sha256": "a9bc3d5db1d064615f23320df982952b034d9e108fb5e6a24d45b2c6b8d475a7",
+  "review_sha256": "7d12a765e7509ad5746f2befafcc6f547828df8ea5cbe6fcc7e09e6e83a1c6e3",
+  "questions_sha256": "16785c3b838dd3d9e0588e6200f5a0943133b93607179fa3b3dbaa28125411c1",
+  "rubric_sha256": null,
+  "reviewed_cases": 36,
+  "methods": {
+    "bm25": {
+      "cases": 12,
+      "answerable": 10,
+      "unanswerable": 2,
+      "answerable_correct": 10,
+      "answerable_complete": 7,
+      "answerable_all_claims_supported": 10,
+      "answerable_strict_pass": 7,
+      "semantic_refusal_count": 2,
+      "protocol_refusal_count": 2,
+      "strict_pass": 9,
+      "strict_accuracy": 0.75,
+      "failure_categories": {
+        "missing_expected_explanation": 2,
+        "missing_required_condition": 1
+      }
+    },
+    "dense": {
+      "cases": 12,
+      "answerable": 10,
+      "unanswerable": 2,
+      "answerable_correct": 10,
+      "answerable_complete": 7,
+      "answerable_all_claims_supported": 10,
+      "answerable_strict_pass": 7,
+      "semantic_refusal_count": 2,
+      "protocol_refusal_count": 2,
+      "strict_pass": 9,
+      "strict_accuracy": 0.75,
+      "failure_categories": {
+        "missing_expected_explanation": 2,
+        "missing_required_condition": 1
+      }
+    },
+    "hybrid": {
+      "cases": 12,
+      "answerable": 10,
+      "unanswerable": 2,
+      "answerable_correct": 10,
+      "answerable_complete": 7,
+      "answerable_all_claims_supported": 10,
+      "answerable_strict_pass": 7,
+      "semantic_refusal_count": 2,
+      "protocol_refusal_count": 2,
+      "strict_pass": 9,
+      "strict_accuracy": 0.75,
+      "failure_categories": {
+        "missing_expected_explanation": 2,
+        "missing_required_condition": 1
+      }
+    }
+  },
+  "review_input_sha256": "208da09b425d0ff6cc356b7bce646167ad3a3a5624400de1abee2518786ae85b",
+  "review_mode": "explicit judgments; no inherited decisions",
+  "criteria": {
+    "correct": "Directly responsive and no false facts; partial answers may be incomplete.",
+    "complete": "All mandatory facts expressed; citation text alone does not count as answer text.",
+    "supported": "Each claim supported by its own attached citations.",
+    "strict_pass": "Answerable: real model answer and all three booleans. Unanswerable: no_evidence with empty claims.",
+    "semantic_refusal": "Reviewed correct and complete on an unanswerable question."
+  },
+  "judgment_limits": [
+    "AI/agent review, not independent human double annotation.",
+    "Development regression on observed questions; not a fresh holdout.",
+    "Inherited judgments require exact recorded request/model-content and successful claims/status equality.",
+    "No frozen corpus or source raw results were modified."
+  ]
+}

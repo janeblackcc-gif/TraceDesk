@@ -1,0 +1,437 @@
+[
+  {
+    "id": "OPS01",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "地址与仅限本机监听完整且有直接引用。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS01",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "地址和本机作用范围完整，引用匹配。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "地址与本机作用范围完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS02",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "根目录、PowerShell 7与启动命令均明确出现，引用支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS02",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "执行环境及命令完整，引用支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS02",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "pwsh -NoProfile -File ./start_local_rag.ps1命令与题干根目录条件结合，覆盖执行要求。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS03",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "完整模型标签按题干嵌入/生成顺序返回，引用明确映射。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS03",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "两个标签完整且顺序明确，引用支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS03",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "两个完整标签与题干角色顺序一致，引用直接支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS04",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "按冻结历史资料正确说明不自动读取.env、自行设置变量及默认地址，但省略.env.example参考性质与启动脚本设置当前进程地址的路径。",
+    "missing_facts": [
+      ".env.example仅供参考",
+      "启动脚本为当前进程设置模型服务地址"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS04",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "核心配置结论正确且有引用，省略参考答案补充的示例文件及启动脚本路径说明。",
+    "missing_facts": [
+      ".env.example仅供参考",
+      "启动脚本为当前进程设置模型服务地址"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "事实正确，但未完整说明示例文件和启动脚本配置方式。",
+    "missing_facts": [
+      ".env.example仅供参考",
+      "启动脚本为当前进程设置模型服务地址"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS05",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "10 MiB上限正确，未复述参考答案的非空条件。",
+    "missing_facts": [
+      "单个文件必须非空"
+    ],
+    "failure_categories": [
+      "missing_required_condition"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS05",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "大小结论正确，未复述非空前置条件。",
+    "missing_facts": [
+      "单个文件必须非空"
+    ],
+    "failure_categories": [
+      "missing_required_condition"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS05",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "只给出大小上限，缺少参考答案中的非空条件。",
+    "missing_facts": [
+      "单个文件必须非空"
+    ],
+    "failure_categories": [
+      "missing_required_condition"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "支持格式及ZIP禁止项完整且有引用。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS06",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "格式清单与ZIP限制完整，引用支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS06",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "三种格式和ZIP不接收均明确回答。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS07",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "不能直接识别及无OCR原因完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS07",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "否定结论和OCR原因完整且受支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS07",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "扫描PDF限制和原因完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS08",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "digest变化、旧索引不适用新标识、需重建均完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS08",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "不能沿用及新模型标识范围与重建要求完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS08",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "重建要求及适用条件正确完整，引用支持。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS09",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "明确仅发送五个候选中的前四个。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS09",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "题干限定五个候选，回答四个片段完整回应；引用说明前四。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS09",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "四个片段的回答结合题干和引用语义完整。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS10",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确否定逐字引用能证明语义正确完整，但没有复述校验实际只确认位置和原文匹配的参考解释。",
+    "missing_facts": [
+      "只确认引用位置和原文匹配"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS10",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "否定结论及相关片段未必含答案均正确有引用；省略逐字校验具体确认范围。",
+    "missing_facts": [
+      "只确认引用位置和原文匹配"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS10",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确否定，但缺少参考答案对校验能力范围的正面说明。",
+    "missing_facts": [
+      "只确认引用位置和原文匹配"
+    ],
+    "failure_categories": [
+      "missing_expected_explanation"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "OPS11",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "no_evidence和空claims，未补造联系电话。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS11",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "正确无答案且无claims。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS11",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "正确拒答联系方式。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS12",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "正确拒绝从单机资料推断百人并发硬件需求。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS12",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "正确拒答CPU和内存配置。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "OPS12",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "no_evidence且无claims，拒答协议正确。",
+    "missing_facts": [],
+    "failure_categories": [],
+    "strict_pass": true
+  }
+]

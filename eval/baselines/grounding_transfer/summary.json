@@ -1,0 +1,19 @@
+{
+  "notice": "AI-authored fixed-evidence transfer fixture; generation-only, not retrieval or human accuracy.",
+  "reviewer": "Codex parent with a second read-only AI reviewer",
+  "cases": 8,
+  "strict_pass": 6,
+  "positive_strict_pass": 2,
+  "positive_cases": 4,
+  "correct_refusal": 4,
+  "negative_cases": 4,
+  "results_sha256": "c4539b2778250a0e44b09843ebd38b9fcf7071468b5ddb54edd062b85a95cc03",
+  "cases_sha256": "692ba16da94572657bad405a83e45f975d7b87e543f3df3f5114a0fe4755a0c3",
+  "limits": [
+    "Generation only with short fixed synthetic evidence; no retrieval.",
+    "A01 rubric includes an unasked 3-day value; direct question was answered.",
+    "A02 question leaves automatic/manual deletion scope ambiguous; counted by frozen rubric.",
+    "N04 intentionally withholds a known partial fact under whole-question abstention.",
+    "No post-run changes to the cases, rubric or generator. Not independent human accuracy."
+  ]
+}
