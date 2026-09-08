@@ -16,6 +16,8 @@
 
 ## 快速开始
 
+下载并解压[0.2.0rc1预发布安装包](https://github.com/janeblackcc-gif/TraceDesk/releases/tag/v0.2.0rc1)，或克隆本仓库。发布附件提供SHA256校验文件，模型权重需另行准备。
+
 Windows / PowerShell 7，在项目根目录执行：
 
 ```powershell

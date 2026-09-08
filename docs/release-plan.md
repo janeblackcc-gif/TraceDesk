@@ -33,11 +33,13 @@
 - [x] 实际 HTTP 启动及浏览器核心流程验收。
 - [x] 核对 README、配置示例、部署说明、架构说明、许可证和版本说明。
 - [x] GitHub 仓库创建、提交、推送与远程 CI 验证。
-- [ ] 发布版本并记录实际支持环境和已知限制。
+- [x] 发布版本并记录实际支持环境和已知限制。
 
 ## 开发顺序
 
 2026-09-08本机验收：Windows 11 / Python 3.13.14，开发目录和解压后的全新虚拟环境均为89项测试通过；依赖、启动配置和本地模型诊断通过。真实HTTP与Edge浏览器验收通过，详细记录见[评测说明](evaluation.md)。公开仓库为[janeblackcc-gif/TraceDesk](https://github.com/janeblackcc-gif/TraceDesk)，[首次远程CI](https://github.com/janeblackcc-gif/TraceDesk/actions/runs/34217162037)的四种系统与Python组合全部通过。
+
+[0.2.0rc1预发布版本](https://github.com/janeblackcc-gif/TraceDesk/releases/tag/v0.2.0rc1)已于2026-09-08发布，包含ZIP和SHA256校验文件。包内85个公开文件与发布提交04490d7逐字节一致，该提交的[CI](https://github.com/janeblackcc-gif/TraceDesk/actions/runs/34217544877)全部通过；从GitHub重新下载附件后的哈希也已核对。标签保留发布时的源码，主分支后续补充发布完成记录。
 
 1. 完成仓库、配置、启动诊断和自动化测试入口。
 2. 以基线中的引用失真为首个修复任务，保留旧结果并进行回归。
