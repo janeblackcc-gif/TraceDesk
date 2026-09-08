@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "before_scroll_reset": {
+    "scrollY": 592,
+    "viewport": 844,
+    "sidebar": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 65,
+      "top": 0,
+      "right": 390,
+      "bottom": 65,
+      "left": 0
+    },
+    "skip": {
+      "x": 15,
+      "y": -100,
+      "width": 104,
+      "height": 43.09375,
+      "top": -100,
+      "right": 119,
+      "bottom": -56.90625,
+      "left": 15
+    },
+    "active": "<summary class=\"\">查看检索追踪 · ada77a9b</summary>"
+  },
+  "after_scroll_reset": {
+    "scrollY": 0,
+    "viewport": 844,
+    "sidebar": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 65,
+      "top": 0,
+      "right": 390,
+      "bottom": 65,
+      "left": 0
+    },
+    "skip": {
+      "x": 15,
+      "y": -100,
+      "width": 104,
+      "height": 43.09375,
+      "top": -100,
+      "right": 119,
+      "bottom": -56.90625,
+      "left": 15
+    },
+    "active": "<summary class=\"\">查看检索追踪 · ada77a9b</summary>"
+  }
+}

@@ -113,9 +113,7 @@ class Run:
         ) as pending:
             action()
         response = pending.value
-        # Browser fetch stays native; expect_response only observes the HTTP exchange.
-        error = response.finished()
-        require(error is None, f'{name}: response body failed: {error}')
+        # json() waits for the complete body; finished() leaks a close task in Playwright 1.62.
         body = response.json()
         self.snapshot(name, response.status, body,
                       {'method': method, 'url': response.url,
@@ -143,6 +141,9 @@ class Run:
         self.counter += 1
         path = self.output / f'{self.counter:02d}_{name}.png'
         self.page.locator('#toast').wait_for(state='hidden', timeout=TIMEOUT_MS)
+        # Full-page capture from a scrolled viewport can misplace fixed and sticky elements.
+        self.page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
+        self.page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
         self.page.screenshot(path=str(path), full_page=True, timeout=TIMEOUT_MS)
         widths = self.page.evaluate('''() => ({viewport: innerWidth,
             document: document.documentElement.scrollWidth, body: document.body.scrollWidth})''')
@@ -181,7 +182,48 @@ class Run:
                 f'{name}: UI/API claim counts differ')
         self.checked(name, status=body.get('status'), profile=body.get('actual_profile'),
                      generation_model=body.get('generation_model'), trace_id=body.get('trace_id'))
+        if profile == 'ollama':
+            self.generation_record(name, body)
         return body
+
+    def generation_record(self, name, answer):
+        assessment = answer.get('generation_assessment')
+        require(isinstance(assessment, dict) and assessment.get('strategy') == 'evidence_first',
+                f'{name}: current generation strategy is missing')
+        decision = 'abstain' if answer.get('status') == 'no_evidence' else 'answer'
+        require(assessment.get('decision') == decision,
+                f'{name}: generation decision differs from the visible result')
+        require(bool(assessment.get('missing_facts')) == (decision == 'abstain'),
+                f'{name}: missing facts differ from the refusal decision')
+        trace = self.api(name + '_persisted_trace', '/api/traces/' + answer['trace_id'])
+        require(trace.get('generation_assessment') == assessment,
+                f'{name}: persisted generation record differs from the response')
+        details = self.page.locator('.answer-card .trace-details')
+        details.locator('summary').click()
+        displayed = json.loads(details.locator('pre').inner_text())
+        require(displayed.get('生成记录_模型判断') == assessment,
+                f'{name}: displayed generation record differs from the response')
+        self.screenshot(name + '_generation_record')
+        details.locator('summary').click()
+        with self.page.expect_download(timeout=TIMEOUT_MS) as pending:
+            self.page.get_by_role('button', name='导出 Markdown', exact=True).click()
+        download = pending.value
+        exported_path = self.output / (name + '_answer.md')
+        download.save_as(str(exported_path))
+        require(download.failure() is None, f'{name}: Markdown download failed')
+        exported = exported_path.read_text(encoding='utf-8')
+        records = re.findall(r'```json\n(.*?)\n```', exported, flags=re.DOTALL)
+        require(len(records) == 1 and json.loads(records[0]) == assessment,
+                f'{name}: exported generation record differs from the response')
+        require('生成记录（模型判断，不代表事实已验证）：' in exported
+                and answer['trace_id'] in exported,
+                f'{name}: export lost the model-judgment boundary or trace ID')
+        require(all(claim['text'] in exported for claim in answer['claims']),
+                f'{name}: export lost answer text')
+        require(not answer.get('warning') or answer['warning'] in exported,
+                f'{name}: export lost the refusal warning')
+        self.checked('generation_record_ui_trace_and_export', question_name=name,
+                     decision=decision, export=exported_path.name)
 
     def highlight(self, name, answer):
         source_ids = {source['id']: source for source in answer['sources']}
@@ -319,6 +361,9 @@ class Run:
                 self.page.set_viewport_size({'width': 390, 'height': 844})
                 self.screenshot('mobile_updated_answer')
                 self.highlight('mobile_exact_source_highlight', updated)
+                self.page.locator('.trace-details summary').click()
+                self.screenshot('mobile_generation_record')
+                self.page.locator('.trace-details summary').click()
                 self.navigate('library')
                 self.screenshot('mobile_library')
                 self.page.set_viewport_size({'width': 1440, 'height': 1000})
