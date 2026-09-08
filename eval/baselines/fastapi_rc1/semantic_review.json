@@ -1,0 +1,912 @@
+[
+  {
+    "id": "FA01",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整覆盖四个 worker 约 4 GB 及进程各自占用内存；各引文支持，存在重复或无关扩展。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA01",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整覆盖四个 worker 约 4 GB 及进程各自占用内存；各引文支持，存在重复或无关扩展。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整覆盖四个 worker 约 4 GB 及进程各自占用内存；各引文支持，存在重复或无关扩展。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA02",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心回答正确完整；第五条外部组件介入重启的结论只引崩溃影响段落，该段未说明外部重启，虽同一回答其他引用有此事实。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA02",
+    "method": "hybrid",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心事实覆盖；额外将开发或部署后注意到崩溃误写成永远重启可能有意义的例外，并把仅谈开机启动的引文用于说明重启组件。",
+    "failure_categories": [
+      "inaccurate_extra_claim",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA02",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "missing_facts": [
+      "普通错误通常局限于单个请求并返回 500",
+      "应用继续处理后续请求"
+    ],
+    "notes": "回答进程崩溃和外部重启，但漏掉普通错误只影响单个请求、返回 500 并继续处理后续请求；另有与问题无关的设置缓存内容。",
+    "failure_categories": [
+      "missing_mandatory_fact",
+      "nonresponsive_extra"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA03",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整说明单进程在 worker 启动前完成迁移，并说明并行重复工作及冲突；按上下文的单次前置步骤理解，语义覆盖必要事实。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA03",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整说明单进程在 worker 启动前完成迁移，并说明并行重复工作及冲突；按上下文的单次前置步骤理解，语义覆盖必要事实。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA03",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整说明单进程在 worker 启动前完成迁移，并说明并行重复工作及冲突；按上下文的单次前置步骤理解，语义覆盖必要事实。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN01",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "正文明确没有精确重启次数和秒数，没有编造数值；但输出了多条 claims 并将状态标为 answered，存在冗余主题说明。",
+    "failure_categories": [
+      "refusal_state_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN01",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "no_evidence 且无 claims，严格拒答通过。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "no_evidence 且无 claims，严格拒答通过。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA04",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "正确给出 --proxy-headers 及信任 TLS 终止代理标头的作用；引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "正确给出 --proxy-headers 及信任 TLS 终止代理标头的作用；引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA04",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "正确给出 --proxy-headers 及信任 TLS 终止代理标头的作用；引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA05",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心答案正确完整；额外把 shell 形式与需要 10 秒建立确定因果，所引正文只包含相关 FAQ 的问句链接，未导入该 FAQ 的解释。",
+    "failure_categories": [
+      "claim_citation_mismatch",
+      "unsupported_causal_attribution"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA05",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心答案正确完整；额外把 shell 形式与需要 10 秒建立确定因果，所引正文只包含相关 FAQ 的问句链接，未导入该 FAQ 的解释。",
+    "failure_categories": [
+      "claim_citation_mismatch",
+      "unsupported_causal_attribution"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA05",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心答案正确完整；额外把 shell 形式与需要 10 秒建立确定因果，所引正文只包含相关 FAQ 的问句链接，未导入该 FAQ 的解释。",
+    "failure_categories": [
+      "claim_citation_mismatch",
+      "unsupported_causal_attribution"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA06",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "依赖层缓存、依赖安装缓存及频繁变化的应用代码后置均完整；引用支持，存在重复展开。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA06",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整解释依赖与应用代码顺序及缓存节省时间，逐项引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "必要事实完整，但第二条给出从几分钟缩短到几秒时，其自身两条引用没有该时间量值；另一条 claim 的引用才包含数值。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN02",
+    "method": "dense",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料缺少镜像精确大小",
+      "不得根据基础镜像或经验编造 MB 数"
+    ],
+    "notes": "把构建输出中的 100% 当成镜像磁盘大小 100 MB；原文没有镜像大小或 MB 单位。",
+    "failure_categories": [
+      "invented_answer",
+      "unit_confusion",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN02",
+    "method": "hybrid",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料缺少镜像精确大小",
+      "不得根据基础镜像或经验编造 MB 数"
+    ],
+    "notes": "把构建输出中的 100% 当成镜像磁盘大小 100 MB；原文没有镜像大小或 MB 单位。",
+    "failure_categories": [
+      "invented_answer",
+      "unit_confusion",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN02",
+    "method": "bm25",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料缺少镜像精确大小",
+      "不得根据基础镜像或经验编造 MB 数"
+    ],
+    "notes": "把构建输出中的 100% 当成镜像磁盘大小 100 MB；原文没有镜像大小或 MB 单位。",
+    "failure_categories": [
+      "invented_answer",
+      "unit_confusion",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA07",
+    "method": "hybrid",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "必要事实覆盖；额外声称用 Field() 附加验证来定义数据类型，将附加验证与类型注解声明混淆。",
+    "failure_categories": [
+      "inaccurate_extra_claim",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA07",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "str 及 Pydantic Settings 按声明类型转换验证均明确；由代码库完成转换已语义覆盖代码承担转换，无需逐字包含在代码中。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA07",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "必要事实在正文中完整；关于原始环境变量是字符串的部分不由该 claim 的两条引文支持，引文仅支持声明类型、读取和转换后的 int。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA08",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "首条完整回答大小写问题；额外的 APP_NAME 和 ADMIN_EMAIL 成功用于设置的断言只引变量输入部分，未引成功赋值结果。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA08",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "单条结论完整给出不区分大小写及 APP_NAME 对应 app_name，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA08",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心答案完整；第二条文本截断为 APP_NAME 被设置为 `，不是完整可核验断言。",
+    "failure_categories": [
+      "malformed_claim"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA09",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "四项事实覆盖；末条将依赖项和缓存共同归因为测试设置被使用与验证，所引材料只支持依赖覆盖的测试行为。",
+    "failure_categories": [
+      "claim_citation_mismatch",
+      "unsupported_causal_attribution"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA09",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "首次创建、后续复用、避免反复读取 .env 与测试覆盖均明确，逐条引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA09",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "明确 lru_cache 仅首次创建并避免每请求读 .env，在缓存语境已蕴含后续复用；另明确覆盖测试依赖。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN03",
+    "method": "hybrid",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料缺少同名覆盖优先级"
+    ],
+    "notes": "没有拒答，给出无当前语料支持的环境变量优先级补答；该结论超出自身引用，不能据此断言真实 Pydantic 行为一定错误。",
+    "failure_categories": [
+      "incorrect_non_refusal",
+      "unsupported_priority_answer",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN03",
+    "method": "bm25",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "missing_facts": [
+      "明确语料缺少同名覆盖优先级"
+    ],
+    "notes": "引用失败后显式降级为 evidence_found，返回相关摘录，未给有效模型拒答；摘录与引文相同。",
+    "failure_categories": [
+      "visible_fallback",
+      "invalid_model_answer",
+      "missing_explicit_refusal"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN03",
+    "method": "dense",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "missing_facts": [
+      "明确语料缺少同名覆盖优先级"
+    ],
+    "notes": "给出有引用支持的相关事实，却未说明语料缺少同名优先级，未回答或拒答所问事实。",
+    "failure_categories": [
+      "incorrect_non_refusal",
+      "missing_explicit_refusal",
+      "nonresponsive_answer"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA10",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "位置参数和关键字参数均明确覆盖，引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA10",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "位置参数和关键字参数均明确覆盖，引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA10",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "位置参数和关键字参数均明确覆盖，引用直接支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA11",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整保留 Celery 与 BackgroundTasks 的适用条件；附加说明也有各自引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA11",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整保留 Celery 与 BackgroundTasks 的适用条件；附加说明也有各自引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA11",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整保留 Celery 与 BackgroundTasks 的适用条件；附加说明也有各自引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA12",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "否定各开独立对象并说明合并，语义覆盖对象复用；明确响应发出后执行，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA12",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "否定各开独立对象并说明合并，语义覆盖对象复用；明确响应发出后执行，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA12",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "否定各开独立对象并说明合并，语义覆盖对象复用；明确响应发出后执行，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN04",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "no_evidence 且无 claims，严格拒答通过。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN04",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "no_evidence 且无 claims，严格拒答通过。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "no_evidence 且无 claims，严格拒答通过。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA13",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "直接给出 --workers 及启动多个进程的用途，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA13",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心完整；额外说选项可用于 fastapi 或 uvicorn 命令的 claim 自己仅引 fastapi 示例，未引 uvicorn 依据。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA13",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "直接给出 --workers 及启动多个进程的用途，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA14",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整保留 Kubernetes 通常每容器单进程的条件；集群复制等扩展均有各自引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA14",
+    "method": "bm25",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心事实完整；额外概括前置步骤可放在每个容器执行时丢失并行多次运行须无问题的条件，并称与 worker 数量无关。",
+    "failure_categories": [
+      "condition_dropped",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA14",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "完整保留 Kubernetes 通常每容器单进程的条件；集群复制等扩展均有各自引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA15",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "missing_facts": [
+      "worker 对重新启动有一点帮助"
+    ],
+    "notes": "收益及其他部署事项正确，但只将重启列为待处理事项，漏掉 worker 对重启略有帮助。",
+    "failure_categories": [
+      "missing_mandatory_fact"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA15",
+    "method": "dense",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "worker 对重新启动有一点帮助"
+    ],
+    "notes": "错误断言 worker 对重启没有直接改善，与引用中对重启有一点帮助冲突。",
+    "failure_categories": [
+      "factual_error",
+      "missing_mandatory_fact",
+      "claim_citation_contradiction"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA15",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "并行、多核、更多请求、复制、对重启略有帮助和其余部署事项全部覆盖，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FN05",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "正文明确证据未给出具体并发上限，没有把进程数当上限；但状态为 answered。",
+    "failure_categories": [
+      "refusal_state_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN05",
+    "method": "hybrid",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料没有给出最大并发请求数"
+    ],
+    "notes": "未说明缺少最大并发数，仅泛称取决于 CPU 核心及系统资源；引用未建立这些因素与每个 worker 上限的关系。",
+    "failure_categories": [
+      "incorrect_non_refusal",
+      "unsupported_claim"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN05",
+    "method": "bm25",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": false,
+    "missing_facts": [
+      "明确语料没有给出最大并发请求数"
+    ],
+    "notes": "将每容器一个进程误当成每个 worker 最多同时处理一个请求，引用不支持。",
+    "failure_categories": [
+      "invented_answer",
+      "factual_error",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA16",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "raise 而非 return、后续代码停止、终止请求并发送 HTTP 错误均完整，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA16",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "raise 而非 return、后续代码停止、终止请求并发送 HTTP 错误均完整，引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA16",
+    "method": "dense",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心回答完整；额外把 RequestValidationError 转字符串可能泄露细节的警告套到 HTTPException，引用不支持这一对象替换。",
+    "failure_categories": [
+      "factual_error",
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA17",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "JSON 可转换值、dict/list 以及 FastAPI 自动转换均覆盖；额外类型差异事实有引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA17",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "JSON 可转换值、dict/list 以及 FastAPI 自动转换均覆盖；额外类型差异事实有引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA17",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "JSON 可转换值、dict/list 以及 FastAPI 自动转换均覆盖；额外类型差异事实有引用支持。",
+    "failure_categories": [],
+    "strict_pass": true
+  },
+  {
+    "id": "FA18",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "四项必要事实正确完整；末条关于 fastapi.responses 与 Starlette 的扩展错误引用自定义异常处理器段落，未支持该事实。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA18",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "四项必要事实正确完整；末条关于 fastapi.responses 与 Starlette 的扩展错误引用自定义异常处理器段落，未支持该事实。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FA18",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": false,
+    "missing_facts": [],
+    "notes": "核心事实完整；附加 app.exception_handler() 传入 Starlette HTTPException 的 claim 仅引注册 UnicornException 的示例段，未支撑所述类名。",
+    "failure_categories": [
+      "claim_citation_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "明确当前示例证据未提供响应头名称和值，无补造答案；按整个任务的导入语料范围理解，状态仍为 answered。",
+    "failure_categories": [
+      "refusal_state_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN06",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "明确当前示例证据未提供响应头名称和值，无补造答案；按整个任务的导入语料范围理解，状态仍为 answered。",
+    "failure_categories": [
+      "refusal_state_mismatch"
+    ],
+    "strict_pass": false
+  },
+  {
+    "id": "FN06",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "missing_facts": [],
+    "notes": "明确当前示例证据未提供响应头名称和值，无补造答案；按整个任务的导入语料范围理解，状态仍为 answered。",
+    "failure_categories": [
+      "refusal_state_mismatch"
+    ],
+    "strict_pass": false
+  }
+]

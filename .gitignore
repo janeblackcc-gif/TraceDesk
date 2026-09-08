@@ -27,6 +27,7 @@ htmlcov/
 !/docs/deployment.md
 !/docs/architecture.md
 !/docs/evaluation.md
+!/docs/external-evaluation.md
 !/docs/assets/
 /design/
 /*.html
@@ -40,4 +41,5 @@ htmlcov/
 !/scripts/release_check.py
 !/scripts/browser_smoke.py
 !/scripts/export_baseline.py
+!/scripts/import_eval_dataset.py
 /datasets/tracedesk_ops/preflight.json

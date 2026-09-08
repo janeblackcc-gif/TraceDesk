@@ -1,0 +1,64 @@
+{
+  "dataset_id": "fastapi_zh_challenge_v1",
+  "collection": "FastAPI 中文官方文档挑战集",
+  "version": "50113da16fec5",
+  "frozen_at": "2026-09-08T11:29:08.559254+00:00",
+  "notice": "固定提交的 FastAPI 官方中文资料，AI 在运行前拟定并冻结的新挑战题；未用于此前调参，不是独立人工标注、真实用户评测或可证明未进入模型预训练的盲测。",
+  "upstream": {
+    "repository": "https://github.com/fastapi/fastapi",
+    "commit": "50113da16fec53b66b80d75e80a89296de4fa5a5",
+    "license": "MIT"
+  },
+  "documents": [
+    {
+      "path": "documents/deployment_concepts.txt",
+      "sha256": "06055ec750479af6220bab0dee84668b25ae7d9f071b0814755ae15f033007eb",
+      "bytes": 17229
+    },
+    {
+      "path": "documents/deployment_docker.txt",
+      "sha256": "e3859952a40c53eaf67751dd925737491b0e9d230b515845fa92510edbc19589",
+      "bytes": 25458
+    },
+    {
+      "path": "documents/advanced_settings.txt",
+      "sha256": "f22d6f508d0657cd0b7ae001213e57d000461531b9484b620a20d5bf4868c30a",
+      "bytes": 11314
+    },
+    {
+      "path": "documents/background_tasks.txt",
+      "sha256": "ad62814e6eca0f4946e7679f9f039786c00260823d61757ea6a374f2b468f7d8",
+      "bytes": 4215
+    },
+    {
+      "path": "documents/server_workers.txt",
+      "sha256": "b9c4a0c9ab00342c2c1d008cdfb7c93c51043ba14936111d275e45ab8e11ee2a",
+      "bytes": 8238
+    },
+    {
+      "path": "documents/handling_errors.txt",
+      "sha256": "89fb081d6ac6a5c364e2820dcce6facdbaa10cc8e751a65cddc123dde21a866b",
+      "bytes": 8459
+    }
+  ],
+  "questions": {
+    "path": "questions.test.jsonl",
+    "sha256": "6b1c766ff67e90fd0a711af871d97a73e3b25df4294cd1b17e3972b24a796869",
+    "count": 24,
+    "answerable": 18,
+    "unanswerable": 6
+  },
+  "rubric": {
+    "path": "rubric.json",
+    "sha256": "7744c8235cda0ee741d6953ca99a02e5db9a64f15102186770a6252411d1f197"
+  },
+  "sources_sha256": "a816be1c97694d2f097fc110d219a9240e754a7e8d9e0b58a709bdbdf708caf7",
+  "protocol_sha256": "e58dc6b791441565f531c9f7dba4e9e061f11e95bab17b7b1bdec2a2711c2a67",
+  "annotation": "Gold quotes in one group are OR alternatives; all groups are required for complete evidence coverage.",
+  "excluded_content": "Upstream docs_src includes, linked pages and images were not expanded; only these six UTF-8 source texts are evidence.",
+  "preflight": {
+    "chunk_count": 133,
+    "all_gold_quotes_found": true,
+    "model_requests_before_freeze": 0
+  }
+}

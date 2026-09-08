@@ -14,6 +14,26 @@ from .service import Service
 METHODS = ('bm25', 'dense', 'hybrid')
 
 
+def validate_filename(value: str) -> str:
+    if not isinstance(value, str) or not value.strip() or value in {'.', '..'} or any(
+            character in value for character in ('/', '\\', ':', '\0')):
+        raise ValueError('Expected a single source filename without a path')
+    return value
+
+
+class GoldPassage(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    source_file: str
+    quote: str
+
+    @model_validator(mode='after')
+    def check_passage(self) -> GoldPassage:
+        validate_filename(self.source_file)
+        if len(self.quote.strip()) < 8:
+            raise ValueError('Each gold quote must contain at least eight non-edge-whitespace characters')
+        return self
+
+
 class Question(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     id: str = Field(min_length=1)
@@ -25,16 +45,20 @@ class Question(BaseModel):
     expected_answer: str = Field(min_length=1)
     source_file: str | None
     gold_quotes: list[str]
+    gold_alternatives: list[list[GoldPassage]] = Field(default_factory=list)
 
     @model_validator(mode='after')
     def check_gold(self) -> Question:
         if self.kind == 'answerable':
-            if not self.source_file or Path(self.source_file).name != self.source_file or not self.gold_quotes:
+            if not self.source_file or not self.gold_quotes:
                 raise ValueError('Answerable questions require a source filename and gold quotes')
+            validate_filename(self.source_file)
             if any(len(quote.strip()) < 8 for quote in self.gold_quotes):
                 raise ValueError('Each gold quote must contain at least eight non-edge-whitespace characters')
-        elif self.source_file is not None or self.gold_quotes:
-            raise ValueError('Unanswerable questions must have no source_file or gold_quotes')
+            if self.gold_alternatives and len(self.gold_alternatives) != len(self.gold_quotes):
+                raise ValueError('Gold alternatives must have one group per required gold quote')
+        elif self.source_file is not None or self.gold_quotes or self.gold_alternatives:
+            raise ValueError('Unanswerable questions must have no source_file, gold_quotes or gold_alternatives')
         if any(not text.strip() for text in (self.id, self.collection, self.version, self.question, self.expected_answer)):
             raise ValueError('Question fields cannot be whitespace-only')
         return self
@@ -45,7 +69,18 @@ def sha256(raw: bytes) -> str:
 
 
 def read_dataset(directory: Path) -> tuple[list[Question], dict[str, bytes], dict]:
-    question_bytes = (directory / 'questions.dev.jsonl').read_bytes()
+    provenance = json.loads((directory / 'provenance.json').read_text(encoding='utf-8-sig'))
+    question_filename = provenance['questions'].get('path', 'questions.dev.jsonl')
+    # The frozen original corpus used this repository-relative metadata value.
+    # Preserve its bytes: map only this exact legacy label to a local filename;
+    # never resolve a supplied directory prefix or accept other nested paths.
+    if question_filename == 'datasets/tracedesk_ops/questions.dev.jsonl':
+        question_filename = 'questions.dev.jsonl'
+    question_filename = validate_filename(question_filename)
+    question_path = directory / question_filename
+    if question_path.resolve().parent != directory.resolve():
+        raise ValueError('Question filename resolves outside the dataset directory')
+    question_bytes = question_path.read_bytes()
     questions = [Question.model_validate(json.loads(line)) for line in question_bytes.decode('utf-8-sig').splitlines() if line.strip()]
     if not questions or len({q.id for q in questions}) != len(questions):
         raise ValueError('Question IDs must be nonempty and unique')
@@ -56,7 +91,6 @@ def read_dataset(directory: Path) -> tuple[list[Question], dict[str, bytes], dic
                  if path.is_file() and path.suffix.lower() in {'.md', '.txt', '.pdf'}}
     if not documents:
         raise ValueError('No supported documents found in the dataset')
-    provenance = json.loads((directory / 'provenance.json').read_text(encoding='utf-8-sig'))
     if (provenance['collection'], provenance['version']) != next(iter(scopes)):
         raise ValueError('Dataset provenance scope differs from the questions')
     expected = {Path(item['path']).name: item['sha256'] for item in provenance['documents']}
@@ -65,8 +99,34 @@ def read_dataset(directory: Path) -> tuple[list[Question], dict[str, bytes], dic
         raise ValueError('Dataset changed since provenance was recorded; review it and regenerate provenance first')
     if any(q.source_file not in documents for q in questions if q.kind == 'answerable'):
         raise ValueError('A question refers to an unavailable source document')
+    if any(passage.source_file not in documents for q in questions
+           for group in q.gold_alternatives for passage in group):
+        raise ValueError('A gold alternative refers to an unavailable source document')
+    supplemental = {}
+    expected_artifacts = []
+    if 'rubric' in provenance:
+        rubric = provenance['rubric']
+        expected_artifacts.append((validate_filename(rubric['path']), rubric['sha256']))
+    for field, filename in (('protocol_sha256', 'README.md'), ('sources_sha256', 'sources.json')):
+        if field in provenance:
+            expected_artifacts.append((filename, provenance[field]))
+    for filename, expected_hash in expected_artifacts:
+        path = directory / filename
+        if path.resolve().parent != directory.resolve():
+            raise ValueError('Supplemental filename resolves outside the dataset directory')
+        if not path.is_file() or sha256(path.read_bytes()) != expected_hash:
+            raise ValueError(f'Supplemental artifact hash mismatch or missing file: {filename}')
+        supplemental[filename] = expected_hash
+    license_path = directory / 'UPSTREAM_LICENSE'
+    if license_path.exists():
+        if license_path.resolve().parent != directory.resolve() or not license_path.is_file():
+            raise ValueError('UPSTREAM_LICENSE must be a file inside the dataset directory')
+        # No upstream-license hash is required by legacy provenance. Record the
+        # observed bytes so the snapshot copy is checked against this exact read.
+        supplemental['UPSTREAM_LICENSE'] = sha256(license_path.read_bytes())
     return questions, documents, {'provenance': provenance, 'documents_sha256': observed,
-                                   'questions_sha256': sha256(question_bytes)}
+                                   'questions_sha256': sha256(question_bytes), 'questions_path': question_filename,
+                                   'supplemental_sha256': supplemental}
 
 
 def snapshot_scope(source_db: Path, service: Service, questions: list[Question],
@@ -126,12 +186,19 @@ def snapshot_scope(source_db: Path, service: Service, questions: list[Question],
 
 def gold_targets(question: Question, candidates: list[dict]) -> list[set[str]]:
     targets = []
-    for quote in question.gold_quotes:
-        matches = {chunk['id'] for chunk in candidates if chunk['filename'] == question.source_file and
-                   chunk['collection'] == question.collection and chunk['version'] == question.version and quote in chunk['text']}
-        if not matches:
-            raise ValueError(f'Gold quote is not present in a source chunk: {question.id}')
-        targets.append(matches)
+    for index, quote in enumerate(question.gold_quotes):
+        passages = [(question.source_file, quote)]
+        if question.gold_alternatives:
+            passages.extend((passage.source_file, passage.quote) for passage in question.gold_alternatives[index])
+        group_matches = set()
+        for filename, passage_quote in passages:
+            matches = {chunk['id'] for chunk in candidates if chunk['filename'] == filename and
+                       chunk['collection'] == question.collection and chunk['version'] == question.version
+                       and passage_quote in chunk['text']}
+            if not matches:
+                raise ValueError(f'Gold quote is not present in a source chunk: {question.id}, {filename}, {passage_quote!r}')
+            group_matches.update(matches)
+        targets.append(group_matches)
     return targets
 
 

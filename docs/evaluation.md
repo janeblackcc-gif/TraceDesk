@@ -2,7 +2,9 @@
 
 ## 题集
 
-当前公开题集包含Atlas虚构技术文档回归，以及[tracedesk_ops开发集](../datasets/tracedesk_ops/README.md)。后者为3份依据v0.1时期真实代码与本机配置整理的短文档，共17个分块，12道AI拟定问题，其中10道可答、2道不可答。
+当前公开题集包含Atlas虚构技术文档回归、[tracedesk_ops开发集](../datasets/tracedesk_ops/README.md)，以及运行前冻结的[FastAPI外部文档挑战集](../datasets/fastapi_zh_challenge_v1/README.md)。tracedesk_ops为3份依据v0.1时期真实代码与本机配置整理的短文档，共17个分块，12道AI拟定问题，其中10道可答、2道不可答。
+
+新增挑战使用六篇官方资料、133个分块、24题，三种方法共72条全部完成。三种方法Hit@4均为18/18，但严格通过均为13/24；已发现无依据补答、拒答状态不一致及引用语义不匹配。结果与修复优先级见[外部评测报告](external-evaluation.md)，不能用下文较简单开发集上的成绩替代外部表现。
 
 tracedesk_ops是冻结的历史资料快照。0.2版本已增加.env读取；OPS04仍按旧资料评分，用于比较引用协议，不作为当前部署说明。当前使用方式见[部署文档](deployment.md)。这些题不是独立测试集或真实用户问题，语料较小且措辞接近原文。
 
@@ -58,4 +60,4 @@ Windows 11 / Python 3.13.14下，本机开发环境与从候选ZIP解压的新�
 
 首次[远程CI](https://github.com/janeblackcc-gif/TraceDesk/actions/runs/34217162037)已通过：Windows / Ubuntu与Python 3.11 / 3.13的四个组合均完成89项测试、依赖检查、启动诊断和发布文件检查。CI使用模拟模型，不运行GPU问答。
 
-浏览器题目是人为设定的功能检查，不能视为独立质量评测；移动视口也不等于真实手机测试。后续提交以[GitHub Actions](https://github.com/janeblackcc-gif/TraceDesk/actions)实际记录为准。独立问题、真实试用、并发压力、其他GPU和macOS原生浏览器仍待验证。最新状态见[发布验收清单](release-plan.md)。
+浏览器题目是人为设定的功能检查，不能视为独立质量评测；移动视口也不等于真实手机测试。后续提交以[GitHub Actions](https://github.com/janeblackcc-gif/TraceDesk/actions)实际记录为准。新增外部挑战已完成AI复核；独立人工问题、真实试用、并发压力、其他GPU和macOS原生浏览器仍待验证。最新状态见[发布验收清单](release-plan.md)。

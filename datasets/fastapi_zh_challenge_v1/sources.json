@@ -1,0 +1,49 @@
+{
+  "repository": "https://github.com/fastapi/fastapi",
+  "commit": "50113da16fec53b66b80d75e80a89296de4fa5a5",
+  "retrieved_at": "2026-09-08T11:07:58.0173903Z",
+  "files": [
+    {
+      "path": "docs/zh/docs/deployment/concepts.md",
+      "filename": "deployment_concepts.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/deployment/concepts.md",
+      "sha256": "06055ec750479af6220bab0dee84668b25ae7d9f071b0814755ae15f033007eb",
+      "bytes": 17229
+    },
+    {
+      "path": "docs/zh/docs/deployment/docker.md",
+      "filename": "deployment_docker.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/deployment/docker.md",
+      "sha256": "e3859952a40c53eaf67751dd925737491b0e9d230b515845fa92510edbc19589",
+      "bytes": 25458
+    },
+    {
+      "path": "docs/zh/docs/advanced/settings.md",
+      "filename": "advanced_settings.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/advanced/settings.md",
+      "sha256": "f22d6f508d0657cd0b7ae001213e57d000461531b9484b620a20d5bf4868c30a",
+      "bytes": 11314
+    },
+    {
+      "path": "docs/zh/docs/tutorial/background-tasks.md",
+      "filename": "background_tasks.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/tutorial/background-tasks.md",
+      "sha256": "ad62814e6eca0f4946e7679f9f039786c00260823d61757ea6a374f2b468f7d8",
+      "bytes": 4215
+    },
+    {
+      "path": "docs/zh/docs/deployment/server-workers.md",
+      "filename": "server_workers.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/deployment/server-workers.md",
+      "sha256": "b9c4a0c9ab00342c2c1d008cdfb7c93c51043ba14936111d275e45ab8e11ee2a",
+      "bytes": 8238
+    },
+    {
+      "path": "docs/zh/docs/tutorial/handling-errors.md",
+      "filename": "handling_errors.txt",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/50113da16fec53b66b80d75e80a89296de4fa5a5/docs/zh/docs/tutorial/handling-errors.md",
+      "sha256": "89fb081d6ac6a5c364e2820dcce6facdbaa10cc8e751a65cddc123dde21a866b",
+      "bytes": 8459
+    }
+  ]
+}

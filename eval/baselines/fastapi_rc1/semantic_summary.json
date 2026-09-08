@@ -1,0 +1,104 @@
+{
+  "reviewed_at": "2026-09-08T11:48:06.385093+00:00",
+  "reviewer": "Codex parent plus two read-only AI reviewers",
+  "notice": "固定提交的 FastAPI 官方中文资料，AI 在运行前拟定并冻结的新挑战题；未用于此前调参，不是独立人工标注、真实用户评测或可证明未进入模型预训练的盲测。",
+  "results_sha256": "c46f2245d3ca87f771c2716c2867c7b78622d00e29e1ce306150ace3106b9cfd",
+  "review_sha256": "f7ccc61d05430c289b113c406e305cded263c28fee018771846425603d20c3df",
+  "questions_sha256": "6b1c766ff67e90fd0a711af871d97a73e3b25df4294cd1b17e3972b24a796869",
+  "rubric_sha256": "7744c8235cda0ee741d6953ca99a02e5db9a64f15102186770a6252411d1f197",
+  "reviewed_cases": 72,
+  "methods": {
+    "bm25": {
+      "cases": 24,
+      "answerable": 18,
+      "unanswerable": 6,
+      "answerable_correct": 17,
+      "answerable_complete": 16,
+      "answerable_all_claims_supported": 14,
+      "answerable_strict_pass": 12,
+      "semantic_refusal_count": 3,
+      "protocol_refusal_count": 1,
+      "strict_pass": 13,
+      "strict_accuracy": 0.5416666666666666,
+      "failure_categories": {
+        "missing_mandatory_fact": 2,
+        "nonresponsive_extra": 1,
+        "refusal_state_mismatch": 2,
+        "claim_citation_mismatch": 6,
+        "unsupported_causal_attribution": 1,
+        "invented_answer": 2,
+        "unit_confusion": 1,
+        "visible_fallback": 1,
+        "invalid_model_answer": 1,
+        "missing_explicit_refusal": 1,
+        "condition_dropped": 1,
+        "factual_error": 1
+      }
+    },
+    "dense": {
+      "cases": 24,
+      "answerable": 18,
+      "unanswerable": 6,
+      "answerable_correct": 16,
+      "answerable_complete": 17,
+      "answerable_all_claims_supported": 11,
+      "answerable_strict_pass": 11,
+      "semantic_refusal_count": 4,
+      "protocol_refusal_count": 2,
+      "strict_pass": 13,
+      "strict_accuracy": 0.5416666666666666,
+      "failure_categories": {
+        "claim_citation_mismatch": 7,
+        "unsupported_causal_attribution": 2,
+        "invented_answer": 1,
+        "unit_confusion": 1,
+        "incorrect_non_refusal": 1,
+        "missing_explicit_refusal": 1,
+        "nonresponsive_answer": 1,
+        "factual_error": 2,
+        "missing_mandatory_fact": 1,
+        "claim_citation_contradiction": 1,
+        "refusal_state_mismatch": 2
+      }
+    },
+    "hybrid": {
+      "cases": 24,
+      "answerable": 18,
+      "unanswerable": 6,
+      "answerable_correct": 16,
+      "answerable_complete": 18,
+      "answerable_all_claims_supported": 11,
+      "answerable_strict_pass": 11,
+      "semantic_refusal_count": 3,
+      "protocol_refusal_count": 2,
+      "strict_pass": 13,
+      "strict_accuracy": 0.5416666666666666,
+      "failure_categories": {
+        "inaccurate_extra_claim": 2,
+        "claim_citation_mismatch": 8,
+        "unsupported_causal_attribution": 1,
+        "invented_answer": 1,
+        "unit_confusion": 1,
+        "malformed_claim": 1,
+        "incorrect_non_refusal": 2,
+        "unsupported_priority_answer": 1,
+        "unsupported_claim": 1,
+        "refusal_state_mismatch": 1
+      }
+    }
+  },
+  "criteria": {
+    "correct": "Directly responsive and no false facts; correct partial answers may be incomplete.",
+    "complete": "All mandatory facts are expressed, including semantic equivalents; citation contents alone do not count as answer text.",
+    "supported": "Every claim must be supported by its own attached citations, not a different claim citation.",
+    "strict_pass": "Answerable: real model answer and all three semantic checks. Unanswerable: no_evidence and empty claims.",
+    "semantic_refusal": "Answer text states the requested facts are unavailable, without supplying an invented answer; can disagree with response status."
+  },
+  "judgment_limits": [
+    "AI judgments, not independent human double annotation.",
+    "Extra causal claims and implied wording admit interpretation; per-case notes expose the decisions.",
+    "FA03 single-process pre-start migration is accepted as the one-time prior step in context.",
+    "FA07 library conversion, FA09 cached first-only creation, FA12 merged non-independent objects are accepted as semantic equivalents.",
+    "No annotations, source text or application behavior were revised after the first run."
+  ]
+}

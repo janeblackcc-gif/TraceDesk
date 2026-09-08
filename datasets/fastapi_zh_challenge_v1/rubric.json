@@ -1,0 +1,379 @@
+{
+  "reviewer": "AI agent; not independent human labeling",
+  "correct": "At least one directly responsive, supported fact; no false factual claim. Partial answers can be correct but incomplete.",
+  "complete": "All mandatory facts are present without loss of conditions; negative cases require explicit refusal without an invented answer.",
+  "all_claims_supported": "Each factual claim is entailed by its own cited passage(s), not merely somewhere in the corpus.",
+  "strict_pass": "Answerable: real Ollama answer, correct, complete, all_claims_supported. Unanswerable: no_evidence and no claims.",
+  "cases": [
+    {
+      "id": "FA01",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "四个进程的模型合计约 4 GB RAM",
+        "多个进程通常不共享内存，每个进程都有一份模型"
+      ],
+      "related_source_file": "deployment_concepts.txt",
+      "gold_line_ranges": [
+        [
+          203
+        ],
+        [
+          207
+        ]
+      ]
+    },
+    {
+      "id": "FA02",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "普通错误通常局限于单个请求并返回 500",
+        "应用继续处理后续请求",
+        "进程崩溃时由外部组件重启",
+        "应用已经崩溃，内部代码无法负责恢复"
+      ],
+      "related_source_file": "deployment_concepts.txt",
+      "gold_line_ranges": [
+        [
+          140,
+          142
+        ],
+        [
+          152
+        ],
+        [
+          162
+        ]
+      ]
+    },
+    {
+      "id": "FA03",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "应用 worker 启动前执行",
+        "通常由单个进程执行一次",
+        "并行多次执行会重复工作并可能冲突"
+      ],
+      "related_source_file": "deployment_concepts.txt",
+      "gold_line_ranges": [
+        [
+          252,
+          258
+        ],
+        [
+          260
+        ]
+      ]
+    },
+    {
+      "id": "FN01",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确资料未给出精确重启次数和间隔",
+        "不得把至少几次改写成确定次数"
+      ],
+      "related_source_file": "deployment_concepts.txt",
+      "gold_line_ranges": []
+    },
+    {
+      "id": "FA04",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "添加 --proxy-headers",
+        "信任代理发送的标头以得知 HTTPS 等代理信息"
+      ],
+      "related_source_file": "deployment_docker.txt",
+      "gold_line_ranges": [
+        [
+          275
+        ]
+      ]
+    },
+    {
+      "id": "FA05",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "使用 CMD 的 exec 形式",
+        "确保优雅停机",
+        "触发生命周期事件"
+      ],
+      "related_source_file": "deployment_docker.txt",
+      "gold_line_ranges": [
+        [
+          254
+        ]
+      ]
+    },
+    {
+      "id": "FA06",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "依赖文件不频繁变更，先复制可使用缓存",
+        "后续下载安装依赖也可使用缓存，节省时间",
+        "应用代码变化最频繁，因此最后复制"
+      ],
+      "related_source_file": "deployment_docker.txt",
+      "gold_line_ranges": [
+        [
+          299,
+          301
+        ],
+        [
+          307
+        ]
+      ]
+    },
+    {
+      "id": "FN02",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确语料缺少镜像精确大小",
+        "不得根据基础镜像或经验编造 MB 数"
+      ],
+      "related_source_file": "deployment_docker.txt",
+      "gold_line_ranges": []
+    },
+    {
+      "id": "FA07",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "环境变量读入 Python 后是 str",
+        "类型转换和验证需要由代码完成",
+        "Pydantic Settings 按声明类型转换并验证，使 items_per_user 为 int"
+      ],
+      "related_source_file": "advanced_settings.txt",
+      "gold_line_ranges": [
+        [
+          23
+        ],
+        [
+          71
+        ]
+      ]
+    },
+    {
+      "id": "FA08",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "Pydantic 读取环境变量不区分大小写",
+        "APP_NAME 可用于 app_name"
+      ],
+      "related_source_file": "advanced_settings.txt",
+      "gold_line_ranges": [
+        [
+          69
+        ]
+      ]
+    },
+    {
+      "id": "FA09",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "依赖项可在测试中覆盖",
+        "Settings 只在首次调用时创建一次",
+        "后续请求复用同一对象",
+        "避免每个请求重复读取 .env"
+      ],
+      "related_source_file": "advanced_settings.txt",
+      "gold_line_ranges": [
+        [
+          249,
+          255
+        ],
+        [
+          316
+        ]
+      ]
+    },
+    {
+      "id": "FN03",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确语料缺少同名覆盖优先级",
+        "不得凭外部知识推测优先级"
+      ],
+      "related_source_file": "advanced_settings.txt",
+      "gold_line_ranges": []
+    },
+    {
+      "id": "FA10",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "可传任意位置参数序列",
+        "可传关键字参数"
+      ],
+      "related_source_file": "background_tasks.txt",
+      "gold_line_ranges": [
+        [
+          42,
+          46
+        ]
+      ]
+    },
+    {
+      "id": "FA11",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "繁重且无需同进程共享状态时可用 Celery",
+        "需要访问同一应用对象或执行小任务时使用 BackgroundTasks"
+      ],
+      "related_source_file": "background_tasks.txt",
+      "gold_line_ranges": [
+        [
+          76
+        ],
+        [
+          80
+        ]
+      ]
+    },
+    {
+      "id": "FA12",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "FastAPI 复用同一对象",
+        "所有后台任务会被合并",
+        "任务在响应发出之后运行"
+      ],
+      "related_source_file": "background_tasks.txt",
+      "gold_line_ranges": [
+        [
+          52
+        ],
+        [
+          56
+        ]
+      ]
+    },
+    {
+      "id": "FN04",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确语料未给出后台任务自动重试次数和算法",
+        "不得把进程重启或通用异常处理解释为后台任务重试"
+      ],
+      "related_source_file": "background_tasks.txt",
+      "gold_line_ranges": []
+    },
+    {
+      "id": "FA13",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "选项名是 --workers",
+        "该选项用于启动多个工作进程"
+      ],
+      "related_source_file": "server_workers.txt",
+      "gold_line_ranges": [
+        [
+          30
+        ]
+      ]
+    },
+    {
+      "id": "FA14",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "Kubernetes 环境通常不需要容器内多 worker",
+        "通常每个容器运行一个 Uvicorn 进程"
+      ],
+      "related_source_file": "server_workers.txt",
+      "gold_line_ranges": [
+        [
+          24
+        ]
+      ]
+    },
+    {
+      "id": "FA15",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "执行并行化并利用多核 CPU，处理更多请求",
+        "主要帮助复制，对重启有一点帮助",
+        "HTTPS、启动时运行、内存和启动前步骤仍需处理"
+      ],
+      "related_source_file": "server_workers.txt",
+      "gold_line_ranges": [
+        [
+          116
+        ],
+        [
+          118,
+          125
+        ]
+      ]
+    },
+    {
+      "id": "FN05",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确语料没有给出最大并发请求数",
+        "不得把 worker 数量 4 当成并发上限"
+      ],
+      "related_source_file": "server_workers.txt",
+      "gold_line_ranges": []
+    },
+    {
+      "id": "FA16",
+      "category": "跨段信息",
+      "mandatory_facts": [
+        "不能 return，必须 raise",
+        "路径操作后续代码不再执行",
+        "请求立即终止并向客户端发送 HTTP 错误"
+      ],
+      "related_source_file": "handling_errors.txt",
+      "gold_line_ranges": [
+        [
+          34
+        ],
+        [
+          36
+        ]
+      ]
+    },
+    {
+      "id": "FA17",
+      "category": "精确事实",
+      "mandatory_facts": [
+        "detail 不限于字符串，可接受任意可转换为 JSON 的值",
+        "可以使用 dict 或 list",
+        "FastAPI 自动转换为 JSON"
+      ],
+      "related_source_file": "handling_errors.txt",
+      "gold_line_ranges": [
+        [
+          64,
+          68
+        ]
+      ]
+    },
+    {
+      "id": "FA18",
+      "category": "条件与例外",
+      "mandatory_facts": [
+        "FastAPI detail 接受任意可转换为 JSON 的数据",
+        "Starlette detail 只接受字符串",
+        "异常处理器注册到 Starlette HTTPException",
+        "这样可捕获 Starlette 内部、扩展或插件抛出的异常"
+      ],
+      "related_source_file": "handling_errors.txt",
+      "gold_line_ranges": [
+        [
+          224
+        ],
+        [
+          228,
+          230
+        ]
+      ]
+    },
+    {
+      "id": "FN06",
+      "category": "相关但不可答",
+      "mandatory_facts": [
+        "明确语料未给出响应头名称和值",
+        "不得根据未导入的 docs_src 示例补答"
+      ],
+      "related_source_file": "handling_errors.txt",
+      "gold_line_ranges": []
+    }
+  ]
+}

@@ -13,5 +13,6 @@
 
 # Frozen dataset and evaluation evidence retain their recorded bytes on checkout.
 datasets/tracedesk_ops/** -text
+datasets/fastapi_zh_challenge_v1/** -text
 eval/baselines/** -text
 docs/assets/browser-acceptance/** -text

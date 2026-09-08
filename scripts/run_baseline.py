@@ -75,7 +75,7 @@ def write_report(output: Path, rows: list[dict], summary: dict, status: dict) ->
                       'error': row.get('error'), **{key: metrics.get(key) for key in fields if key in metrics}}
             writer.writerow(values)
     lines = ['# 批量评测结果', '', status['notice'], '',
-             '三种方法均复用 Service.ask，使用相同生成模型；评测输入来自在线知识库的只读快照。',
+             '三种方法均复用 Service.ask，使用相同生成模型；评测输入来自导入知识库的只读快照。',
              '先按每种方法预热一次，再按题号轮换方法顺序。预热不计分，正式每题每方法只运行一次。', '',
              '| 方法 | Hit@4 | Recall@5 | MRR@5 | 可答题返回模型答案 | 正确拒答 | 降级 | 检索P50 ms | 总耗时P50/P95 ms |',
              '|---|---:|---:|---:|---:|---:|---:|---:|---:|']
@@ -120,11 +120,18 @@ def main() -> int:
     (snapshot_dir / 'documents').mkdir(parents=True)
     for name, raw in documents.items():
         (snapshot_dir / 'documents' / name).write_bytes(raw)
-    shutil.copy2(args.dataset / 'questions.dev.jsonl', snapshot_dir / 'questions.dev.jsonl')
+    question_filename = dataset_meta['questions_path']
+    shutil.copy2(args.dataset / question_filename, snapshot_dir / question_filename)
     shutil.copy2(args.dataset / 'provenance.json', snapshot_dir / 'provenance.json')
+    for filename, expected_hash in dataset_meta['supplemental_sha256'].items():
+        raw = (args.dataset / filename).read_bytes()
+        if sha256(raw) != expected_hash:
+            raise ValueError(f'Supplemental artifact changed before snapshot: {filename}')
+        (snapshot_dir / filename).write_bytes(raw)
     status = {'status': 'preparing', 'started_at': now(), 'completed_cases': 0,
               'expected_cases': len(questions) * len(METHODS), 'output': str(output),
-              'notice': '本轮为AI辅助整理的真实项目运维资料与AI拟定开发题；不是独立测试集或真实用户评测。',
+              'notice': dataset_meta['provenance'].get('notice',
+                  '本轮为AI辅助整理的真实项目运维资料与AI拟定开发题；不是独立测试集或真实用户评测。'),
               'http_timeout_seconds': 120, 'max_silence_seconds_per_request': 120,
               'max_seconds': args.max_seconds, 'methods': list(METHODS),
               'method_order': 'rotate bm25,dense,hybrid by question index; each case gets a new conversation',
