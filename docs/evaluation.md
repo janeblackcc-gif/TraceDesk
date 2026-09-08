@@ -56,4 +56,6 @@ Windows 11 / Python 3.13.14下，本机开发环境与从候选ZIP解压的新�
 
 原始[浏览器验收报告](assets/browser-acceptance/report.json)与同目录13张截图随仓库发布；另有用于README的[桌面实景](assets/workspace-desktop.png)、[移动实景](assets/workspace-mobile.png)和[移动引用高亮](assets/citation-mobile.png)。后续截图脚本增加等待临时通知消失，避免通知遮挡展示；不改变应用行为。
 
-浏览器题目是人为设定的功能检查，不能视为独立质量评测；移动视口也不等于真实手机测试。远程CI以[GitHub Actions](https://github.com/janeblackcc-gif/TraceDesk/actions)实际记录为准。独立问题、真实试用、并发压力、其他GPU和macOS原生浏览器仍待验证。最新状态见[发布验收清单](release-plan.md)。
+首次[远程CI](https://github.com/janeblackcc-gif/TraceDesk/actions/runs/34217162037)已通过：Windows / Ubuntu与Python 3.11 / 3.13的四个组合均完成89项测试、依赖检查、启动诊断和发布文件检查。CI使用模拟模型，不运行GPU问答。
+
+浏览器题目是人为设定的功能检查，不能视为独立质量评测；移动视口也不等于真实手机测试。后续提交以[GitHub Actions](https://github.com/janeblackcc-gif/TraceDesk/actions)实际记录为准。独立问题、真实试用、并发压力、其他GPU和macOS原生浏览器仍待验证。最新状态见[发布验收清单](release-plan.md)。
