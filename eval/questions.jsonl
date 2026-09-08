@@ -1,0 +1,40 @@
+{"id": "Q01", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "Atlas 要求哪个 Python 版本？", "gold_quotes": ["要求 Python 3.11"]}
+{"id": "Q02", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "默认服务端口是多少？", "gold_quotes": ["默认服务端口是 8088"]}
+{"id": "Q03", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "健康检查用什么路径？", "gold_quotes": ["健康检查路径为 /ready"]}
+{"id": "Q04", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "访问令牌多久过期？", "gold_quotes": ["访问令牌有效期为 15 分钟"]}
+{"id": "Q05", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "E041 应该怎么修复？", "gold_quotes": ["E041 表示索引维度与嵌入模型不一致"]}
+{"id": "Q06", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "E013 文件编码错误怎么处理？", "gold_quotes": ["E013 表示文本不是 UTF-8 编码"]}
+{"id": "Q07", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "E022 图片型 PDF 如何处理？", "gold_quotes": ["E022 表示 PDF 页面没有可提取文字"]}
+{"id": "Q08", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "E031 是什么意思？", "gold_quotes": ["E031 表示文档含有疑似提示注入内容"]}
+{"id": "Q09", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "E090 生成超时怎么办？", "gold_quotes": ["遇到 E090 时检查本地模型服务是否运行"]}
+{"id": "Q10", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "单个文件的上传限制是多少？", "gold_quotes": ["单个上传文件不得超过 10 MiB"]}
+{"id": "Q11", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "如何处理重复上传？", "gold_quotes": ["视为重复上传，不新增分块"]}
+{"id": "Q12", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "删除文档会删除向量吗？", "gold_quotes": ["删除文档时级联删除分块和向量"]}
+{"id": "Q13", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "查询缓存有效期是多久？", "gold_quotes": ["查询缓存有效期为 6 小时"]}
+{"id": "Q14", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "运行日志保留多久？", "gold_quotes": ["脱敏运行日志保留 7 天"]}
+{"id": "Q15", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "部署时如何备份数据？", "gold_quotes": ["备份前停止写入，复制数据库及上传目录"]}
+{"id": "Q16", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "何时可以直接回滚？", "gold_quotes": ["只有新版本未写入业务数据时才能直接回滚"]}
+{"id": "Q17", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "新人如何申请项目权限？", "gold_quotes": ["新人向项目维护人申请 reader 权限"]}
+{"id": "Q18", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "提交说明采用什么格式？", "gold_quotes": ["提交说明采用 type: summary 格式"]}
+{"id": "Q19", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "故障工单要准备哪些材料？", "gold_quotes": ["提交故障工单时附带版本号、错误码、脱敏日志和复现步骤"]}
+{"id": "Q20", "split": "dev", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "启动顺序是什么？", "gold_quotes": ["启动顺序为：复制 .env.example 为 .env"]}
+{"id": "Q21", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "端口被占用时怎么办？", "gold_quotes": ["启动提示 address already in use 时"]}
+{"id": "Q22", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "答案没有来源怎么办？", "gold_quotes": ["答案没有来源时不能作为操作依据"]}
+{"id": "Q23", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "检索前怎样选择文档版本？", "gold_quotes": ["检索前必须选择知识库和版本"]}
+{"id": "Q24", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "证据不足时应该如何回答？", "gold_quotes": ["所选版本没有足够证据时应明确拒答"]}
+{"id": "Q25", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "复杂表格如何导入？", "gold_quotes": ["复杂表格需人工整理为 Markdown"]}
+{"id": "Q26", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v2", "question": "单次请求超时是多少秒？", "gold_quotes": ["单次文档问答请求超时为 90 秒"]}
+{"id": "Q27", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "旧版默认服务端口是多少？", "gold_quotes": ["默认服务端口是 8000"]}
+{"id": "Q28", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "Python 运行环境要求是什么？", "gold_quotes": ["要求 Python 3.10"]}
+{"id": "Q29", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "旧版访问令牌有效期多久？", "gold_quotes": ["访问令牌有效期为 30 分钟"]}
+{"id": "Q30", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "查询缓存有效期是多少？", "gold_quotes": ["查询缓存有效期为 24 小时"]}
+{"id": "Q31", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "健康检查路径是什么？", "gold_quotes": ["健康检查路径为 /health"]}
+{"id": "Q32", "split": "test", "kind": "answerable", "collection": "Atlas 演示项目", "version": "v1", "question": "单个文件上传限制多少？", "gold_quotes": ["单个上传文件不得超过 20 MiB"]}
+{"id": "Q33", "split": "dev", "kind": "unanswerable", "collection": "Atlas 演示项目", "version": "v2", "question": "明天杭州的天气怎么样？", "gold_quotes": []}
+{"id": "Q34", "split": "dev", "kind": "unanswerable", "collection": "Atlas 演示项目", "version": "v2", "question": "双色球的中奖号码是什么？", "gold_quotes": []}
+{"id": "Q35", "split": "test", "kind": "unanswerable", "collection": "Atlas 演示项目", "version": "v2", "question": "月球到火星相距多远？", "gold_quotes": []}
+{"id": "Q36", "split": "test", "kind": "unanswerable", "collection": "Atlas 演示项目", "version": "v2", "question": "推荐一首钢琴协奏曲。", "gold_quotes": []}
+{"id": "Q37", "split": "test", "kind": "unanswerable", "collection": "Atlas 演示项目", "version": "v2", "question": "西红柿炒鸡蛋放几勺糖？", "gold_quotes": []}
+{"id": "Q38", "split": "dev", "kind": "scope", "collection": "Atlas 演示项目", "version": "v2", "question": "v1 默认服务端口是多少？", "gold_quotes": []}
+{"id": "Q39", "split": "test", "kind": "scope", "collection": "Atlas 演示项目", "version": "v2", "question": "比较 v1 和 v2 的令牌期限。", "gold_quotes": []}
+{"id": "Q40", "split": "test", "kind": "scope", "collection": "Atlas 演示项目", "version": "v2", "question": "请按 v3 文档给出部署命令。", "gold_quotes": []}

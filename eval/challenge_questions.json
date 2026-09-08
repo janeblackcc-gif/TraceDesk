@@ -1,0 +1,124 @@
+[
+  {
+    "question": "凭据作废前能用几刻钟？",
+    "kind": "paraphrase",
+    "gold": "访问令牌有效期为 15 分钟",
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": false
+  },
+  {
+    "question": "不认识的程序占着服务地址，直接关掉它合适吗？",
+    "kind": "paraphrase",
+    "gold": "不要直接关闭未知进程",
+    "status": "evidence_found",
+    "retrieved": [
+      "部署手册.md:服务端口",
+      "故障排查.md:端口被占用",
+      "部署手册.md:回滚条件"
+    ],
+    "passed": true
+  },
+  {
+    "question": "出了事故怎样还原到先前的资料状态？",
+    "kind": "paraphrase",
+    "gold": "备份前停止写入",
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": false
+  },
+  {
+    "question": "相同资料反复拖进来，会越存越多吗？",
+    "kind": "paraphrase",
+    "gold": "视为重复上传，不新增分块",
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": false
+  },
+  {
+    "question": "扫描件能靠重新做索引解决吗？",
+    "kind": "paraphrase",
+    "gold": "直接重建向量索引不能解决",
+    "status": "evidence_found",
+    "retrieved": [
+      "数据管理.md:上传限制",
+      "故障排查.md:E022 图片型 PDF"
+    ],
+    "passed": true
+  },
+  {
+    "question": "项目交接时我该从哪种访问级别开始？",
+    "kind": "paraphrase",
+    "gold": "新人向项目维护人申请 reader 权限",
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": false
+  },
+  {
+    "question": "E041 应该联系哪位管理员，电话号码是多少？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": true
+  },
+  {
+    "question": "访问令牌采用 RSA 还是 HMAC 签名？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "evidence_found",
+    "retrieved": [
+      "部署手册.md:访问令牌",
+      "部署手册.md:日志保留",
+      "新人入门.md:首次排查材料"
+    ],
+    "passed": false
+  },
+  {
+    "question": "运行日志备份存放在哪个具体云存储桶？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "evidence_found",
+    "retrieved": [
+      "部署手册.md:日志保留",
+      "部署手册.md:数据备份与恢复",
+      "部署手册.md:访问令牌",
+      "故障排查.md:E090 生成超时"
+    ],
+    "passed": false
+  },
+  {
+    "question": "Python 服务能支持多少并发用户？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "evidence_found",
+    "retrieved": [
+      "新人入门.md:本地启动顺序",
+      "新人入门.md:Python 运行环境",
+      "部署手册.md:服务端口",
+      "数据管理.md:上传限制",
+      "新人入门.md:首次排查材料"
+    ],
+    "passed": false
+  },
+  {
+    "question": "部署到 GPU 集群时显存上限是多少？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "no_evidence",
+    "retrieved": [],
+    "passed": true
+  },
+  {
+    "question": "上传文件的商业授权费用是多少？",
+    "kind": "hard_negative",
+    "gold": null,
+    "status": "evidence_found",
+    "retrieved": [
+      "数据管理.md:上传限制",
+      "数据管理.md:重复上传",
+      "部署手册.md:数据备份与恢复"
+    ],
+    "passed": false
+  }
+]

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><title>TraceDesk · 溯知</title>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="app-shell">
+<aside class="sidebar">
+  <a href="/" class="brand" aria-label="TraceDesk 首页"><span class="brand-mark" aria-hidden="true">t<span>·</span></span><span>TraceDesk<small>溯知 · 本地证据工作台</small></span></a>
+  <div class="sidebar-label">工作空间</div>
+  <nav aria-label="主导航">
+    <button class="nav-item active" data-view="workspace"><span class="nav-icon">◈</span>问答工作台</button>
+    <button class="nav-item" data-view="library"><span class="nav-icon">▤</span>知识库<span id="nav-doc-count" class="nav-count">0</span></button>
+    <button class="nav-item" data-view="evaluation"><span class="nav-icon">▥</span>评测实验室</button>
+    <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span>本地模型</button>
+  </nav>
+  <div class="sidebar-note"><span class="status-dot"></span> 本机工作空间<p>让结论有出处。<br>让版本不混淆。</p></div>
+  <div class="sidebar-bottom"><div class="avatar">本</div><div>本地单人模式<small>v0.2 RC1 · 不连接云端模型</small></div></div>
+</aside>
+<main id="main">
+  <header class="topbar"><div class="breadcrumb">个人工作空间 <span>/</span> <strong id="page-title">问答工作台</strong></div><div class="topbar-right"><span class="privacy-pill"><span class="status-dot"></span> Local first</span><button id="new-chat" class="button compact secondary">新建问答</button></div></header>
+  <section id="workspace-view" class="view active-view" aria-labelledby="workspace-heading">
+    <div class="workspace-top"><div><div class="eyebrow">KNOWLEDGE, WITH EVIDENCE.</div><h1 id="workspace-heading">让每一个答案，<br><span>都有迹可循。</span></h1><p class="subtitle">从技术文档到可核验的答案。先选对版本，再开始提问。</p></div><div class="version-orbit" aria-hidden="true"><span class="orbit-top">文档</span><div class="orbit-center">溯</div><span class="orbit-bottom">证据</span><span class="orbit-dot"></span></div></div>
+    <div class="scope-bar" aria-label="本次问答的检索范围">
+      <label>知识库<select id="collection-select"><option value="">尚未导入</option></select></label>
+      <label>版本<select id="version-select"><option value="">—</option></select></label>
+      <label class="profile-label">回答模式<select id="profile-select"><option value="evidence">证据模式 · 无需模型</option><option value="ollama">本地 RAG · Ollama</option></select></label>
+      <div class="scope-explainer"><span class="scope-lock">⌑</span><span>只检索所选版本<small>不自动混用旧文档</small></span></div>
+    </div>
+    <div id="demo-banner" class="demo-banner"><div><strong>从一个可验证的例子开始。</strong><span>载入原创 Atlas 演示文档，体验新旧版本、故障排查和引用定位。</span></div><button id="load-demo" class="button primary">载入演示 <span aria-hidden="true">↗</span></button></div>
+    <div id="conversation" aria-live="polite"></div>
+    <div id="starter-section" class="starter-section"><div class="section-caption">试着问一个具体的问题 <span>ATLAS · 示例问题</span></div><div class="starter-grid">
+      <button class="starter-card" data-question="默认服务端口是多少？"><span class="card-symbol">⌘</span><strong>新人快速入门</strong><span>默认服务端口是多少？</span><i aria-hidden="true">↗</i></button>
+      <button class="starter-card" data-question="E041 应该怎么修复？"><span class="card-symbol">⌁</span><strong>定位一个故障</strong><span>E041 应该怎么修复？</span><i aria-hidden="true">↗</i></button>
+      <button class="starter-card" data-question="删除文档会删除向量吗？"><span class="card-symbol">▧</span><strong>核对数据规则</strong><span>删除文档会删除向量吗？</span><i aria-hidden="true">↗</i></button>
+    </div></div>
+    <form id="ask-form" class="composer"><label for="question" class="sr-only">输入技术文档问题</label><textarea id="question" placeholder="提问一个文档中的问题，例如：E041 应该怎么修复？" rows="2" maxlength="1000"></textarea><div class="composer-footer"><span id="mode-description">原文摘录，不是大模型生成 · ⌘ / Ctrl + Enter 发送</span><button id="ask-button" class="button primary" type="submit">查找证据 <span aria-hidden="true">↑</span></button></div></form>
+    <p class="disclaimer">引用已定位不代表内容一定正确。执行任何操作前，请核对原文与所选版本。</p>
+  </section>
+  <section id="library-view" class="view" aria-labelledby="library-heading"><div class="page-intro"><div class="eyebrow">YOUR SOURCE OF TRUTH</div><h1 id="library-heading">把知识整理好，<span>答案才可靠。</span></h1><p class="subtitle">同名文件按版本管理。内容替换或删除后，旧分块和向量同步清理。</p></div>
+    <div class="panel upload-panel"><div><h2>导入文档</h2><p>支持 Markdown、UTF-8 TXT、文本型 PDF。单个文件 ≤10 MiB，PDF ≤100 页；不支持 OCR。</p></div><form id="upload-form"><div class="form-grid"><label>知识库名称<input name="collection" id="upload-collection" required maxlength="60" placeholder="例如：实验室项目"></label><label>文档版本<input name="version" id="upload-version" required maxlength="60" placeholder="例如：v1"></label><label>选择文件<input name="file" type="file" accept=".md,.txt,.pdf" required></label></div><button class="button primary" type="submit">导入并建立文本索引</button></form></div>
+    <div class="library-toolbar"><h2>文档清单 <span id="doc-total" class="subtle">0 个文件</span></h2><div><button id="activate-version" class="button secondary">将所选版本设为当前</button><button id="index-vectors" class="button secondary">建立本地向量索引</button></div></div><p id="library-scope" class="small muted"></p>
+    <div class="panel table-scroll"><table><thead><tr><th>文件</th><th>知识库 / 版本</th><th>状态</th><th>分块</th><th>操作</th></tr></thead><tbody id="document-rows"></tbody></table><div id="library-empty" class="empty-state">还没有文档。在上方导入自己的资料，或前往问答工作台载入演示。</div></div>
+    <div class="notice"><strong>导入不等于信任。</strong>疑似提示注入文档会进入隔离状态，不参与检索。此检测是启发式规则，不是安全保证。</div>
+  </section>
+  <section id="evaluation-view" class="view" aria-labelledby="evaluation-heading"><div class="page-intro"><div class="eyebrow">MEASURE. DON'T GUESS.</div><h1 id="evaluation-heading">每一次改进，<span>都应该被验证。</span></h1><p class="subtitle">对照 BM25 与词项融合基线，保留逐题结果，而不只看一个“准确率”。</p></div>
+    <div class="eval-toolbar"><div><h2>随包合成集 · 回归基线</h2><p class="small muted">40 题 · 原创 Atlas 文档 · 不读取你的个人知识库</p></div><button id="run-eval" class="button primary">重新运行评测</button></div>
+    <div id="eval-notice" class="notice"></div><div id="eval-metrics" class="metric-grid"></div>
+    <div class="panel table-scroll"><table><thead><tr><th>基线 / 分组</th><th>Recall@5</th><th>MRR@5</th><th>nDCG@5</th><th>无答案拒答率</th><th>P95</th></tr></thead><tbody id="eval-comparison"></tbody></table></div>
+    <div class="panel eval-details"><h2>逐题检查</h2><p id="eval-meta" class="small muted"></p><div class="table-scroll"><table><thead><tr><th>题目</th><th>分组</th><th>版本</th><th>结果</th><th>Recall@5</th></tr></thead><tbody id="eval-rows"></tbody></table></div></div>
+  </section>
+  <section id="settings-view" class="view" aria-labelledby="settings-heading"><div class="page-intro"><div class="eyebrow">LOCAL BY CHOICE</div><h1 id="settings-heading">资料留在本机。<span>能力按需开启。</span></h1><p class="subtitle">证据模式随时可用；完整 RAG 需要你安装本地模型并建立向量索引。</p></div>
+    <div class="settings-grid"><div class="panel settings-card"><span class="tag">开箱体验</span><h2>证据模式</h2><p>BM25 + 词项 TF-IDF 融合检索，展示原文摘录和精确来源。不运行生成模型，不将词项向量伪称为语义嵌入。</p><div class="status-line"><span class="status-dot"></span> 无需模型 · 无需 API Key</div></div><div class="panel settings-card"><span class="tag">可选完整链路</span><h2>本地 RAG</h2><p>Ollama 嵌入 + 生成，结构化回答、逐条引用校验。服务不可用时明确报错，不自动转发到云端。</p><div id="model-status" class="status-line muted">尚未检查本地服务</div></div></div>
+    <div class="panel setup-card"><h2>本地模型</h2><p>Ollama 0.33.3</p><pre><code>qwen3-embedding:0.6b-q8_0
+qwen3.5:4b-q4_K_M</code></pre><button id="check-models" class="button secondary">检查本地模型</button></div>
+    <div class="notice"><strong>隐私边界：</strong>服务仅面向本机单人使用，SQLite 数据未加密；有电脑访问权限的人仍可能读取。请勿修改为外网监听或导入未经授权的资料。不开启遥测，不调用云端模型；本机 Ollama 服务也应保持可信且仅使用本地权重。</div>
+  </section>
+</main></div>
+<dialog id="source-dialog" class="source-dialog" aria-labelledby="source-title"><div class="drawer-head"><div><div class="eyebrow">SOURCE EVIDENCE</div><h2 id="source-title">来源原文</h2><p id="source-meta" class="small muted"></p></div><button id="close-source" class="icon-button" aria-label="关闭来源">✕</button></div><div class="drawer-note">行号来自解析文本；PDF 页号为文件页序号，不是原版面坐标高亮。</div><div id="source-lines" class="source-lines"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body></html>

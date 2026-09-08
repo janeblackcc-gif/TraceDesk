@@ -1,0 +1,86 @@
+{
+  "created_at_utc": "2026-09-08T07:45:12.427164+00:00",
+  "collection": "TraceDesk 本机运维",
+  "version": "2026-09-08",
+  "corpus_kind": "AI-assisted operational documentation grounded in the current local project",
+  "question_kind": "AI-authored development draft; not independent or real-user evaluation",
+  "semantic_verification": "Source behavior was reviewed by the coding agent; this script checks structure and exact quotations only.",
+  "documents": [
+    {
+      "path": "datasets/tracedesk_ops/documents/01_本机启动.md",
+      "bytes": 1511,
+      "sha256": "002609f584aabbc909f5ac1127799b2f602696c5ac5db23cdbd0373db1478176",
+      "sources": [
+        {
+          "path": "README.md",
+          "bytes": 5471,
+          "sha256": "2469eea9ac08adf157340f268866711984abe51a57506261316b1e8b161603d6"
+        },
+        {
+          "path": "start_local_rag.ps1",
+          "bytes": 3025,
+          "sha256": "23eaa6dbbf002de1d66d26ac48dab825734adbb0f6a99d5fdd2271821319500d"
+        },
+        {
+          "path": "scripts/start.py",
+          "bytes": 737,
+          "sha256": "98fe88820e995ecf9c8202c7c739d6121eef67f113caf19c2a38e878a71bab35"
+        },
+        {
+          "path": "app/providers.py",
+          "bytes": 6640,
+          "sha256": "d11eb4686c74ef02b0346e75a04c6003a4f09d14e7892c92e0c79f0cb2934d08"
+        }
+      ]
+    },
+    {
+      "path": "datasets/tracedesk_ops/documents/02_文档导入.md",
+      "bytes": 1209,
+      "sha256": "37808da49b1bf42caddd39227ea4fde2929a127a986433715ce36d2072a13ee2",
+      "sources": [
+        {
+          "path": "app/ingest.py",
+          "bytes": 4270,
+          "sha256": "d80197fdbfbf2106d365f6d9da8a22ac1d682b5a8bd7782752bf173cb47acf77"
+        }
+      ]
+    },
+    {
+      "path": "datasets/tracedesk_ops/documents/03_索引与问答.md",
+      "bytes": 1738,
+      "sha256": "d4f51b8991e99352e3bfd98a5b643236cadc46539020c963ecbcdae7e87dde82",
+      "sources": [
+        {
+          "path": "app/service.py",
+          "bytes": 8690,
+          "sha256": "1e8c770153e8385f6314d715c3e9e0b926b3b15b22b22579b1f2fca2f371493d"
+        },
+        {
+          "path": "app/store.py",
+          "bytes": 8826,
+          "sha256": "406bba9028afb77770db5ddd59f4d7b23438d8e03d7d6bfadbc8d8639406b0ad"
+        },
+        {
+          "path": "app/retrieval.py",
+          "bytes": 4265,
+          "sha256": "f93822a1815456282c162ab42cf4cd83323e79d667dd4e063a2b8fa74b148001"
+        },
+        {
+          "path": "app/providers.py",
+          "bytes": 6640,
+          "sha256": "d11eb4686c74ef02b0346e75a04c6003a4f09d14e7892c92e0c79f0cb2934d08"
+        },
+        {
+          "path": "app/main.py",
+          "bytes": 8087,
+          "sha256": "38c8a2573bebeb9b35e46610095132122ea15a9a42cebd58abd854d22145778a"
+        }
+      ]
+    }
+  ],
+  "questions": {
+    "path": "datasets/tracedesk_ops/questions.dev.jsonl",
+    "bytes": 4917,
+    "sha256": "16785c3b838dd3d9e0588e6200f5a0943133b93607179fa3b3dbaa28125411c1"
+  }
+}

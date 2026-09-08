@@ -1,0 +1,54 @@
+{
+  "reviewer": "Codex agent, source-grounded manual adjudication; not independent human review",
+  "reviewed_at": "2026-09-08",
+  "results_sha256": "ff0cd6bcdb465971f13d2c3a798ba29555c9d950e497eda349c6cd2283789d9f",
+  "reviewed_cases": 36,
+  "criteria": {
+    "correct": "Answerable: a delivered Ollama answer resolves the core question with supported claims. Unanswerable: no_evidence with no invented answer. Fallback does not pass even if its excerpts contain the answer.",
+    "complete": "In addition to core correctness, answer prose explicitly covers all facts in expected_answer. Citation text alone does not fill omissions.",
+    "all_claims_supported": "Every delivered claim is supported by its cited text. Fallback excerpts may be supported while correct=false. Null for refusals with no claims."
+  },
+  "methods": {
+    "bm25": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 9,
+      "fully_complete_answerable": 5,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 11,
+      "end_to_end_core_accuracy": 0.9166666666666666,
+      "end_to_end_full_pass": 7,
+      "end_to_end_full_accuracy": 0.5833333333333334,
+      "visible_fallbacks": 1
+    },
+    "dense": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 9,
+      "fully_complete_answerable": 5,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 11,
+      "end_to_end_core_accuracy": 0.9166666666666666,
+      "end_to_end_full_pass": 7,
+      "end_to_end_full_accuracy": 0.5833333333333334,
+      "visible_fallbacks": 1
+    },
+    "hybrid": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 9,
+      "fully_complete_answerable": 5,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 11,
+      "end_to_end_core_accuracy": 0.9166666666666666,
+      "end_to_end_full_pass": 7,
+      "end_to_end_full_accuracy": 0.5833333333333334,
+      "visible_fallbacks": 1
+    }
+  },
+  "limitations": [
+    "AI-authored development questions from 3 AI-assisted documents; no held-out or real-user set.",
+    "Completeness is stricter than the literal question for OPS01, OPS05, OPS07 and OPS09; these are omissions, not false factual claims.",
+    "Raw automatic summary.json semantic_accuracy remains null; use this file and semantic_review.json for agent adjudication."
+  ]
+}

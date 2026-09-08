@@ -1,0 +1,53 @@
+{
+  "notice": "本轮为AI辅助整理的真实项目运维资料与AI拟定开发题；不是独立测试集或真实用户评测。",
+  "methods": [
+    "bm25",
+    "dense",
+    "hybrid"
+  ],
+  "method_order": "rotate bm25,dense,hybrid by question index; each case gets a new conversation",
+  "code_sha256": {
+    "app/batch_evaluation.py": "68030ddf67a4df9f9c57b5e8dd3cb24d65abcd0e018f2e01fd1b108392c5bd0c",
+    "scripts/run_baseline.py": "a24fd2f5d7503f8cbca72e79b87ae246a3c38d7d6b6e43710530165c5aa6a271",
+    "app/service.py": "1e8c770153e8385f6314d715c3e9e0b926b3b15b22b22579b1f2fca2f371493d",
+    "app/retrieval.py": "f93822a1815456282c162ab42cf4cd83323e79d667dd4e063a2b8fa74b148001",
+    "app/providers.py": "d11eb4686c74ef02b0346e75a04c6003a4f09d14e7892c92e0c79f0cb2934d08",
+    "app/store.py": "406bba9028afb77770db5ddd59f4d7b23438d8e03d7d6bfadbc8d8639406b0ad",
+    "app/ingest.py": "d80197fdbfbf2106d365f6d9da8a22ac1d682b5a8bd7782752bf173cb47acf77"
+  },
+  "embedding": "qwen3-embedding:0.6b-q8_0",
+  "generation": "qwen3.5:4b-q4_K_M",
+  "model_digests": {
+    "qwen3.5:4b-q4_K_M": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "qwen3-embedding:0.6b-q8_0": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "ollama_version": "0.33.3",
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "completed",
+  "completed_cases": 36,
+  "dataset": {
+    "documents_sha256": {
+      "01_本机启动.md": "002609f584aabbc909f5ac1127799b2f602696c5ac5db23cdbd0373db1478176",
+      "02_文档导入.md": "37808da49b1bf42caddd39227ea4fde2929a127a986433715ce36d2072a13ee2",
+      "03_索引与问答.md": "d4f51b8991e99352e3bfd98a5b643236cadc46539020c963ecbcdae7e87dde82"
+    },
+    "questions_sha256": "16785c3b838dd3d9e0588e6200f5a0943133b93607179fa3b3dbaa28125411c1"
+  },
+  "scope": {
+    "collection": "TraceDesk 本机运维",
+    "version": "2026-09-08",
+    "chunk_count": 17,
+    "vector_count": 17,
+    "dimension": 1024,
+    "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "original_results_sha256": "ff0cd6bcdb465971f13d2c3a798ba29555c9d950e497eda349c6cd2283789d9f",
+  "export_notice": "Records reserialized; request IDs, host paths, setup calls and embedding arrays omitted. Chat requests/replies preserved. Semantic review hash refers to the private original results; exported file hashes are below.",
+  "exported_sha256": {
+    "results.jsonl": "2d01b17cd711f581dc5350f68718b63830adb135431b48a0b0b6bfb2a258a174",
+    "summary.json": "4b6ad2ffc526d647785ee5e8c14e1da0cfbcbdd5eb3bc87f3e9325a241837479",
+    "semantic_review.json": "bde4e15c6e2cec26a838df811cdeefd963b4a06df28a08a489ae1b12c1ca50c3",
+    "semantic_summary.json": "8bd6da041edfddd3eab3290a869a1308cfb3bd84346f83b09a260a0b4d25c6d5"
+  }
+}

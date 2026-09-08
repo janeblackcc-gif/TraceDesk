@@ -1,0 +1,53 @@
+{
+  "notice": "Atlas 是原创虚构实验室软件项目，所有配置仅为测试数据，不是 TraceDesk 配置。",
+  "documents": [
+    {
+      "filename": "新人入门.md",
+      "file": "v1_新人入门.md",
+      "collection": "Atlas 演示项目",
+      "version": "v1"
+    },
+    {
+      "filename": "部署手册.md",
+      "file": "v1_部署手册.md",
+      "collection": "Atlas 演示项目",
+      "version": "v1"
+    },
+    {
+      "filename": "故障排查.md",
+      "file": "v1_故障排查.md",
+      "collection": "Atlas 演示项目",
+      "version": "v1"
+    },
+    {
+      "filename": "数据管理.md",
+      "file": "v1_数据管理.md",
+      "collection": "Atlas 演示项目",
+      "version": "v1"
+    },
+    {
+      "filename": "新人入门.md",
+      "file": "v2_新人入门.md",
+      "collection": "Atlas 演示项目",
+      "version": "v2"
+    },
+    {
+      "filename": "部署手册.md",
+      "file": "v2_部署手册.md",
+      "collection": "Atlas 演示项目",
+      "version": "v2"
+    },
+    {
+      "filename": "故障排查.md",
+      "file": "v2_故障排查.md",
+      "collection": "Atlas 演示项目",
+      "version": "v2"
+    },
+    {
+      "filename": "数据管理.md",
+      "file": "v2_数据管理.md",
+      "collection": "Atlas 演示项目",
+      "version": "v2"
+    }
+  ]
+}

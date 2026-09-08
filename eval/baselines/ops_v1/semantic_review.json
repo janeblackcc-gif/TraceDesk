@@ -1,0 +1,290 @@
+[
+  {
+    "id": "OPS01",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "地址与引用正确；正文未明确补充仅本机访问，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS01",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "地址与引用正确；正文未明确补充仅本机访问，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "地址与引用正确；正文未明确补充仅本机访问，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS02",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "项目根目录、PowerShell 7和启动命令均正确，引用直接支持。"
+  },
+  {
+    "id": "OPS02",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "项目根目录、PowerShell 7和启动命令均正确，引用直接支持。"
+  },
+  {
+    "id": "OPS02",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "项目根目录、PowerShell 7和启动命令均正确，引用直接支持。"
+  },
+  {
+    "id": "OPS03",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "嵌入和生成模型完整标签均正确；额外给出的模型参数有逐项原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS03",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "嵌入和生成模型完整标签均正确；额外给出的模型参数有逐项原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS03",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "嵌入和生成模型完整标签均正确；额外给出的模型参数有逐项原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS04",
+    "method": "bm25",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "核心事实和原始生成结论正确，但引用删除了.env周围及.env.example后的原文空格，逐字校验失败；最终是有明确警告的原文摘录，不计有效模型回答。"
+  },
+  {
+    "id": "OPS04",
+    "method": "dense",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "核心事实和原始生成结论正确，但引用删除了.env周围及.env.example后的原文空格，逐字校验失败；最终是有明确警告的原文摘录，不计有效模型回答。"
+  },
+  {
+    "id": "OPS04",
+    "method": "hybrid",
+    "correct": false,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "核心事实和原始生成结论正确，但引用删除了.env周围及.env.example后的原文空格，逐字校验失败；最终是有明确警告的原文摘录，不计有效模型回答。"
+  },
+  {
+    "id": "OPS05",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "10 MiB上限正确；正文未补充文件必须非空，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS05",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "10 MiB上限正确；正文未补充文件必须非空，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS05",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "10 MiB上限正确；正文未补充文件必须非空，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "三种可接受格式、文本型PDF限定和拒绝ZIP均正确；额外限制有原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS06",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "三种可接受格式、文本型PDF限定和拒绝ZIP均正确；额外限制有原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS06",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "三种可接受格式、文本型PDF限定和拒绝ZIP均正确；额外限制有原文依据，回答偏长。"
+  },
+  {
+    "id": "OPS07",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答不能直接处理无可提取文字的扫描PDF；正文未明确没有OCR功能，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS07",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答不能直接处理无可提取文字的扫描PDF；正文未明确没有OCR功能，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS07",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答不能直接处理无可提取文字的扫描PDF；正文未明确没有OCR功能，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS08",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "明确digest改变后旧索引不能沿用且必须重建，引用支持。"
+  },
+  {
+    "id": "OPS08",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "明确digest改变后旧索引不能沿用且必须重建，引用支持。"
+  },
+  {
+    "id": "OPS08",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "明确digest改变后旧索引不能沿用且必须重建，引用支持。"
+  },
+  {
+    "id": "OPS09",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答数量为4；正文未明确是排名前4个，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS09",
+    "method": "bm25",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答数量为4；正文未明确是排名前4个，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS09",
+    "method": "dense",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确回答数量为4；正文未明确是排名前4个，故不算完整覆盖参考答案。"
+  },
+  {
+    "id": "OPS10",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "准确区分引用逐字匹配与结论的语义正确性、完整性。"
+  },
+  {
+    "id": "OPS10",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "准确区分引用逐字匹配与结论的语义正确性、完整性。"
+  },
+  {
+    "id": "OPS10",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "准确区分引用逐字匹配与结论的语义正确性、完整性。"
+  },
+  {
+    "id": "OPS11",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "候选只有项目背景，没有维护人电话；模型主动拒答，未虚构联系方式。"
+  },
+  {
+    "id": "OPS11",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "候选只有项目背景，没有维护人电话；模型主动拒答，未虚构联系方式。"
+  },
+  {
+    "id": "OPS11",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "候选只有项目背景，没有维护人电话；模型主动拒答，未虚构联系方式。"
+  },
+  {
+    "id": "OPS12",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "检索为空，系统在调用生成前拒答；文档没有百人并发容量或硬件测量。"
+  },
+  {
+    "id": "OPS12",
+    "method": "bm25",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "检索为空，系统在调用生成前拒答；文档没有百人并发容量或硬件测量。"
+  },
+  {
+    "id": "OPS12",
+    "method": "dense",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": null,
+    "notes": "检索为空，系统在调用生成前拒答；文档没有百人并发容量或硬件测量。"
+  }
+]

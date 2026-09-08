@@ -1,0 +1,55 @@
+{
+  "reviewer": "Codex agent, source-grounded manual adjudication; not independent human review",
+  "reviewed_at": "2026-09-08",
+  "results_sha256": "b17160442d28f9bddc1f5b9962201cf91e3c3fe65d34ed4dc2eaa27a22740b03",
+  "reviewed_cases": 36,
+  "criteria": {
+    "correct": "Answerable: a delivered Ollama answer resolves the core question with supported claims. Unanswerable: no_evidence with no invented answer. Fallback does not pass.",
+    "complete": "Answer prose explicitly covers all facts in expected_answer. Citation text alone does not fill omissions.",
+    "all_claims_supported": "Every delivered claim is supported by its cited text. Null for refusals with no claims."
+  },
+  "methods": {
+    "bm25": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 10,
+      "fully_complete_answerable": 9,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 12,
+      "end_to_end_core_accuracy": 1,
+      "end_to_end_full_pass": 11,
+      "end_to_end_full_accuracy": 0.9166666666666666,
+      "visible_fallbacks": 0
+    },
+    "dense": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 10,
+      "fully_complete_answerable": 8,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 12,
+      "end_to_end_core_accuracy": 1,
+      "end_to_end_full_pass": 10,
+      "end_to_end_full_accuracy": 0.8333333333333334,
+      "visible_fallbacks": 0
+    },
+    "hybrid": {
+      "reviewed": 12,
+      "answerable": 10,
+      "core_correct_answerable": 10,
+      "fully_complete_answerable": 8,
+      "correct_refusals": 2,
+      "end_to_end_core_pass": 12,
+      "end_to_end_core_accuracy": 1,
+      "end_to_end_full_pass": 10,
+      "end_to_end_full_accuracy": 0.8333333333333334,
+      "visible_fallbacks": 0
+    }
+  },
+  "limitations": [
+    "Same 12 AI-authored development questions and historical v0.1 corpus; no held-out or real-user validation.",
+    "Current v0.2 supports .env loading; OPS04 measures fidelity to a frozen historical source.",
+    "Some answers remain verbose; OPS05 omits nonempty, and OPS02 dense/hybrid omit explicit PowerShell 7 wording.",
+    "Source selection guarantees provenance and exact text, not semantic entailment."
+  ]
+}
