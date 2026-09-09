@@ -2,7 +2,7 @@
 
 面向技术文档交接的本地RAG工作台。按知识库和版本查找资料，生成带原文引用的回答，并在资料不足或引用失败时明确提示。
 
-当前候选版本为 **0.2.0rc2**，面向可复现的本地单人部署。后端使用FastAPI与SQLite，网页为原生HTML/CSS/JavaScript，本地模型通过Ollama调用。复杂论文问答仍存在实质性错误，继续保持预发布状态。
+当前已发布的预发布版本为 **0.2.0rc2**，面向可复现的本地单人部署。后端使用FastAPI与SQLite，网页为原生HTML/CSS/JavaScript，本地模型通过Ollama调用。复杂论文问答仍存在实质性错误，继续保持预发布状态。
 
 ![本地RAG回答与逐条原文引用](docs/assets/workspace-desktop.png)
 
