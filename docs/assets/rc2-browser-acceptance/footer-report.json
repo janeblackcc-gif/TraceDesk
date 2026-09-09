@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "checks": [
+    "served HTML bytes match the corrected package",
+    "running backend version is 0.2.0rc2",
+    "visible footer is RC2"
+  ],
+  "health": {
+    "status": "ok",
+    "version": "0.2.0rc2",
+    "single_user": true,
+    "default_profile": "evidence"
+  },
+  "footer": "v0.2 RC2 · 不连接云端模型",
+  "html_sha256": "d0194196b83bcbe4ff21a854417d1380f890519733eb3412382b2a6531d26ca4",
+  "scope": "Targeted version-label check after the separate 38-check functional run; no model inference."
+}

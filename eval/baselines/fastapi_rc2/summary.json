@@ -1,0 +1,32 @@
+{
+  "status": "completed",
+  "notice": "Development regression after removing unconditional answer rewriting; not independent human evaluation.",
+  "methods": {
+    "hybrid": {
+      "cases": 24,
+      "answerable": 18,
+      "unanswerable": 6,
+      "scored_answerable": 18,
+      "errors": 0,
+      "hit_at_4": 0.9444444444444444,
+      "recall_at_5": 0.9611111111111111,
+      "mrr_at_5": 0.8351851851851851,
+      "gold_coverage_at_4": 0.9166666666666666,
+      "all_gold_in_context_count": 18,
+      "answerable_real_model_answers": 18,
+      "behavior_expected_count": 24,
+      "correct_refusal_count": 6,
+      "refusal_recall": 1.0,
+      "refusal_precision": 1.0,
+      "false_refusal_count": 0,
+      "fallback_count": 0,
+      "citation_checked_answers": 18,
+      "citation_exact_answers": 18,
+      "retrieval_p50_ms": 483.36,
+      "retrieval_p95_ms": 732.27,
+      "total_p50_ms": 6347.8,
+      "total_p95_ms": 9755.33,
+      "semantic_accuracy": null
+    }
+  }
+}

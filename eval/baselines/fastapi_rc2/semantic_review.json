@@ -1,0 +1,279 @@
+[
+  {
+    "id": "FA01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "4 GB及每进程独立内存均回答完整且各有引用。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA02",
+    "method": "hybrid",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "notes": "普通请求错误与进程崩溃均回答，但无依据加入HTTPException示例，并将通常限制于请求扩大为无条件表述。自己的第一条引用不支持新增示例。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "failure_categories": [
+      "correct",
+      "all_claims_supported"
+    ]
+  },
+  {
+    "id": "FA03",
+    "method": "hybrid",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "notes": "覆盖单进程、启动前和重复工作，但将可能冲突写成会引发冲突，强化了原文因果强度。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "failure_categories": [
+      "correct",
+      "all_claims_supported"
+    ]
+  },
+  {
+    "id": "FN01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "选项和信任代理标头的作用均由自身引用直接支持。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA05",
+    "method": "hybrid",
+    "correct": false,
+    "complete": true,
+    "all_claims_supported": false,
+    "notes": "exec选择和生命周期作用正确，但额外断言shell形式必然无法停机或触发生命周期，超过引用中确保能力的陈述。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "failure_categories": [
+      "correct",
+      "all_claims_supported"
+    ]
+  },
+  {
+    "id": "FA06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "依赖低变更频率、缓存复用和代码后置均说明，并由两个引用支持；后续步骤难复用缓存的表述来自原文。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FN02",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA07",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "说明str、BaseSettings及按注解转换为int，未回答参考要求中的验证环节。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "FA08",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "大小写不敏感及APP_NAME映射完整，有直接引用。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA09",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "完整说明首次创建、后续复用、避免重复读.env及测试依赖覆盖。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FN03",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA10",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "位置参数和关键字参数均覆盖。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA11",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "Celery和BackgroundTasks的计算量、共享状态和小任务条件均保留。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA12",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "复用同一对象、合并任务及响应后执行均完整。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FN04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA13",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "workers选项正确，额外的数量、多核作用和集群建议均有对应引用。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA14",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "通常每容器一个进程及集群层复制、负载均衡均有对应依据。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA15",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "并行、多核、请求量及仍需处理事项已回答，也保留重启有一点帮助；未明确说明worker主要帮助复制这一必答关系。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "FN05",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA16",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "raise而非return、停止后续代码及返回HTTP错误均完整。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA17",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "任意可转JSON的值及自动转换均完整，虽有重复但没有错误。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FA18",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "两种detail类型和注册到Starlette类均由引用直接支持。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "FN06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "所问精确事实未提供，最终结果为no_evidence且claims为空，符合冻结拒答协议。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "failure_categories": []
+  }
+]

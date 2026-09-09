@@ -3,6 +3,7 @@ import httpx
 import pytest
 from app.providers import Ollama, ModelUnavailable
 from app.service import Service
+from app.citations import MAX_QUOTE_CHARS, quote_passages
 
 
 EVIDENCE = {'id': 'document:1', 'filename': 'guide.md', 'version': 'v1',
@@ -54,8 +55,14 @@ def test_long_source_is_split_into_exact_bounded_passages():
     answer, request = generate(reply('E1S1'), [evidence])
     passages = json.loads(request['messages'][1]['content'])['evidence'][0]['passages']
     assert len(passages) > 1
-    assert all(8 <= len(p['text']) <= 600 and p['text'] in evidence['text'] for p in passages)
+    assert all(8 <= len(p['text']) <= MAX_QUOTE_CHARS and p['text'] in evidence['text'] for p in passages)
     assert Service.validate_claims(answer, [evidence]) is not None
+
+
+def test_normal_ingestion_chunk_is_not_split_from_its_qualifier():
+    text = 'An earlier section discusses computation.\n' * 17 + 'The noise is complex Gaussian.'
+    assert 600 < len(text) < 850
+    assert quote_passages(text) == [text]
 
 
 def test_abstention_remains_an_abstention():

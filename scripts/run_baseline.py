@@ -1,4 +1,4 @@
-"""Benchmark three retrieval methods with the same local generator and corpus."""
+"""Benchmark selected retrieval methods with the same local generator and corpus."""
 from __future__ import annotations
 import argparse
 import csv
@@ -35,6 +35,7 @@ class RecordedOllama(Ollama):
     def _request(self, path: str, payload: dict | None = None) -> dict:
         record = {'path': path, 'payload': payload}
         started = time.perf_counter()
+        print(json.dumps({'time': now(), 'event': 'model_request_started', 'path': path}), flush=True)
         try:
             response = super()._request(path, payload)
             if path == '/api/embed':
@@ -49,6 +50,8 @@ class RecordedOllama(Ollama):
         finally:
             record['wall_ms'] = (time.perf_counter() - started) * 1000
             self.calls.append(record)
+            print(json.dumps({'time': now(), 'event': 'model_request_finished', 'path': path,
+                              'wall_ms': round(record['wall_ms'], 2), 'failed': 'error' in record}), flush=True)
 
 
 def model_snapshot(provider: Ollama) -> dict:
@@ -75,7 +78,7 @@ def write_report(output: Path, rows: list[dict], summary: dict, status: dict) ->
                       'error': row.get('error'), **{key: metrics.get(key) for key in fields if key in metrics}}
             writer.writerow(values)
     lines = ['# 批量评测结果', '', status['notice'], '',
-             '三种方法均复用 Service.ask，使用相同生成模型；评测输入来自导入知识库的只读快照。',
+             '所选方法均复用 Service.ask，使用相同生成模型；评测输入来自导入知识库的只读快照。',
              '先按每种方法预热一次，再按题号轮换方法顺序。预热不计分，正式每题每方法只运行一次。', '',
              '| 方法 | Hit@4 | Recall@5 | MRR@5 | 可答题返回模型答案 | 正确拒答 | 降级 | 检索P50 ms | 总耗时P50/P95 ms |',
              '|---|---:|---:|---:|---:|---:|---:|---:|---:|']
@@ -87,12 +90,13 @@ def write_report(output: Path, rows: list[dict], summary: dict, status: dict) ->
     lines += ['', '## 指标口径', '',
               '- Hit@4：可答题前4个片段是否至少命中一个标注相关块；Recall@5：前5个片段召回的相关块比例。',
               '- MRR@5：第一个相关片段排名的倒数；gold_coverage_at_4另行检查前4块覆盖了多少条必要原文，防止多事实题只命中一部分。',
+              '- generation_context_gold_coverage按实际提供给生成模型的来源计算，all_gold_in_context据此判定；旧响应缺少来源清单时按其前4块协议回退。',
               '- 返回模型答案仅表示answered且实际模式为ollama，不等于语义正确；逐字引用通过也不等于条件完整。',
               '- 拒答指标按无答案题统计；同时记录可答题误拒答和引用失败降级。',
               '- 错误题单独保留；检索均值只含可评分的可答题，分母为scored_answerable，不能隐藏errors后对外报告完整通过率。',
               '- 检索耗时包含应用范围检查、模型digest查询，以及dense/hybrid的查询嵌入；不是纯排序算法时间。',
               '- 总耗时包含生成与引用校验；预热记录单独保存，小样本单轮计时不能当作稳定性能保证。',
-              '- 未修改既有检索阈值；BM25、dense、hybrid均按当前应用实现评测。', '',
+              '- BM25、dense、hybrid均按manifest记录的应用版本评测；分句或翻译查询、相邻上下文及生成复核均保留在完整记录中。', '',
               '## 逐题复核', '',
               'results.jsonl包含完整服务响应及Ollama调用记录；results.csv便于筛选，semantic_review.json保留逐题语义标注空位。',
               '必须依据问题、expected_answer、claims和来源原文人工或代理复核，不能把自动行为检查当成答案准确率。', '']
@@ -110,7 +114,13 @@ def main() -> int:
     parser.add_argument('--ollama-url', default=settings.ollama_url)
     parser.add_argument('--output', type=Path, default=ROOT / 'evidence/baselines' / datetime.now().strftime('tracedesk_ops_%Y%m%d_%H%M%S'))
     parser.add_argument('--max-seconds', type=int, default=900)
+    parser.add_argument('--methods', nargs='+', choices=METHODS, default=list(METHODS),
+                        help='Retrieval methods to run; defaults to all three')
+    parser.add_argument('--notice', help='Describe this run, e.g. development regression of previously reviewed questions')
     args = parser.parse_args()
+    methods = tuple(args.methods)
+    if len(methods) != len(set(methods)):
+        parser.error('--methods must not contain duplicates')
     if args.max_seconds < 120:
         parser.error('--max-seconds must allow at least one 120-second model request')
     questions, documents, dataset_meta = read_dataset(args.dataset)
@@ -129,12 +139,12 @@ def main() -> int:
             raise ValueError(f'Supplemental artifact changed before snapshot: {filename}')
         (snapshot_dir / filename).write_bytes(raw)
     status = {'status': 'preparing', 'started_at': now(), 'completed_cases': 0,
-              'expected_cases': len(questions) * len(METHODS), 'output': str(output),
-              'notice': dataset_meta['provenance'].get('notice',
+              'expected_cases': len(questions) * len(methods), 'output': str(output),
+              'notice': args.notice or dataset_meta['provenance'].get('notice',
                   '本轮为AI辅助整理的真实项目运维资料与AI拟定开发题；不是独立测试集或真实用户评测。'),
               'http_timeout_seconds': 120, 'max_silence_seconds_per_request': 120,
-              'max_seconds': args.max_seconds, 'methods': list(METHODS),
-              'method_order': 'rotate bm25,dense,hybrid by question index; each case gets a new conversation',
+              'max_seconds': args.max_seconds, 'methods': list(methods),
+              'method_order': 'rotate selected methods by question index; each case gets a new conversation',
               'dataset': dataset_meta, 'semantic_review': 'pending',
               'python': platform.python_version(), 'platform': platform.platform(),
               'code_sha256': {name: sha256((ROOT / name).read_bytes()) for name in (
@@ -166,7 +176,7 @@ def main() -> int:
             status['setup_calls'] = list(provider.calls)
             write_json(output / 'manifest.json', status)
             warmup = []
-            for method in METHODS:
+            for method in methods:
                 if time.perf_counter() >= deadline:
                     raise TimeoutError('Run time budget exhausted during warmup')
                 status.update(status='warming', current_case=questions[0].id, current_method=method)
@@ -179,7 +189,8 @@ def main() -> int:
                 write_json(output / 'warmup.json', warmup)
             with (output / 'results.jsonl').open('x', encoding='utf-8') as handle:
                 for index, question in enumerate(questions):
-                    order = METHODS[index % 3:] + METHODS[:index % 3]
+                    offset = index % len(methods)
+                    order = methods[offset:] + methods[:offset]
                     for method in order:
                         if time.perf_counter() >= deadline:
                             raise TimeoutError('Run time budget exhausted; partial results were retained')
@@ -220,7 +231,7 @@ def main() -> int:
             if provider is not None:
                 provider.client.close()
             status.update(finished_at=now(), completed_cases=len(rows), exit_code=code)
-            write_report(output, rows, summarize(rows), status)
+            write_report(output, rows, summarize(rows, methods), status)
             emit('run_finished', status=status['status'], exit_code=code, completed_cases=len(rows), output=str(output))
     return code
 

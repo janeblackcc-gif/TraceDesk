@@ -1,0 +1,32 @@
+{
+  "status": "completed",
+  "notice": "Development regression on frozen historic operations documents; direct-question and frozen-reference completeness distinguished.",
+  "methods": {
+    "hybrid": {
+      "cases": 12,
+      "answerable": 10,
+      "unanswerable": 2,
+      "scored_answerable": 10,
+      "errors": 0,
+      "hit_at_4": 1.0,
+      "recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "gold_coverage_at_4": 1.0,
+      "all_gold_in_context_count": 10,
+      "answerable_real_model_answers": 10,
+      "behavior_expected_count": 12,
+      "correct_refusal_count": 2,
+      "refusal_recall": 1.0,
+      "refusal_precision": 1.0,
+      "false_refusal_count": 0,
+      "fallback_count": 0,
+      "citation_checked_answers": 10,
+      "citation_exact_answers": 10,
+      "retrieval_p50_ms": 323.2,
+      "retrieval_p95_ms": 378.36,
+      "total_p50_ms": 3697.31,
+      "total_p95_ms": 4955.36,
+      "semantic_accuracy": null
+    }
+  }
+}

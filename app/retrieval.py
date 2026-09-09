@@ -28,7 +28,7 @@ def cosine(a: list[float], b: list[float]) -> float:
 
 def search(question: str, candidates: list[dict], method: str = 'hybrid',
            vectors: dict[str, list[float]] | None = None, query_vector: list[float] | None = None,
-           top_k: int = 5) -> list[dict]:
+           top_k: int = 5, min_dense_score: float = .50) -> list[dict]:
     if not candidates:
         return []
     terms = set(tokenize(question))
@@ -75,8 +75,88 @@ def search(question: str, candidates: list[dict], method: str = 'hybrid',
                 rrf[s['id']] += 1 / (60 + rank)
                 union[s['id']] = s
         combined = [(union[cid], value) for cid, value in rrf.items()]
-    # Heuristic relevance gate, NOT calibrated probability. Keep dense semantic-only matches at >=.50.
+    # Heuristic relevance gate, NOT calibrated probability.
     combined = [(s, value) for s, value in combined if s['coverage'] >= .12 or
-                (vectors is not None and s['secondary'] >= .50)]
+                (vectors is not None and s['secondary'] >= min_dense_score)]
     combined.sort(key=lambda pair: (-pair[1], pair[0]['id']))
     return [{**s, 'score': round(value, 6), 'rank': i + 1} for i, (s, value) in enumerate(combined[:top_k])]
+
+
+def retrieval_queries(question: str) -> list[str]:
+    """Keep the original query and up to three literal clauses; never invent search terms."""
+    parts = list(dict.fromkeys(part.strip() for part in re.split(r'[？?；;。\n]+', question)
+                               if len(part.strip()) >= 8))
+    if len(parts) < 2:
+        return [question]
+    return [question, *[part for part in parts if part != question][:3]]
+
+
+def translation_language(question: str, candidates: list[dict]) -> str | None:
+    """Detect a clear Chinese/English mismatch, leaving identifiers and mixed text alone."""
+    def language(text):
+        chinese = len(re.findall(r'[\u4e00-\u9fff]', text))
+        latin = len(re.findall(r'[A-Za-z]', text))
+        if chinese >= 8 and chinese * 3 >= latin:
+            return 'Chinese'
+        if latin >= 24 and latin > chinese * 3:
+            return 'English'
+        return None
+    source = language('\n'.join(c['text'][:1200] for c in candidates[:16]))
+    query = language(question)
+    return source if query is not None and source is not None and query != source else None
+
+
+def search_context(queries: list[str], candidates: list[dict], method: str = 'hybrid',
+                   vectors: dict[str, list[float]] | None = None,
+                   query_vectors: list[list[float]] | None = None) -> list[dict]:
+    """Balance subquestions, then add bounded adjacent text in the same document.
+
+    The returned text is unchanged, and every added chunk keeps its own source ID.
+    Adjacency is context, not an additional relevance or correctness claim.
+    """
+    if not queries:
+        return []
+    if query_vectors is not None and len(query_vectors) != len(queries):
+        raise ValueError('查询向量数量与检索问题不一致。')
+    rankings = [search(query, candidates, method, vectors,
+                       query_vectors[i] if query_vectors is not None else None,
+                       top_k=6, min_dense_score=.40) for i, query in enumerate(queries)]
+    anchors = []
+    seen = set()
+    for rank in range(6):
+        for query_index, ranking in enumerate(rankings):
+            if rank < len(ranking) and ranking[rank]['id'] not in seen:
+                source = ranking[rank]
+                anchors.append({**source, 'context_origin': 'retrieved', 'query_index': query_index})
+                seen.add(source['id'])
+                if len(anchors) == 6:
+                    break
+        if len(anchors) == 6:
+            break
+    documents = {}
+    for source in candidates:
+        # Keep adjacency within the original scope, even for manually supplied candidates.
+        key = (source['collection'], source['version'], source['doc_id'])
+        documents.setdefault(key, []).append(source)
+    adjacent = {}
+    for group in documents.values():
+        group.sort(key=lambda source: (source['page'], source['start_line'], source['end_line'], source['id']))
+        for i, source in enumerate(group):
+            adjacent[source['id']] = [group[j] for j in (i - 1, i + 1) if 0 <= j < len(group)]
+    pending = list(anchors)
+    for anchor in anchors:
+        for source in adjacent.get(anchor['id'], []):
+            if source['id'] not in seen:
+                pending.append({**source, 'score': 0.0, 'context_origin': 'adjacent',
+                                'context_anchor': anchor['id']})
+                seen.add(source['id'])
+    output = []
+    characters = 0
+    for source in pending:
+        if len(output) >= 18:
+            break
+        if characters + len(source['text']) > 14000:
+            continue
+        output.append({**source, 'rank': len(output) + 1})
+        characters += len(source['text'])
+    return output

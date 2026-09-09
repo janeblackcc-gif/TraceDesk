@@ -1,0 +1,317 @@
+{
+  "status": "passed",
+  "started_at": "2026-09-09T04:09:03.231283+00:00",
+  "finished_at": "2026-09-09T04:09:49.514195+00:00",
+  "elapsed_seconds": 46.284,
+  "browser": "Microsoft Edge via Playwright channel=msedge, headless",
+  "transport": "real HTTP navigation and native browser fetch; no stubs or bridge",
+  "request_timeout_seconds": 120,
+  "scope": "synthetic smoke; empty isolated app required; leaves demo data",
+  "limitations": [
+    "Controlled numeric fixture assertions are not a general semantic evaluation",
+    "Viewport emulation does not certify physical mobile/touch or other browser engines"
+  ],
+  "checks": [
+    {
+      "name": "initial_library_empty"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_empty_workspace",
+      "path": "01_desktop_empty_workspace.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_empty_library",
+      "path": "02_desktop_empty_library.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "demo_v2_port",
+      "status": "evidence_found",
+      "profile": "evidence",
+      "generation_model": null,
+      "trace_id": "551fa82eaa954449815ff586192defcb"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_exact_source_highlight",
+      "path": "03_desktop_exact_source_highlight.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "exact_quote_highlight",
+      "quote": "## 服务端口\nAtlas v2 的默认服务端口是 8088。修改端口应设置 ATLAS_PORT 环境变量，并同步修改健康检查地址。",
+      "source": "部署手册.md"
+    },
+    {
+      "name": "demo_v1_port",
+      "status": "evidence_found",
+      "profile": "evidence",
+      "generation_model": null,
+      "trace_id": "58cfa89b69ec4f01a9266fe3d3790408"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_evidence_v1",
+      "path": "04_desktop_evidence_v1.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "configured_models_ready",
+      "models": {
+        "online": true,
+        "models": [
+          "qwen3.5:4b-q4_K_M",
+          "qwen3-embedding:0.6b-q8_0"
+        ],
+        "embedding": "qwen3-embedding:0.6b-q8_0",
+        "generation": "qwen3.5:4b-q4_K_M",
+        "ready": true
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_models",
+      "path": "05_desktop_models.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "upload_original",
+      "document_id": "5ba8637e4d1f93983b09b02b1d705673",
+      "hours": 7
+    },
+    {
+      "name": "index_original",
+      "version": "v1",
+      "indexed": 2,
+      "total": 2,
+      "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+      "dimension": 1024
+    },
+    {
+      "name": "model_original_interval",
+      "status": "answered",
+      "profile": "ollama",
+      "generation_model": "qwen3.5:4b-q4_K_M",
+      "trace_id": "6e89876a9b954a95956cc48309227906"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "model_original_interval_generation_record",
+      "path": "06_model_original_interval_generation_record.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "generation_record_ui_trace_and_export",
+      "question_name": "model_original_interval",
+      "decision": "answer",
+      "export": "model_original_interval_answer.md"
+    },
+    {
+      "name": "controlled_fixture_interval",
+      "hours": 7,
+      "limitation": "Checks a known numeric fact, not general semantic correctness"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_model_highlight",
+      "path": "07_desktop_model_highlight.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "exact_quote_highlight",
+      "quote": "## 备份间隔\n云杉公开验收项目的备份间隔为 7 小时。\n本文是原创公开浏览器验收用虚构资料，只用于验证文档更新和引用。",
+      "source": "public_browser_backup.md"
+    },
+    {
+      "name": "model_no_answer",
+      "status": "no_evidence",
+      "profile": "ollama",
+      "generation_model": null,
+      "trace_id": "5dcab2b3476440ccb3c6697c8e25f0ae"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "model_no_answer_generation_record",
+      "path": "08_model_no_answer_generation_record.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "generation_record_ui_trace_and_export",
+      "question_name": "model_no_answer",
+      "decision": "abstain",
+      "export": "model_no_answer_answer.md"
+    },
+    {
+      "name": "replace_same_filename",
+      "document_id": "e393d19b7341c47acd8ae58551c57bdd",
+      "hours": 13
+    },
+    {
+      "name": "index_replacement",
+      "version": "v1",
+      "indexed": 2,
+      "total": 2,
+      "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+      "dimension": 1024
+    },
+    {
+      "name": "model_updated_interval",
+      "status": "answered",
+      "profile": "ollama",
+      "generation_model": "qwen3.5:4b-q4_K_M",
+      "trace_id": "c7543675b9d34584af14f1de0ee468e2"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "model_updated_interval_generation_record",
+      "path": "09_model_updated_interval_generation_record.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "generation_record_ui_trace_and_export",
+      "question_name": "model_updated_interval",
+      "decision": "answer",
+      "export": "model_updated_interval_answer.md"
+    },
+    {
+      "name": "controlled_fixture_interval",
+      "hours": 13,
+      "limitation": "Checks a known numeric fact, not general semantic correctness"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_updated_answer",
+      "path": "10_desktop_updated_answer.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "mobile_updated_answer",
+      "path": "11_mobile_updated_answer.png",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "mobile_exact_source_highlight",
+      "path": "12_mobile_exact_source_highlight.png",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "name": "exact_quote_highlight",
+      "quote": "## 备份间隔\n云杉公开验收项目的备份间隔为 13 小时。\n本文是原创公开浏览器验收用虚构资料，只用于验证文档更新和引用。",
+      "source": "public_browser_backup.md"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "mobile_generation_record",
+      "path": "13_mobile_generation_record.png",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "mobile_library",
+      "path": "14_mobile_library.png",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_library_before_delete",
+      "path": "15_desktop_library_before_delete.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "deleted_document_has_no_stale_ui_or_api_source"
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "desktop_after_delete",
+      "path": "16_desktop_after_delete.png",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "name": "screenshot_and_no_horizontal_overflow",
+      "name_of_view": "mobile_after_delete",
+      "path": "17_mobile_after_delete.png",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "name": "no_javascript_or_network_errors"
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "request_failures": [],
+  "exit_code": 0,
+  "app_version": "0.2.0rc2"
+}

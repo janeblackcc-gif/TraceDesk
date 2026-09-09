@@ -45,6 +45,25 @@ def test_partial_context_is_not_complete_and_rank_five_is_not_context():
     assert metrics['semantic_correct'] is None
 
 
+def test_expanded_generation_context_is_scored_separately_from_top_four():
+    q = question(gold_quotes=['The port is 8765.', 'Back up every day.'])
+    sources = [source(), *[source(str(i), text='Unrelated details.') for i in range(3)],
+               source('last', text='Back up every day.')]
+    result = response(sources=sources, generation_source_ids=[s['id'] for s in sources],
+                      claims=[{'text':'Back up every day.',
+                               'citations':[{'chunk_id':'last','quote':'Back up every day.'}]}])
+    metrics = score_response(q, result, gold_targets(q, sources))
+    assert metrics['gold_coverage_at_4'] == .5
+    assert metrics['generation_context_gold_coverage'] == 1
+    assert metrics['all_gold_in_context'] and metrics['citations_exact']
+
+
+@pytest.mark.parametrize('ids', [['foreign'], ['a','a'], [['a']], 'a'])
+def test_generation_context_manifest_must_reference_unique_returned_sources(ids):
+    with pytest.raises(ValueError, match='Generation context'):
+        score_response(question(), response(generation_source_ids=ids), [{'a'}])
+
+
 def test_no_answer_has_no_retrieval_recall_and_false_refusal_is_separate():
     result = response(status='no_evidence', claims=[])
     negative = question(id='N1', kind='unanswerable', source_file=None, gold_quotes=[])

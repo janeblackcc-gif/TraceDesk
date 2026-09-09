@@ -32,7 +32,13 @@ def export_run(source: Path, destination: Path, dataset: str = 'ops') -> dict:
     raw = (source / 'results.jsonl').read_bytes()
     raw_hash = hashlib.sha256(raw).hexdigest()
     rows = [json.loads(line) for line in raw.decode('utf-8').splitlines() if line.strip()]
-    expected = {(q.id, method) for q in questions for method in METHODS}
+    selected = manifest.get('methods')
+    if (not isinstance(selected, list) or not selected
+            or any(method not in METHODS for method in selected)
+            or len(selected) != len(set(selected))):
+        raise ValueError('Run must declare unique supported methods')
+    methods = tuple(selected)
+    expected = {(q.id, method) for q in questions for method in methods}
     if status['status'] != 'completed' or len(rows) != len(expected) or {(row['case']['id'], row['method']) for row in rows} != expected:
         raise ValueError('Expected a completed run with all question/method pairs')
     question_map = {q.id: q for q in questions}
@@ -52,7 +58,7 @@ def export_run(source: Path, destination: Path, dataset: str = 'ops') -> dict:
            for field in ('correct', 'complete', 'all_claims_supported')):
         raise ValueError('Semantic review boolean fields must all be filled')
     summary = read_json(source / 'summary.json')
-    if summary['status'] != 'completed' or summary['methods'] != summarize(rows):
+    if summary['status'] != 'completed' or summary['methods'] != summarize(rows, methods):
         raise ValueError('Stored summary differs from results')
     public_rows = []
     for row in rows:

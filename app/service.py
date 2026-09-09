@@ -8,7 +8,8 @@ from pathlib import Path
 from .ingest import InputError
 from .store import Store
 from .providers import Ollama, ModelUnavailable
-from .retrieval import search, document_text
+from .citations import MAX_QUOTE_CHARS
+from .retrieval import search, document_text, retrieval_queries, search_context, translation_language
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -72,7 +73,7 @@ class Service:
                 if not isinstance(cite, dict):
                     return None
                 chunk_id, quote = cite.get('chunk_id'), cite.get('quote')
-                if not isinstance(chunk_id, str) or chunk_id not in allowed or not isinstance(quote, str) or not 8 <= len(quote) <= 600:
+                if not isinstance(chunk_id, str) or chunk_id not in allowed or not isinstance(quote, str) or not 8 <= len(quote) <= MAX_QUOTE_CHARS:
                     return None
                 if quote not in allowed[chunk_id]['text']:
                     return None
@@ -108,23 +109,38 @@ class Service:
         effective = f'{previous}\n追问：{question}' if followup and previous else question
         response['effective_question'] = effective
         candidates = self.store.candidates(collection, version)
-        key, vectors, qv = None, None, None
+        key, vectors, query_vectors = None, None, None
+        queries = retrieval_queries(effective) if profile == 'ollama' else [effective]
         if profile == 'ollama':
             key = self.provider.model_key()
+            language = translation_language(effective, candidates)
+            if language is not None and isinstance(self.provider, Ollama):
+                try:
+                    translated = self.provider.plan_queries(effective, language)
+                except ModelUnavailable as exc:
+                    response['query_planning'] = {'status': 'literal_fallback', 'message': str(exc)}
+                else:
+                    queries = list(dict.fromkeys([effective, *translated]))
+                    response['query_planning'] = {'status': 'translated', 'language': language}
             if method != 'bm25':
                 vectors = self.store.get_vectors([c['id'] for c in candidates], key)
                 if len(vectors) != len(candidates) or not candidates:
                     raise IndexRequired('当前版本的向量索引缺失或已过期，请在知识库页建立本地向量索引。')
-                qv = self.provider.embed(['Instruct: Retrieve technical documentation passages that answer the question.\nQuery: ' + effective])[0]
-        retrieved = search(effective, candidates, method, vectors, qv)
+                query_vectors = self.provider.embed([
+                    'Instruct: Retrieve technical documentation passages that answer the question.\nQuery: ' + query
+                    for query in queries])
+        retrieved = (search_context(queries, candidates, method, vectors, query_vectors)
+                     if profile == 'ollama' else search(effective, candidates, method))
         response['retrieval_ms'] = round((time.perf_counter() - started) * 1000, 2)
         response['model_key'] = key
         response['secondary_channel'] = 'dense' if vectors is not None else 'lexical_tfidf'
         response['sources'] = retrieved
+        response['retrieval_queries'] = queries
         if not retrieved:
             response.update(status='no_evidence', warning='所选版本未检索到足够相关的证据。请补充文档、改写问题或检查版本。')
             return self._finish(response, started)
-        evidence = retrieved[:4]
+        evidence = retrieved if profile == 'ollama' else retrieved[:4]
+        response['generation_source_ids'] = [source['id'] for source in evidence]
         if profile == 'ollama':
             result = self.provider.generate(effective, evidence)
             if 'generation_assessment' in result:

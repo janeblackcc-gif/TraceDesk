@@ -45,4 +45,5 @@ htmlcov/
 !/scripts/run_grounding_transfer.py
 !/docs/grounding-repair.md
 !/docs/human-evaluation.md
+!/docs/rc2-evaluation.md
 /datasets/tracedesk_ops/preflight.json

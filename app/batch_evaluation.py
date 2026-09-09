@@ -215,15 +215,23 @@ def score_response(question: Question, response: dict, targets: list[set[str]]) 
     ranks = [index + 1 for index, chunk_id in enumerate(ids[:5]) if chunk_id in relevant]
     top4, top5 = set(ids[:4]), set(ids[:5])
     coverage = sum(bool(target & top4) for target in targets) / len(targets) if targets else None
+    context_ids = response.get('generation_source_ids', ids[:4])
+    if (not isinstance(context_ids, list) or any(not isinstance(cid, str) for cid in context_ids)
+            or len(context_ids) != len(set(context_ids)) or not set(context_ids) <= set(ids)):
+        raise ValueError('Generation context IDs differ from returned sources')
+    context = [source for source in sources if source['id'] in context_ids]
+    context_coverage = (sum(bool(target & set(context_ids)) for target in targets) / len(targets)
+                        if targets else None)
     refusal = response['status'] == 'no_evidence' and not response['claims']
     answered = response['status'] == 'answered' and response['actual_profile'] == 'ollama' and bool(response['claims'])
-    quoted = (Service.validate_claims({'abstain': False, 'claims': response['claims']}, sources[:4]) is not None
+    quoted = (Service.validate_claims({'abstain': False, 'claims': response['claims']}, context) is not None
               if response['claims'] else None)
     return {'hit_at_4': float(bool(relevant & top4)) if relevant else None,
             'recall_at_5': len(relevant & top5) / len(relevant) if relevant else None,
             'mrr_at_5': 1 / min(ranks) if ranks else (0.0 if relevant else None),
             'gold_coverage_at_4': coverage,
-            'all_gold_in_context': coverage == 1 if targets else None,
+            'generation_context_chunks': len(context_ids), 'generation_context_gold_coverage': context_coverage,
+            'all_gold_in_context': context_coverage == 1 if targets else None,
             'real_model_answer': answered, 'refused': refusal,
             'behavior_expected': answered if question.kind == 'answerable' else refusal,
             'correct_refusal': refusal if question.kind == 'unanswerable' else None,

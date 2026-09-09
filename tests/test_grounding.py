@@ -37,7 +37,7 @@ def test_one_missing_required_fact_blocks_all_generated_claims():
     assert answer['generation_assessment']['missing_facts'] == ['镜像容量']
 
 
-def test_supported_fact_uses_exact_citation_and_one_chat_call():
+def test_supported_fact_uses_exact_citation_without_unconditional_rewrite():
     calls = []
     provider = provider_for({'requirements': [requirement()]}, calls)
     try:
@@ -45,12 +45,81 @@ def test_supported_fact_uses_exact_citation_and_one_chat_call():
     finally:
         provider.client.close()
     assert len(calls) == 1
+    assert answer['generation_assessment']['revision_count'] == 0
     assert answer['claims'] == [{'text': '完成进度为 100%。', 'citations': [
         {'chunk_id': EVIDENCE['id'], 'quote': EVIDENCE['text']}]}]
     assert answer['generation_assessment']['decision'] == 'answer'
     assert answer['generation_assessment']['generation_ms'] >= 0
     assert answer['generation_assessment']['requirements'] == [{k: v for k, v in requirement().items() if k != 'answer'}]
     assert Service.validate_claims(answer, [EVIDENCE])
+
+
+def test_schema_conflict_is_repaired_without_returning_unsupported_draft():
+    plans = [{'requirements': [{**requirement(False), 'answer': '无依据的草稿。'}]},
+             {'requirements': [requirement(False)]}]
+    calls = []
+    def handler(request):
+        calls.append(json.loads(request.content))
+        return httpx.Response(200, json={'done': True, 'done_reason': 'stop',
+                              'message': {'content': json.dumps(plans[len(calls) - 1])}})
+    provider = Ollama(transport=httpx.MockTransport(handler))
+    try:
+        answer = provider.generate('最终镜像容量是多少？', [EVIDENCE])
+    finally:
+        provider.client.close()
+    assert len(calls) == 2 and answer['abstain'] and answer['claims'] == []
+    assert json.loads(calls[1]['messages'][1]['content'])['validation_issues']
+    assert answer['generation_assessment']['revision_reason'] == 'schema_repair'
+
+
+def test_valid_refusal_is_not_rewritten_into_an_invented_answer():
+    plans = [{'requirements': [requirement(False)]},
+             {'requirements': [{**requirement(), 'answer': '镜像容量为 100 MB。'}]}]
+    calls = []
+    def handler(request):
+        calls.append(json.loads(request.content))
+        return httpx.Response(200, json={'done': True, 'done_reason': 'stop',
+                              'message': {'content': json.dumps(plans[len(calls) - 1])}})
+    provider = Ollama(transport=httpx.MockTransport(handler))
+    try:
+        answer = provider.generate('最终镜像容量是多少？', [EVIDENCE])
+    finally:
+        provider.client.close()
+    assert len(calls) == 1
+    assert answer['abstain'] is True and answer['claims'] == []
+    assert answer['generation_assessment']['revision_reason'] is None
+
+
+def test_query_translation_has_no_corpus_or_reference_answer_input():
+    calls = []
+    provider = provider_for({'queries':['state vector and motion model','experimental measurement noise assumptions']}, calls)
+    try:
+        queries = provider.plan_queries('状态模型和实验噪声假设分别是什么？','English')
+    finally:
+        provider.client.close()
+    assert len(queries) == 2 and len(calls) == 1
+    payload = json.loads(calls[0]['messages'][1]['content'])
+    assert payload == {'question':'状态模型和实验噪声假设分别是什么？','language':'English'}
+
+
+def test_invalid_translation_does_not_become_a_query():
+    provider = provider_for({'queries':['query'],'answer':'invented'})
+    try:
+        with pytest.raises(ModelUnavailable,match='翻译格式'):
+            provider.plan_queries('状态模型和实验噪声假设分别是什么？','English')
+    finally:
+        provider.client.close()
+
+
+def test_numeric_answer_preserves_the_question_object():
+    item = {**requirement(), 'required_fact':'构建完成的进度', 'answer':'100%'}
+    provider = provider_for({'requirements':[item]})
+    try:
+        answer = provider.generate('构建完成的进度是多少？',[EVIDENCE])
+    finally:
+        provider.client.close()
+    assert answer['claims'][0]['text'] == '构建完成的进度：100%'
+    assert Service.validate_claims(answer,[EVIDENCE]) is not None
 
 
 @pytest.mark.parametrize('change', [

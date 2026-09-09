@@ -1,0 +1,75 @@
+{
+  "notice": "Development regression after removing unconditional answer rewriting; not independent human evaluation.",
+  "methods": [
+    "hybrid"
+  ],
+  "method_order": "rotate selected methods by question index; each case gets a new conversation",
+  "code_sha256": {
+    "app/__init__.py": "4f158033b1bd28be7ae656de743a2df5867867483ddd18cd3480884d74b14561",
+    "app/evaluation.py": "21b99396e7ccf47d51fe5d161fa62254a8b496a16be598dcffd03e8d650a8404",
+    "app/batch_evaluation.py": "6ad149557fb9a21b8a7d99d67ba8425cf1b296e9f147924c9c0c8cb1c2e4e659",
+    "scripts/run_baseline.py": "6a3fec562db7626d0886dec78f33ac36e59f14b54382a5e5f791519f31690f88",
+    "app/service.py": "f7c6821bcdd7668fa07c7ee9f93a620dbda285ba048af85ce8ec1a2a66b2f992",
+    "app/retrieval.py": "6f0bd978c51cd78158fe921fbce8cd24bef254163ff16257f5025bf18aef5f45",
+    "app/providers.py": "fb5c0bc18e5785e4fec83992f5aeacb0edc0516daac2d47b2ae4375209629e03",
+    "app/store.py": "406bba9028afb77770db5ddd59f4d7b23438d8e03d7d6bfadbc8d8639406b0ad",
+    "app/ingest.py": "d80197fdbfbf2106d365f6d9da8a22ac1d682b5a8bd7782752bf173cb47acf77",
+    "app/config.py": "99f7f85b4fa05a801bc5c928bdd0ac152b2416d288d6130c0e1f4b3c612e07fa",
+    "app/citations.py": "7698004d5f964b6548c7e04bd4ea428d1993a5813ccb49d3eb454d32e8d00ea6"
+  },
+  "embedding": "qwen3-embedding:0.6b-q8_0",
+  "generation": "qwen3.5:4b-q4_K_M",
+  "model_digests": {
+    "qwen3.5:4b-q4_K_M": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "qwen3-embedding:0.6b-q8_0": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "ollama_version": "0.33.3",
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "completed",
+  "completed_cases": 24,
+  "dataset_id": "fastapi_zh_challenge_v1",
+  "dataset": {
+    "documents_sha256": {
+      "advanced_settings.txt": "f22d6f508d0657cd0b7ae001213e57d000461531b9484b620a20d5bf4868c30a",
+      "background_tasks.txt": "ad62814e6eca0f4946e7679f9f039786c00260823d61757ea6a374f2b468f7d8",
+      "deployment_concepts.txt": "06055ec750479af6220bab0dee84668b25ae7d9f071b0814755ae15f033007eb",
+      "deployment_docker.txt": "e3859952a40c53eaf67751dd925737491b0e9d230b515845fa92510edbc19589",
+      "handling_errors.txt": "89fb081d6ac6a5c364e2820dcce6facdbaa10cc8e751a65cddc123dde21a866b",
+      "server_workers.txt": "b9c4a0c9ab00342c2c1d008cdfb7c93c51043ba14936111d275e45ab8e11ee2a"
+    },
+    "questions_sha256": "6b1c766ff67e90fd0a711af871d97a73e3b25df4294cd1b17e3972b24a796869",
+    "questions_path": "questions.test.jsonl",
+    "supplemental_sha256": {
+      "rubric.json": "7744c8235cda0ee741d6953ca99a02e5db9a64f15102186770a6252411d1f197",
+      "README.md": "e58dc6b791441565f531c9f7dba4e9e061f11e95bab17b7b1bdec2a2711c2a67",
+      "sources.json": "a816be1c97694d2f097fc110d219a9240e754a7e8d9e0b58a709bdbdf708caf7",
+      "UPSTREAM_LICENSE": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e"
+    }
+  },
+  "dataset_source": {
+    "repository_directory": "datasets/fastapi_zh_challenge_v1",
+    "upstream": {
+      "repository": "https://github.com/fastapi/fastapi",
+      "commit": "50113da16fec53b66b80d75e80a89296de4fa5a5",
+      "license": "MIT"
+    },
+    "provenance_sha256": "cf79fcbab635d2292aed6bdd7988b5b6e2618050af260090ce2a3773e17610f4"
+  },
+  "scope": {
+    "collection": "FastAPI 中文官方文档挑战集",
+    "version": "50113da16fec5",
+    "chunk_count": 133,
+    "vector_count": 133,
+    "dimension": 1024,
+    "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "original_results_sha256": "6129463da3d3b446c0541b0b6f1436d2f3b3a4efa66adcdd657be2afd104883f",
+  "export_notice": "Records reserialized; request IDs, host paths, setup calls and embedding arrays omitted. Chat requests/replies preserved. Semantic review hash refers to the private original results; exported file hashes are below.",
+  "exported_sha256": {
+    "results.jsonl": "4f5e112f82cd9ffa9a720078d0a94d61bceb1826587728ac0e7610b24e373bbe",
+    "summary.json": "f18a4f76113624c05a72134d4b964576f4d8f37dd0c7392b90fbed9b6491e34d",
+    "semantic_review.json": "5fe8aabcc418e0adbf7b159ccfabaa17e2ec8c02a66b2ae0db15cd2ed318a9d0",
+    "semantic_summary.json": "a3b2097a363cf20b6cdcfd18079d71563a89d85bea7b07f960509dd7bbf473ad"
+  }
+}

@@ -138,3 +138,37 @@ def test_export_does_not_allow_unknown_case_fields(export_fixture):
     with pytest.raises(ValueError, match='Extra inputs'):
         export_run(source, destination)
     assert not destination.exists()
+
+
+def test_export_accepts_complete_declared_single_method_run(export_fixture):
+    source, destination = export_fixture
+    rows = [json.loads(line) for line in (source / 'results.jsonl').read_text(encoding='utf-8').splitlines()]
+    rows = [row for row in rows if row['method'] == 'hybrid']
+    raw = ''.join(json.dumps(row, ensure_ascii=False) + '\n' for row in rows).encode('utf-8')
+    (source / 'results.jsonl').write_bytes(raw)
+    for name in ('manifest.json', 'summary.json', 'semantic_summary.json', 'semantic_review.json'):
+        path = source / name
+        value = json.loads(path.read_text(encoding='utf-8'))
+        if name == 'manifest.json':
+            value['methods'] = ['hybrid']
+        elif name == 'summary.json':
+            value['methods'] = summarize(rows, ('hybrid',))
+        elif name == 'semantic_summary.json':
+            value['results_sha256'] = hashlib.sha256(raw).hexdigest()
+        else:
+            value = [item for item in value if item['method'] == 'hybrid']
+        path.write_text(json.dumps(value, ensure_ascii=False), encoding='utf-8')
+    result = export_run(source, destination)
+    assert result['cases'] == 12
+
+
+@pytest.mark.parametrize('methods', [[], ['unknown'], ['hybrid', 'hybrid']])
+def test_export_rejects_invalid_method_declaration(export_fixture, methods):
+    source, destination = export_fixture
+    path = source / 'manifest.json'
+    value = json.loads(path.read_text(encoding='utf-8'))
+    value['methods'] = methods
+    path.write_text(json.dumps(value), encoding='utf-8')
+    with pytest.raises(ValueError, match='supported methods'):
+        export_run(source, destination)
+    assert not destination.exists()

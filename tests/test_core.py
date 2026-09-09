@@ -196,7 +196,7 @@ def test_ollama_http_contract_mock(monkeypatch):
     generation_payload = json.loads(captured[-1].content)
     assert generation_payload['model'] == 'qwen3.5:4b-q4_K_M'
     assert generation_payload['stream'] is False and generation_payload['think'] is False
-    assert generation_payload['options'] == {'temperature': 0, 'num_ctx': 8192, 'num_predict': 1536, 'seed': 42}
+    assert generation_payload['options'] == {'temperature': 0, 'num_ctx': 16384, 'num_predict': 3072, 'seed': 42}
     provider.client.close()
 
 def test_ollama_truncated_output_rejected_even_when_json_is_valid():

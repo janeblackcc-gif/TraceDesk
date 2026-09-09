@@ -1,0 +1,15 @@
+{
+  "notice": "AI对已用于开发的保存结果作逐条语义复核，不是新增人工评分、独立测试或生产准确率。原始人工0/8保持不变。",
+  "reviewer": "coding_agent",
+  "results_sha256": "6129463da3d3b446c0541b0b6f1436d2f3b3a4efa66adcdd657be2afd104883f",
+  "cases": 24,
+  "strict_pass": 19,
+  "answered": 18,
+  "no_evidence": 6,
+  "execution_errors": 0,
+  "median_latency_ms": 6584.02,
+  "p95_nearest_rank_latency_ms": 9755.33,
+  "chat_requests": 24,
+  "negative_protocol_refusals": 6,
+  "warning": null
+}

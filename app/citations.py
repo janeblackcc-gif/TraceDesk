@@ -2,6 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
+MAX_QUOTE_CHARS = 900
 
 @dataclass(frozen=True)
 class CitationSource:
@@ -13,7 +14,8 @@ def quote_passages(text: str) -> list[str]:
     ranges: list[tuple[int, int]] = []
     start = 0
     while start < len(text):
-        end = min(start + 500, len(text))
+        # Normal ingestion chunks fit in one quote, preserving formulas and nearby qualifiers.
+        end = min(start + 850, len(text))
         if end < len(text):
             boundary = text.rfind('\n', start + 8, end)
             if boundary != -1:
@@ -22,8 +24,8 @@ def quote_passages(text: str) -> list[str]:
                 end = len(text)
         if len(text[start:end].strip()) < 8:
             if end < len(text):
-                end = min(start + 600, len(text))
-            elif ranges and end - ranges[-1][0] <= 600:
+                end = min(start + MAX_QUOTE_CHARS, len(text))
+            elif ranges and end - ranges[-1][0] <= MAX_QUOTE_CHARS:
                 ranges[-1] = (ranges[-1][0], end)
                 break
         if len(text[start:end].strip()) >= 8:
@@ -41,7 +43,9 @@ def prepare_evidence(evidence: list[dict]) -> tuple[list[dict], dict[str, Citati
             source_id = f'E{index}S{part}'
             sources[source_id] = CitationSource(chunk['id'], quote)
             passages.append({'source_id': source_id, 'text': quote})
-        context.append({'filename': chunk['filename'], 'version': chunk['version'], 'passages': passages})
+        context.append({'filename': chunk['filename'], 'version': chunk['version'],
+                        **{key: chunk[key] for key in ('page', 'start_line', 'end_line') if key in chunk},
+                        'passages': passages})
     return context, sources
 
 

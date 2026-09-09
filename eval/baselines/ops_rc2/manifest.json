@@ -1,0 +1,63 @@
+{
+  "notice": "Development regression on frozen historic operations documents; direct-question and frozen-reference completeness distinguished.",
+  "methods": [
+    "hybrid"
+  ],
+  "method_order": "rotate selected methods by question index; each case gets a new conversation",
+  "code_sha256": {
+    "app/__init__.py": "4f158033b1bd28be7ae656de743a2df5867867483ddd18cd3480884d74b14561",
+    "app/evaluation.py": "21b99396e7ccf47d51fe5d161fa62254a8b496a16be598dcffd03e8d650a8404",
+    "app/batch_evaluation.py": "6ad149557fb9a21b8a7d99d67ba8425cf1b296e9f147924c9c0c8cb1c2e4e659",
+    "scripts/run_baseline.py": "6a3fec562db7626d0886dec78f33ac36e59f14b54382a5e5f791519f31690f88",
+    "app/service.py": "f7c6821bcdd7668fa07c7ee9f93a620dbda285ba048af85ce8ec1a2a66b2f992",
+    "app/retrieval.py": "6f0bd978c51cd78158fe921fbce8cd24bef254163ff16257f5025bf18aef5f45",
+    "app/providers.py": "fb5c0bc18e5785e4fec83992f5aeacb0edc0516daac2d47b2ae4375209629e03",
+    "app/store.py": "406bba9028afb77770db5ddd59f4d7b23438d8e03d7d6bfadbc8d8639406b0ad",
+    "app/ingest.py": "d80197fdbfbf2106d365f6d9da8a22ac1d682b5a8bd7782752bf173cb47acf77",
+    "app/config.py": "99f7f85b4fa05a801bc5c928bdd0ac152b2416d288d6130c0e1f4b3c612e07fa",
+    "app/citations.py": "7698004d5f964b6548c7e04bd4ea428d1993a5813ccb49d3eb454d32e8d00ea6"
+  },
+  "embedding": "qwen3-embedding:0.6b-q8_0",
+  "generation": "qwen3.5:4b-q4_K_M",
+  "model_digests": {
+    "qwen3.5:4b-q4_K_M": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "qwen3-embedding:0.6b-q8_0": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "ollama_version": "0.33.3",
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "completed",
+  "completed_cases": 12,
+  "dataset_id": "tracedesk_ops",
+  "dataset": {
+    "documents_sha256": {
+      "01_本机启动.md": "002609f584aabbc909f5ac1127799b2f602696c5ac5db23cdbd0373db1478176",
+      "02_文档导入.md": "37808da49b1bf42caddd39227ea4fde2929a127a986433715ce36d2072a13ee2",
+      "03_索引与问答.md": "d4f51b8991e99352e3bfd98a5b643236cadc46539020c963ecbcdae7e87dde82"
+    },
+    "questions_sha256": "16785c3b838dd3d9e0588e6200f5a0943133b93607179fa3b3dbaa28125411c1",
+    "questions_path": "questions.dev.jsonl",
+    "supplemental_sha256": {}
+  },
+  "dataset_source": {
+    "repository_directory": "datasets/tracedesk_ops",
+    "upstream": null,
+    "provenance_sha256": "c247414f67dd3020f5b8a9d43417e73011f8d558634d1a17922c452dbfe1918d"
+  },
+  "scope": {
+    "collection": "TraceDesk 本机运维",
+    "version": "2026-09-08",
+    "chunk_count": 17,
+    "vector_count": 17,
+    "dimension": 1024,
+    "model_key": "qwen3-embedding:0.6b-q8_0@ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d"
+  },
+  "original_results_sha256": "9e482dbc0e730ad517c97698a03579d35ea5cada3e55327d2aa9ede6529a477e",
+  "export_notice": "Records reserialized; request IDs, host paths, setup calls and embedding arrays omitted. Chat requests/replies preserved. Semantic review hash refers to the private original results; exported file hashes are below.",
+  "exported_sha256": {
+    "results.jsonl": "0a820739125a01dbaaef41ec738b13373690cfaa34bbe9de5bfa96a8b66eeacd",
+    "summary.json": "18c655a4af8975ba70039378c93ec68ea1a4848260fac1800217d51be9878f68",
+    "semantic_review.json": "71cd7b730ab6e6fabad72fd84ed343cb0e7b3c16d4b48ca3fd43aabd5108531b",
+    "semantic_summary.json": "40d6747f62bc6bd9fed4719f450cb49992c5d94fe5c4ba872dff41c1126c5b73"
+  }
+}

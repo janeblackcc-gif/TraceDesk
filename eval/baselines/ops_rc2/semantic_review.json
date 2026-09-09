@@ -1,0 +1,166 @@
+[
+  {
+    "id": "OPS01",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "本机地址及监听范围完整。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS02",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "完整启动命令及PowerShell环境明确。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS03",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "嵌入和生成标签依题干顺序完整给出。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS04",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": ".env是否自动读取的否定结论正确。冻结expected_answer还要求.env.example参考性质和启动脚本设置配置，正文未提供；该额外解释不是自然题干直接询问的事实。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "OPS05",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "直接回答10 MiB上限。冻结expected_answer还要求文件非空条件，正文未提供；该额外解释不是自然题干直接询问的事实。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "OPS06",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "三类格式及ZIP拒收完整。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS07",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "直接否定扫描PDF识别能力。冻结expected_answer还要求无OCR原因，正文未提供；该额外解释不是自然题干直接询问的事实。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "OPS08",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "旧digest索引不可沿用、必须重建完整。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS09",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "依据冻结历史资料正确回答前4个；该资料并非当前实现说明。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS10",
+    "method": "hybrid",
+    "correct": true,
+    "complete": false,
+    "all_claims_supported": true,
+    "notes": "正确否定逐字引用能证明语义正确或完整。冻结expected_answer还要求校验只能确认位置与原文匹配，正文未提供；该额外解释不是自然题干直接询问的事实。",
+    "reviewer": "coding_agent",
+    "strict_pass": false,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": [
+      "complete"
+    ]
+  },
+  {
+    "id": "OPS11",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "联系方式缺失，正确拒答。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  },
+  {
+    "id": "OPS12",
+    "method": "hybrid",
+    "correct": true,
+    "complete": true,
+    "all_claims_supported": true,
+    "notes": "百人并发配置缺失，正确拒答。",
+    "reviewer": "coding_agent",
+    "strict_pass": true,
+    "direct_question_complete": true,
+    "direct_question_strict_pass": true,
+    "failure_categories": []
+  }
+]
