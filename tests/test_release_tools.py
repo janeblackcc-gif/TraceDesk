@@ -41,9 +41,22 @@ def test_release_blocks_private_files_excluded_links_and_escape(tmp_path):
 
 def test_release_detects_machine_path_and_credentials(tmp_path):
     names = release_tree(tmp_path)
-    for value in ('Z' + ':/private/owner', 'gh' + 'p_' + 'a' * 24):
+    for value in ('Z' + ':/private/owner', 'gh' + 'p_' + 'a' * 24, 's' + 'k-' + 'a' * 24):
         (tmp_path / 'README.md').write_text(value, encoding='utf-8')
         assert any('credential-like' in error for error in inspect_files(tmp_path, names)[1])
+
+
+def test_release_accepts_authorized_reference_data_but_checks_notebooks(tmp_path):
+    names = release_tree(tmp_path)
+    reference = tmp_path / '大模型训练营之rag资料/data/example.ipynb'
+    reference.parent.mkdir(parents=True)
+    reference.write_text('{"cells": [], "metadata": {}}', encoding='utf-8')
+    entries, errors = inspect_files(tmp_path, names + ['大模型训练营之rag资料/data/example.ipynb'])
+    assert not errors and any(entry['path'] == '大模型训练营之rag资料/data/example.ipynb' for entry in entries)
+
+    reference.write_text('{"token": "s' + 'k-' + 'a' * 24 + '"}', encoding='utf-8')
+    assert any('credential-like' in error for error in inspect_files(
+        tmp_path, names + ['大模型训练营之rag资料/data/example.ipynb'])[1])
 
 
 def test_dataset_preflight_does_not_modify_frozen_files():

@@ -1,0 +1,13 @@
+{
+  "query": "What is Quantum Computing?",
+  "ground_truth": "|\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9, where \u03b1 and \u03b2 are complex numbers satisfying |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1, representing the probability amplitudes for measuring the qubit in state |0\u27e9 or |1\u27e9 respectively.",
+  "simple_rag": {
+    "response": "The mathematical representation of a qubit in superposition is \u03c8 = \u03b1|0\u27e9 + \u03b2|1\u27e9, where \u03b1 and \u03b2 are complex numbers satisfying \u03b1\u00b2 + \u03b2\u00b2 = 1.",
+    "similarity": 0.9357720179679427
+  },
+  "rl_rag": {
+    "response": "In quantum computing, a qubit in superposition can be mathematically represented as a linear combination of the two basis states |0\u27e9 and |1\u27e9. This can be expressed as \u03b1|0\u27e9 + \u03b2|1\u27e9, where \u03b1 and \u03b2 are complex numbers representing the probability amplitudes of the qubit being in state |0\u27e9 and |1\u27e9 respectively. The superposition allows the qubit to exist in a simultaneous state of both |0\u27e9 and |1\u27e9 until measured, collapsing the superposition to one of the basis states.",
+    "similarity": 0.9082687238119368
+  },
+  "improvement": -0.027503294156005942
+}

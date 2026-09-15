@@ -1,0 +1,206 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: white; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: white; }
+      .step-title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: white; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; fill: white; }
+      .small-text { font-family: Arial, sans-serif; font-size: 10px; fill: #ccc; }
+      .bg { fill: #1a1a1a; }
+      .box-doc { fill: #2d4a3d; stroke: #4ade80; stroke-width: 2; }
+      .box-query { fill: #3d2d4a; stroke: #a855f7; stroke-width: 2; }
+      .box-shared { fill: #4a3d2d; stroke: #f59e0b; stroke-width: 2; }
+      .box-output { fill: #4a2d2d; stroke: #ef4444; stroke-width: 2; }
+      .box-storage { fill: #2d3d4a; stroke: #3b82f6; stroke-width: 2; }
+      .arrow-doc { fill: none; stroke: #4ade80; stroke-width: 2; marker-end: url(#arrowhead-green); }
+      .arrow-query { fill: none; stroke: #a855f7; stroke-width: 2; marker-end: url(#arrowhead-purple); }
+      .arrow-shared { fill: none; stroke: #f59e0b; stroke-width: 2; marker-end: url(#arrowhead-orange); }
+      .arrow-output { fill: none; stroke: #ef4444; stroke-width: 2; marker-end: url(#arrowhead-red); }
+      .line-doc { stroke: #4ade80; stroke-width: 3; stroke-dasharray: 5,5; }
+      .line-query { stroke: #a855f7; stroke-width: 3; stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4ade80" />
+    </marker>
+    <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a855f7" />
+    </marker>
+    <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect class="bg" width="1200" height="800"/>
+  
+  <!-- Title -->
+  <text class="title" x="50" y="40">RAG双流程架构：检索增强生成 (Retrieval-Augmented Generation)</text>
+  
+  <!-- Legend -->
+  <rect fill="#4ade80" x="50" y="60" width="20" height="3"/>
+  <text class="small-text" x="80" y="68">文档处理流程 (离线)</text>
+  <rect fill="#a855f7" x="250" y="60" width="20" height="3"/>
+  <text class="small-text" x="280" y="68">查询检索流程 (在线)</text>
+  
+  <!-- Document Processing Pipeline (Top) -->
+  <text class="subtitle" x="50" y="120">文档处理流程 (Document Processing Pipeline)</text>
+  <line class="line-doc" x1="50" y1="130" x2="1150" y2="130"/>
+  
+  <!-- Step 1: Raw Documents -->
+  <rect class="box-doc" x="50" y="150" width="120" height="60" rx="5"/>
+  <text class="step-title" x="110" y="170" text-anchor="middle">原始文档</text>
+  <text class="text" x="110" y="185" text-anchor="middle">PDF/Word/HTML</text>
+  <text class="small-text" x="110" y="200" text-anchor="middle">多种格式文档</text>
+  
+  <!-- Step 2: Document Parsing -->
+  <rect class="box-doc" x="220" y="150" width="120" height="60" rx="5"/>
+  <text class="step-title" x="280" y="170" text-anchor="middle">文档解析</text>
+  <text class="text" x="280" y="185" text-anchor="middle">文本提取</text>
+  <text class="small-text" x="280" y="200" text-anchor="middle">结构化处理</text>
+  
+  <!-- Step 3: Text Chunking -->
+  <rect class="box-doc" x="390" y="150" width="120" height="60" rx="5"/>
+  <text class="step-title" x="450" y="170" text-anchor="middle">文本分块</text>
+  <text class="text" x="450" y="185" text-anchor="middle">Chunking</text>
+  <text class="small-text" x="450" y="200" text-anchor="middle">512-1024 tokens</text>
+  
+  <!-- Step 4: Embedding -->
+  <rect class="box-doc" x="560" y="150" width="120" height="60" rx="5"/>
+  <text class="step-title" x="620" y="170" text-anchor="middle">向量化</text>
+  <text class="text" x="620" y="185" text-anchor="middle">Embedding</text>
+  <text class="small-text" x="620" y="200" text-anchor="middle">文本→向量</text>
+  
+  <!-- Step 5: Vector Storage -->
+  <rect class="box-storage" x="730" y="150" width="120" height="60" rx="5"/>
+  <text class="step-title" x="790" y="170" text-anchor="middle">向量存储</text>
+  <text class="text" x="790" y="185" text-anchor="middle">Vector DB</text>
+  <text class="small-text" x="790" y="200" text-anchor="middle">高维向量索引</text>
+  
+  <!-- Document Processing Arrows -->
+  <line class="arrow-doc" x1="170" y1="180" x2="220" y2="180"/>
+  <line class="arrow-doc" x1="340" y1="180" x2="390" y2="180"/>
+  <line class="arrow-doc" x1="510" y1="180" x2="560" y2="180"/>
+  <line class="arrow-doc" x1="680" y1="180" x2="730" y2="180"/>
+  
+  <!-- Query Processing Pipeline (Bottom) -->
+  <text class="subtitle" x="50" y="320">查询检索流程 (Query Retrieval Pipeline)</text>
+  <line class="line-query" x1="50" y1="330" x2="1150" y2="330"/>
+  
+  <!-- Step 1: User Query -->
+  <rect class="box-query" x="50" y="350" width="120" height="60" rx="5"/>
+  <text class="step-title" x="110" y="370" text-anchor="middle">用户查询</text>
+  <text class="text" x="110" y="385" text-anchor="middle">User Query</text>
+  <text class="small-text" x="110" y="400" text-anchor="middle">自然语言问题</text>
+  
+  <!-- Step 2: Query Embedding -->
+  <rect class="box-query" x="220" y="350" width="120" height="60" rx="5"/>
+  <text class="step-title" x="280" y="370" text-anchor="middle">查询向量化</text>
+  <text class="text" x="280" y="385" text-anchor="middle">Query Embedding</text>
+  <text class="small-text" x="280" y="400" text-anchor="middle">查询→向量</text>
+  
+  <!-- Step 3: Similarity Search -->
+  <rect class="box-query" x="390" y="350" width="120" height="60" rx="5"/>
+  <text class="step-title" x="450" y="370" text-anchor="middle">相似度检索</text>
+  <text class="text" x="450" y="385" text-anchor="middle">Vector Search</text>
+  <text class="small-text" x="450" y="400" text-anchor="middle">Top-K相似文档</text>
+  
+  <!-- Step 4: Context Assembly -->
+  <rect class="box-query" x="560" y="350" width="120" height="60" rx="5"/>
+  <text class="step-title" x="620" y="370" text-anchor="middle">上下文组装</text>
+  <text class="text" x="620" y="385" text-anchor="middle">Context Assembly</text>
+  <text class="small-text" x="620" y="400" text-anchor="middle">相关文档合并</text>
+  
+  <!-- Query Processing Arrows -->
+  <line class="arrow-query" x1="170" y1="380" x2="220" y2="380"/>
+  <line class="arrow-query" x1="340" y1="380" x2="390" y2="380"/>
+  <line class="arrow-query" x1="510" y1="380" x2="560" y2="380"/>
+  
+  <!-- Connection from Vector DB to Similarity Search -->
+  <line class="arrow-shared" x1="790" y1="210" x2="790" y2="280" stroke-dasharray="5,5"/>
+  <line class="arrow-shared" x1="790" y1="280" x2="450" y2="280" stroke-dasharray="5,5"/>
+  <line class="arrow-shared" x1="450" y1="280" x2="450" y2="350"/>
+  
+  <!-- Prompt Construction -->
+  <text class="subtitle" x="50" y="500">增强生成流程 (Augmented Generation)</text>
+  
+  <!-- Context + Query Combination -->
+  <rect class="box-shared" x="200" y="520" width="150" height="80" rx="5"/>
+  <text class="step-title" x="275" y="540" text-anchor="middle">提示词构建</text>
+  <text class="text" x="275" y="555" text-anchor="middle">Prompt Construction</text>
+  <text class="small-text" x="210" y="575">Context: [检索文档]</text>
+  <text class="small-text" x="210" y="590">Query: [用户问题]</text>
+  
+  <!-- LLM Generation -->
+  <rect class="box-shared" x="400" y="520" width="150" height="80" rx="5"/>
+  <text class="step-title" x="475" y="540" text-anchor="middle">大语言模型</text>
+  <text class="text" x="475" y="555" text-anchor="middle">LLM Generation</text>
+  <text class="small-text" x="475" y="575" text-anchor="middle">基于上下文生成</text>
+  <text class="small-text" x="475" y="590" text-anchor="middle">准确性增强</text>
+  
+  <!-- Final Answer -->
+  <rect class="box-output" x="600" y="520" width="150" height="80" rx="5"/>
+  <text class="step-title" x="675" y="540" text-anchor="middle">最终答案</text>
+  <text class="text" x="675" y="555" text-anchor="middle">Final Answer</text>
+  <text class="small-text" x="675" y="575" text-anchor="middle">增强后的回答</text>
+  <text class="small-text" x="675" y="590" text-anchor="middle">可追溯来源</text>
+  
+  <!-- Arrows from Context Assembly to Prompt Construction -->
+  <line class="arrow-query" x1="620" y1="410" x2="620" y2="460"/>
+  <line class="arrow-query" x1="620" y1="460" x2="275" y2="460"/>
+  <line class="arrow-query" x1="275" y1="460" x2="275" y2="520"/>
+  
+  <!-- Arrows from Query to Prompt Construction -->
+  <line class="arrow-query" x1="110" y1="410" x2="110" y2="480"/>
+  <line class="arrow-query" x1="110" y1="480" x2="275" y2="480"/>
+  <line class="arrow-query" x1="275" y1="480" x2="275" y2="520"/>
+  
+  <!-- Generation Flow Arrows -->
+  <line class="arrow-shared" x1="350" y1="560" x2="400" y2="560"/>
+  <line class="arrow-output" x1="550" y1="560" x2="600" y2="560"/>
+  
+  <!-- Architecture Components -->
+  <text class="subtitle" x="900" y="120">核心组件</text>
+  
+  <!-- Embedding Model -->
+  <rect class="box-doc" x="900" y="140" width="120" height="40" rx="3"/>
+  <text class="step-title" x="960" y="160" text-anchor="middle">嵌入模型</text>
+  <text class="small-text" x="960" y="175" text-anchor="middle">统一向量空间</text>
+  
+  <!-- Vector Database -->
+  <rect class="box-storage" x="1040" y="140" width="120" height="40" rx="3"/>
+  <text class="step-title" x="1100" y="160" text-anchor="middle">向量数据库</text>
+  <text class="small-text" x="1100" y="175" text-anchor="middle">高效检索索引</text>
+  
+  <!-- LLM -->
+  <rect class="box-shared" x="900" y="190" width="120" height="40" rx="3"/>
+  <text class="step-title" x="960" y="210" text-anchor="middle">生成模型</text>
+  <text class="small-text" x="960" y="225" text-anchor="middle">理解+生成能力</text>
+  
+  <!-- Search Engine -->
+  <rect class="box-query" x="1040" y="190" width="120" height="40" rx="3"/>
+  <text class="step-title" x="1100" y="210" text-anchor="middle">检索引擎</text>
+  <text class="small-text" x="1100" y="225" text-anchor="middle">相似度计算</text>
+  
+  <!-- Key Features -->
+  <text class="subtitle" x="900" y="270">关键特性</text>
+  
+  <rect fill="#0f172a" stroke="#64748b" stroke-width="1" x="900" y="285" width="260" height="120" rx="5"/>
+  <text class="text" x="910" y="305">• 离线文档处理：批量预处理文档库</text>
+  <text class="text" x="910" y="325">• 在线实时检索：快速响应用户查询</text>
+  <text class="text" x="910" y="345">• 语义匹配：基于语义相似度检索</text>
+  <text class="text" x="910" y="365">• 上下文增强：外部知识注入生成</text>
+  <text class="text" x="910" y="385">• 可扩展架构：支持大规模文档库</text>
+  
+  <!-- Performance Metrics -->
+  <text class="subtitle" x="900" y="440">性能指标</text>
+  
+  <rect fill="#1e293b" stroke="#475569" stroke-width="1" x="900" y="455" width="260" height="100" rx="5"/>
+  <text class="text" x="910" y="475">检索延迟: &lt; 100ms</text>
+  <text class="text" x="910" y="495">生成延迟: 1-3s</text>
+  <text class="text" x="910" y="515">检索准确率: 85-95%</text>
+  <text class="text" x="910" y="535">知识时效性: 实时更新</text>
+  
+</svg>

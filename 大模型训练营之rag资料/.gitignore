@@ -1,0 +1,35 @@
+# Never publish local repository metadata or credentials.
+**/.git/
+**/.git.tracedesk-local-backup/
+**/.env
+**/.env.*
+!**/.env.example
+
+# Reproducible dependencies belong in manifests and lock files.
+**/node_modules/
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.py[cod]
+
+# Generated caches, build output, notebook checkpoints, and runtime state.
+**/.cache/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.ipynb_checkpoints/
+**/dist/
+**/build/
+**/volumes/
+**/*.log
+**/.DS_Store
+**/Thumbs.db
+
+# Large derived model/index artifacts are not source material.
+**/*.onnx
+**/*.trie
+**/*.model
+**/*.pkl
+**/*.pickle
+**/9b5ad71b2ce5302211f9c61530b329a4922fc6a4
+**/rag/res/huqie.txt

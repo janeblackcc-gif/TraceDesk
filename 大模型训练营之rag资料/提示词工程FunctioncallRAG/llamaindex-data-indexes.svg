@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400">
+    <!-- 背景框架 -->
+    <rect width="1000" height="1400" fill="#f7f7f7"/>
+    <text x="500" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold" fill="#333">LlamaIndex 数据索引模块 (Data Indexes) 详解</text>
+    
+    <!-- 第一部分：索引概述 -->
+    <rect x="50" y="70" width="900" height="160" fill="#e6f3ff" rx="10" ry="10" stroke="#aad4ff" stroke-width="2"/>
+    <text x="500" y="90" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#0066cc">索引概述 (Index Overview)</text>
+    
+    <!-- 索引定义 -->
+    <rect x="100" y="120" width="380" height="80" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="290" y="140" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">索引定义</text>
+    <text x="290" y="165" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">索引是数据的结构化表示，用于高效检索和查询</text>
+    <text x="290" y="185" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">将原始数据转换为向量或其他结构以支持语义搜索</text>
+    
+    <!-- 索引作用 -->
+    <rect x="520" y="120" width="380" height="80" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="710" y="140" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">索引作用</text>
+    <text x="710" y="165" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">加速相关内容检索，减少LLM处理的数据量</text>
+    <text x="710" y="185" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">优化查询效率，提高响应质量和相关性</text>
+    
+    <!-- 第二部分：主要索引类型 -->
+    <rect x="50" y="250" width="900" height="280" fill="#f0f8ea" rx="10" ry="10" stroke="#c3e6a1" stroke-width="2"/>
+    <text x="500" y="270" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#336600">主要索引类型 (Main Index Types)</text>
+    
+    <!-- 向量存储索引 -->
+    <rect x="80" y="300" width="260" height="200" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="210" y="320" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">VectorStoreIndex</text>
+    <rect x="100" y="340" width="220" height="140" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="210" y="360" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">基于向量相似度的搜索</text>
+    <text x="210" y="380" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">支持语义搜索和相关性排序</text>
+    <text x="210" y="400" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适用于大规模非结构化数据</text>
+    <text x="210" y="420" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">多种向量存储后端支持</text>
+    <text x="210" y="440" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">(Chroma, FAISS, Pinecone等)</text>
+    <text x="210" y="460" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">✓ 最常用的索引类型</text>
+    
+    <!-- 列表索引 -->
+    <rect x="370" y="300" width="260" height="200" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="320" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">ListIndex</text>
+    <rect x="390" y="340" width="220" height="140" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="500" y="360" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">简单的顺序存储结构</text>
+    <text x="500" y="380" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">按顺序遍历所有节点</text>
+    <text x="500" y="400" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适用于较小的数据集</text>
+    <text x="500" y="420" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">无需向量嵌入，处理速度快</text>
+    <text x="500" y="440" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">支持按序列关系查询</text>
+    <text x="500" y="460" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">✓ 适合顺序敏感的内容</text>
+    
+    <!-- 关键词表索引 -->
+    <rect x="660" y="300" width="260" height="200" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="790" y="320" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">KeywordTableIndex</text>
+    <rect x="680" y="340" width="220" height="140" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="790" y="360" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">基于关键词的索引结构</text>
+    <text x="790" y="380" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">提取文本中的关键词和实体</text>
+    <text x="790" y="400" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">支持精确匹配和部分匹配</text>
+    <text x="790" y="420" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适合需要精确查找的场景</text>
+    <text x="790" y="440" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">可与向量索引混合使用</text>
+    <text x="790" y="460" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">✓ 适合特定术语检索</text>
+    
+    <!-- 第三部分：特殊索引类型 -->
+    <rect x="50" y="550" width="900" height="240" fill="#fff2e6" rx="10" ry="10" stroke="#ffcc99" stroke-width="2"/>
+    <text x="500" y="570" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#cc6600">特殊索引类型 (Special Index Types)</text>
+    
+    <!-- 树形索引 -->
+    <rect x="80" y="600" width="260" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="210" y="620" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">TreeIndex</text>
+    <rect x="100" y="640" width="220" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="210" y="660" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">层次化组织数据</text>
+    <text x="210" y="680" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">自顶向下的数据导航</text>
+    <text x="210" y="700" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">支持复杂的层次关系表示</text>
+    <text x="210" y="720" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适用于需要层级结构的数据</text>
+    
+    <!-- 知识图谱索引 -->
+    <rect x="370" y="600" width="260" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="620" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">KnowledgeGraphIndex</text>
+    <rect x="390" y="640" width="220" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="500" y="660" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">实体与关系的图形表示</text>
+    <text x="500" y="680" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">捕获语义关系和连接</text>
+    <text x="500" y="700" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">支持基于关系的复杂查询</text>
+    <text x="500" y="720" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适合关系密集型数据分析</text>
+    
+    <!-- 文档摘要索引 -->
+    <rect x="660" y="600" width="260" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="790" y="620" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">SummaryIndex</text>
+    <rect x="680" y="640" width="220" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="790" y="660" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">为文档创建摘要</text>
+    <text x="790" y="680" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">提供内容的高层次视图</text>
+    <text x="790" y="700" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">减少处理长文档的LLM负担</text>
+    <text x="790" y="720" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">适合生成概述和摘要</text>
+    
+    <!-- 第四部分：索引创建流程 -->
+    <rect x="50" y="810" width="900" height="260" fill="#f3e6ff" rx="10" ry="10" stroke="#d8b2ff" stroke-width="2"/>
+    <text x="500" y="830" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#660099">索引创建流程 (Indexing Process)</text>
+    
+    <!-- 文档节点 -->
+    <rect x="100" y="870" width="160" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="180" y="905" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档节点</text>
+    
+    <!-- 文本分割 -->
+    <rect x="320" y="870" width="160" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="400" y="905" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文本分割</text>
+    
+    <!-- 节点嵌入 -->
+    <rect x="540" y="870" width="160" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="620" y="905" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">节点嵌入</text>
+    
+    <!-- 索引构建 -->
+    <rect x="760" y="870" width="160" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="840" y="905" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">索引构建</text>
+    
+    <!-- 箭头 -->
+    <line x1="260" y1="900" x2="320" y2="900" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="480" y1="900" x2="540" y2="900" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="700" y1="900" x2="760" y2="900" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 流程说明 -->
+    <rect x="100" y="950" width="160" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="180" y="970" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">加载文档数据</text>
+    <text x="180" y="990" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">清洗和预处理</text>
+    <text x="180" y="1010" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">提取元数据</text>
+    <text x="180" y="1030" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">创建Document对象</text>
+    
+    <rect x="320" y="950" width="160" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="400" y="970" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">使用TextSplitter</text>
+    <text x="400" y="990" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">按句子、段落分割</text>
+    <text x="400" y="1010" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">控制块大小和重叠</text>
+    <text x="400" y="1030" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">创建Node对象</text>
+    
+    <rect x="540" y="950" width="160" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="620" y="970" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">使用EmbeddingModel</text>
+    <text x="620" y="990" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">转换文本为向量</text>
+    <text x="620" y="1010" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">保留节点元数据</text>
+    <text x="620" y="1030" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">存储在向量数据库</text>
+    
+    <rect x="760" y="950" width="160" height="100" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="840" y="970" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">选择索引类型</text>
+    <text x="840" y="990" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">配置索引参数</text>
+    <text x="840" y="1010" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">优化检索策略</text>
+    <text x="840" y="1030" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">持久化索引</text>
+    
+    <!-- 第五部分：常用用法 -->
+    <rect x="50" y="1090" width="900" height="290" fill="#ffebee" rx="10" ry="10" stroke="#ffcdd2" stroke-width="2"/>
+    <text x="500" y="1110" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#c62828">常用用法 (Common Usage Patterns)</text>
+    
+    <!-- 代码示例 1 -->
+    <rect x="80" y="1140" width="380" height="220" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="270" y="1160" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">基本向量索引创建与查询</text>
+    
+    <rect x="100" y="1180" width="340" height="160" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="115" y="1200" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">from llama_index import VectorStoreIndex, SimpleDirectoryReader</text>
+    <text x="115" y="1220" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">from llama_index.storage.storage_context import StorageContext</text>
+    <text x="115" y="1240" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">from llama_index.vector_stores import ChromaVectorStore</text>
+    <text x="115" y="1260" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre"></text>
+    <text x="115" y="1280" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre"># 加载文档</text>
+    <text x="115" y="1300" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">documents = SimpleDirectoryReader("data").load_data()</text>
+    <text x="115" y="1320" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre"># 创建索引</text>
+    <text x="115" y="1340" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">index = VectorStoreIndex.from_documents(documents)</text>
+    
+    <!-- 代码示例 2 -->
+    <rect x="490" y="1140" width="430" height="220" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="705" y="1160" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">高级索引配置与持久化</text>
+    
+    <rect x="510" y="1180" width="390" height="160" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="525" y="1200" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">import chromadb</text>
+    <text x="525" y="1220" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">from llama_index import StorageContext, Settings, ServiceContext</text>
+    <text x="525" y="1240" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">from llama_index.vector_stores import ChromaVectorStore</text>
+    <text x="525" y="1260" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre"></text>
+    <text x="525" y="1280" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre"># 设置存储上下文</text>
+    <text x="525" y="1300" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">db = chromadb.PersistentClient("./chroma_db")</text>
+    <text x="525" y="1320" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">chroma_collection = db.get_or_create_collection("my_collection")</text>
+    <text x="525" y="1340" font-family="Arial" font-size="11" text-anchor="start" fill="#222" style="white-space: pre">vector_store = ChromaVectorStore(chroma_collection=chroma_collection)</text>
+    
+    <!-- 箭头标记定义 -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666666" />
+        </marker>
+    </defs>
+</svg>

@@ -89,7 +89,3 @@ acceptance/
 pilot/
 eval/real/private/
 .local-secrets/
-
-# Local third-party training material may contain nested repositories, secrets,
-# caches, model assets, and documents without redistribution permission.
-/大模型训练营之rag资料/

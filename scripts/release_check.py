@@ -9,6 +9,7 @@ import sys
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import TypedDict
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,12 +22,20 @@ REQUIRED = {'.gitignore', '.env.example', 'README.md', 'LICENSE', 'requirements.
 ROOT_FILES = {'.gitignore', '.gitattributes', '.env.example', '.env.production.example', 'README.md', 'LICENSE', 'CHANGELOG.md',
               'CONTRIBUTING.md', 'requirements.txt', 'requirements-dev.txt', 'requirements-lock.txt', 'requirements-dev-lock.txt',
               'pyproject.toml', 'start_local_rag.ps1', 'alembic.ini', '.dockerignore'}
-ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs', 'alembic', 'deploy'}
+REFERENCE_DIRS = {'大模型训练营之rag资料'}
+ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs', 'alembic', 'deploy'} | REFERENCE_DIRS
 PRIVATE_NAMES = {'data', '.venv', '.git', 'evidence', '.release-work', '__pycache__', '.pytest_cache',
                  'artifacts', 'acceptance', 'pilot', 'private'}
-TEXT_SUFFIXES = {'.py', '.md', '.json', '.jsonl', '.txt', '.toml', '.yml', '.yaml', '.ps1', '.js', '.css', '.html'}
-PRIVATE_TEXT = re.compile(r'(?<![\w])[A-Za-z]:[\\/][^\s"<>]+|-----BEGIN [A-Z ]*PRIVATE KEY-----|\b(?:ghp|gho|github_pat)_[A-Za-z0-9_]{20,}')
+TEXT_SUFFIXES = {'.py', '.md', '.json', '.jsonl', '.txt', '.toml', '.yml', '.yaml', '.ps1', '.js', '.css', '.html', '.ipynb'}
+PRIVATE_TEXT = re.compile(r'(?<![\w])[A-Za-z]:[\\/][^\s"<>]+|-----BEGIN [A-Z ]*PRIVATE KEY-----|'
+                          r'\b(?:ghp|gho|github_pat)_[A-Za-z0-9_]{20,}|\bsk-[A-Za-z0-9_-]{20,}')
 MARKDOWN_LINK = re.compile(r'\]\(([^)]+)\)')
+
+
+class FileEntry(TypedDict):
+    path: str
+    bytes: int
+    sha256: str
 
 
 def source_files(root: Path) -> list[str]:
@@ -35,19 +44,24 @@ def source_files(root: Path) -> list[str]:
     return sorted(set(name for name in result.stdout.decode('utf-8').split('\0') if name))
 
 
-def inspect_files(root: Path, names: list[str]) -> tuple[list[dict], list[str]]:
-    entries, errors = [], []
+def inspect_files(root: Path, names: list[str]) -> tuple[list[FileEntry], list[str]]:
+    entries: list[FileEntry] = []
+    errors: list[str] = []
     for missing in sorted(REQUIRED - set(names)):
         errors.append(f'Missing release file: {missing}')
     for name in names:
         relative = Path(name)
         path = root / relative
+        is_reference = bool(relative.parts) and relative.parts[0] in REFERENCE_DIRS
         if relative.is_absolute() or not path.resolve().is_relative_to(root.resolve()) or path.is_symlink():
             errors.append(f'Unsafe source path: {name}')
             continue
         if (len(relative.parts) == 1 and name not in ROOT_FILES) or (len(relative.parts) > 1 and relative.parts[0] not in ROOT_DIRS):
             errors.append(f'Unreviewed top-level path: {name}')
-        if (set(relative.parts) & PRIVATE_NAMES or
+        private_parts = set(relative.parts) & PRIVATE_NAMES
+        if is_reference:
+            private_parts.discard('data')
+        if (private_parts or
                 (relative.name.startswith('.env') and relative.name not in {'.env.example', '.env.production.example'}) or
                 relative.suffix.lower() in {'.log', '.db', '.sqlite', '.sqlite3', '.gguf', '.safetensors', '.zip'} or
                 relative.name.endswith(('.db-wal', '.db-shm'))):
@@ -84,9 +98,11 @@ def main() -> int:
     parser.add_argument('--archive', type=Path, help='Write a new zip after all checks pass; never overwrite')
     args = parser.parse_args()
     entries, errors = inspect_files(ROOT, source_files(ROOT))
-    report = {'status': 'failed' if errors else 'passed', 'version': __version__,
-              'checked_at': datetime.now(timezone.utc).isoformat(), 'files': entries, 'errors': errors,
-              'notice': 'Static release-content and link checks; does not certify runtime quality or external security.'}
+    report: dict[str, object] = {
+        'status': 'failed' if errors else 'passed', 'version': __version__,
+        'checked_at': datetime.now(timezone.utc).isoformat(), 'files': entries, 'errors': errors,
+        'notice': 'Static release-content and link checks; does not certify runtime quality or external security.',
+    }
     if args.archive and not errors:
         args.archive.parent.mkdir(parents=True, exist_ok=True)
         prefix = f'TraceDesk-{__version__}'

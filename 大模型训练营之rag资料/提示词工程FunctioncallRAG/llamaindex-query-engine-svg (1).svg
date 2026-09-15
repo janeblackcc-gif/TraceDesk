@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 600">
+  <!-- DrawIO Style Grid Background -->
+  <defs>
+    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="white"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- User Query -->
+  <rect x="310" y="30" width="100" height="40" rx="5" ry="5" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="360" y="55" font-family="Arial" font-size="14" text-anchor="middle">User Query</text>
+  
+  <!-- Query Engine Box -->
+  <rect x="230" y="110" width="260" height="60" rx="5" ry="5" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="360" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">LlamaIndex Query Engine</text>
+  
+  <!-- Flow Arrow 1 -->
+  <path d="M 360 70 L 360 110" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 110 L 365 100 L 360 103 L 355 100 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Query Transformation Box -->
+  <rect x="185" y="210" width="350" height="50" rx="5" ry="5" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="360" y="240" font-family="Arial" font-size="16" text-anchor="middle">Query Transformation</text>
+  
+  <!-- Flow Arrow 2 -->
+  <path d="M 360 170 L 360 210" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 210 L 365 200 L 360 203 L 355 200 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Query Routing -->
+  <rect x="100" y="290" width="140" height="40" rx="5" ry="5" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="170" y="315" font-family="Arial" font-size="14" text-anchor="middle">Query Routing</text>
+  
+  <!-- Query Rewriting -->
+  <rect x="290" y="290" width="140" height="40" rx="5" ry="5" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="360" y="315" font-family="Arial" font-size="14" text-anchor="middle">Query Rewriting</text>
+  
+  <!-- Query Planning -->
+  <rect x="480" y="290" width="140" height="40" rx="5" ry="5" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="550" y="315" font-family="Arial" font-size="14" text-anchor="middle">Query Planning</text>
+  
+  <!-- Flow Arrows from Transformation to Options -->
+  <path d="M 270 260 L 170 290" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 170 290 L 176 282 L 172 283 L 167 280 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 360 260 L 360 290" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 290 L 365 280 L 360 283 L 355 280 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 450 260 L 550 290" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 550 290 L 545 280 L 548 283 L 544 287 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Retriever -->
+  <rect x="290" y="360" width="140" height="40" rx="5" ry="5" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+  <text x="360" y="385" font-family="Arial" font-size="14" text-anchor="middle">Retriever</text>
+  
+  <!-- Flow Arrows to Retriever -->
+  <path d="M 170 330 L 320 360" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 320 360 L 314 351 L 316 354 L 312 358 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 360 330 L 360 360" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 360 L 365 350 L 360 353 L 355 350 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 550 330 L 400 360" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 400 360 L 406 356 L 404 353 L 410 351 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Document Store/Vector DB -->
+  <ellipse cx="360" cy="440" rx="100" ry="40" fill="#d0cee2" stroke="#56517e" stroke-width="2"/>
+  <text x="360" y="445" font-family="Arial" font-size="14" text-anchor="middle">Document Store/</text>
+  <text x="360" y="465" font-family="Arial" font-size="14" text-anchor="middle">Vector DB</text>
+  
+  <!-- Retrieved Documents -->
+  <rect x="290" y="500" width="140" height="40" rx="5" ry="5" fill="#b1ddf0" stroke="#10739e" stroke-width="2"/>
+  <text x="360" y="525" font-family="Arial" font-size="14" text-anchor="middle">Retrieved Documents</text>
+  
+  <!-- Flow Arrows between DB and Documents -->
+  <path d="M 360 400 L 360 440" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 440 L 365 430 L 360 433 L 355 430 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 360 480 L 360 500" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 360 500 L 365 490 L 360 493 L 355 490 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Response Synthesis -->
+  <rect x="510" y="520" width="160" height="40" rx="5" ry="5" fill="#ffe6cc" stroke="#d79b00" stroke-width="2"/>
+  <text x="590" y="545" font-family="Arial" font-size="14" text-anchor="middle">Response Synthesis</text>
+  
+  <!-- Flow Arrow to Synthesis -->
+  <path d="M 430 520 L 510 540" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 510 540 L 500 532 L 502 536 L 496 539 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Final Response -->
+  <rect x="510" y="440" width="160" height="40" rx="5" ry="5" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="590" y="465" font-family="Arial" font-size="16" text-anchor="middle">Final Response</text>
+  
+  <!-- Flow Arrow to Final Response -->
+  <path d="M 590 520 L 590 480" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 590 480 L 595 490 L 590 487 L 585 490 Z" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Legend -->
+  <rect x="600" y="30" width="20" height="20" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="630" y="45" font-family="Arial" font-size="12">Input/Output</text>
+  
+  <rect x="600" y="60" width="20" height="20" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="630" y="75" font-family="Arial" font-size="12">Main Process</text>
+  
+  <rect x="600" y="90" width="20" height="20" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="630" y="105" font-family="Arial" font-size="12">Transformation</text>
+  
+  <rect x="600" y="120" width="20" height="20" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="630" y="135" font-family="Arial" font-size="12">Query Processing</text>
+  
+  <rect x="600" y="150" width="20" height="20" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+  <text x="630" y="165" font-family="Arial" font-size="12">Data Retrieval</text>
+  
+  <ellipse cx="610" cy="190" rx="10" ry="10" fill="#d0cee2" stroke="#56517e" stroke-width="2"/>
+  <text x="630" y="195" font-family="Arial" font-size="12">Data Storage</text>
+
+  <!-- Frame/Group Box for Process -->
+  <rect x="80" y="190" width="560" height="380" rx="10" ry="10" fill="none" stroke="#666666" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="95" y="210" font-family="Arial" font-size="14" font-style="italic">LlamaIndex Query Engine Process</text>
+</svg>

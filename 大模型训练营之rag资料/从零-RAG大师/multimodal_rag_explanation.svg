@@ -1,0 +1,250 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: white; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: white; }
+      .step-title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: white; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; fill: white; }
+      .small-text { font-family: Arial, sans-serif; font-size: 10px; fill: #ccc; }
+      .example-text { font-family: Arial, sans-serif; font-size: 11px; fill: #fbbf24; }
+      .bg { fill: #1a1a1a; }
+      .box-text { fill: #2d4a3d; stroke: #4ade80; stroke-width: 2; }
+      .box-image { fill: #4a2d3d; stroke: #ef4444; stroke-width: 2; }
+      .box-audio { fill: #3d2d4a; stroke: #a855f7; stroke-width: 2; }
+      .box-video { fill: #4a3d2d; stroke: #f59e0b; stroke-width: 2; }
+      .box-fusion { fill: #2d3d4a; stroke: #3b82f6; stroke-width: 2; }
+      .box-output { fill: #1e293b; stroke: #64748b; stroke-width: 2; }
+      .arrow { fill: none; stroke: #666; stroke-width: 2; marker-end: url(#arrowhead); }
+      .highlight-arrow { fill: none; stroke: #fbbf24; stroke-width: 3; marker-end: url(#highlight-arrowhead); }
+      .modal-bg { fill: rgba(0,0,0,0.3); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+    <marker id="highlight-arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect class="bg" width="1200" height="900"/>
+  
+  <!-- Title -->
+  <text class="title" x="50" y="40">多模态RAG：跨媒体检索增强生成 (Multimodal RAG)</text>
+  <text class="subtitle" x="50" y="65" fill="#fbbf24">整合文本、图像、音频、视频等多种模态信息，实现更丰富的知识检索和生成</text>
+  
+  <!-- Example Query -->
+  <rect class="box-fusion" x="50" y="85" width="1100" height="40" rx="5"/>
+  <text class="step-title" x="600" y="105" text-anchor="middle" fill="#3b82f6">示例查询: "请分析这张产品设计图的技术规格，并结合说明书文档给出改进建议"</text>
+  
+  <!-- Input Sources -->
+  <text class="subtitle" x="50" y="160">多模态输入源 (Multimodal Input Sources)</text>
+  
+  <!-- Text Documents -->
+  <rect class="box-text" x="50" y="180" width="200" height="120" rx="5"/>
+  <text class="step-title" x="150" y="200" text-anchor="middle">文本文档</text>
+  <text class="text" x="150" y="220" text-anchor="middle">Text Documents</text>
+  
+  <!-- Text content simulation -->
+  <rect fill="#1a2e1a" x="70" y="235" width="160" height="50" rx="3"/>
+  <text class="small-text" x="75" y="250">产品技术规格书.pdf</text>
+  <text class="small-text" x="75" y="265">"该产品采用铝合金材质，</text>
+  <text class="small-text" x="75" y="278">尺寸为300×200×50mm..."</text>
+  
+  <!-- Images -->
+  <rect class="box-image" x="280" y="180" width="200" height="120" rx="5"/>
+  <text class="step-title" x="380" y="200" text-anchor="middle">图像资料</text>
+  <text class="text" x="380" y="220" text-anchor="middle">Images & Diagrams</text>
+  
+  <!-- Image content simulation -->
+  <rect fill="#2e1a1a" x="300" y="235" width="160" height="50" rx="3"/>
+  <rect fill="#ef4444" x="310" y="245" width="30" height="20" rx="2"/>
+  <rect fill="#666" x="350" y="245" width="30" height="20" rx="2"/>
+  <rect fill="#ef4444" x="390" y="245" width="30" height="20" rx="2"/>
+  <text class="small-text" x="305" y="275">设计图纸.jpg</text>
+  
+  <!-- Audio -->
+  <rect class="box-audio" x="510" y="180" width="200" height="120" rx="5"/>
+  <text class="step-title" x="610" y="200" text-anchor="middle">音频内容</text>
+  <text class="text" x="610" y="220" text-anchor="middle">Audio Content</text>
+  
+  <!-- Audio wave simulation -->
+  <g transform="translate(530, 240)">
+    <path d="M0,20 Q10,10 20,20 Q30,30 40,20 Q50,10 60,20 Q70,25 80,20 Q90,15 100,20 Q110,25 120,20 Q130,10 140,20 Q150,30 160,20" 
+          fill="none" stroke="#a855f7" stroke-width="2"/>
+  </g>
+  <text class="small-text" x="535" y="275">专家讲解.mp3</text>
+  
+  <!-- Video -->
+  <rect class="box-video" x="740" y="180" width="200" height="120" rx="5"/>
+  <text class="step-title" x="840" y="200" text-anchor="middle">视频演示</text>
+  <text class="text" x="840" y="220" text-anchor="middle">Video Demonstrations</text>
+  
+  <!-- Video frame simulation -->
+  <rect fill="#2e2a1a" x="760" y="235" width="160" height="50" rx="3"/>
+  <polygon points="790,245 790,265 810,255" fill="#f59e0b"/>
+  <text class="small-text" x="765" y="275">操作演示.mp4</text>
+  
+  <!-- Processing Pipeline -->
+  <text class="subtitle" x="50" y="350">多模态处理流程 (Multimodal Processing Pipeline)</text>
+  
+  <!-- Step 1: Modal-specific Processing -->
+  <text class="step-title" x="50" y="380">步骤1：模态特定处理</text>
+  
+  <!-- Text Processing -->
+  <rect class="box-text" x="50" y="395" width="180" height="80" rx="4"/>
+  <text class="text" x="140" y="415" text-anchor="middle">文本处理</text>
+  <text class="small-text" x="60" y="435">• OCR文字识别</text>
+  <text class="small-text" x="60" y="450">• 语义分块</text>
+  <text class="small-text" x="60" y="465">• 文本向量化</text>
+  
+  <!-- Image Processing -->
+  <rect class="box-image" x="250" y="395" width="180" height="80" rx="4"/>
+  <text class="text" x="340" y="415" text-anchor="middle">图像处理</text>
+  <text class="small-text" x="260" y="435">• 目标检测</text>
+  <text class="small-text" x="260" y="450">• 图像分割</text>
+  <text class="small-text" x="260" y="465">• 视觉特征提取</text>
+  
+  <!-- Audio Processing -->
+  <rect class="box-audio" x="450" y="395" width="180" height="80" rx="4"/>
+  <text class="text" x="540" y="415" text-anchor="middle">音频处理</text>
+  <text class="small-text" x="460" y="435">• 语音转文字</text>
+  <text class="small-text" x="460" y="450">• 音频特征提取</text>
+  <text class="small-text" x="460" y="465">• 语义理解</text>
+  
+  <!-- Video Processing -->
+  <rect class="box-video" x="650" y="395" width="180" height="80" rx="4"/>
+  <text class="text" x="740" y="415" text-anchor="middle">视频处理</text>
+  <text class="small-text" x="660" y="435">• 关键帧提取</text>
+  <text class="small-text" x="660" y="450">• 动作识别</text>
+  <text class="small-text" x="660" y="465">• 时序分析</text>
+  
+  <!-- Step 2: Unified Vector Space -->
+  <text class="step-title" x="50" y="510">步骤2：统一向量空间映射</text>
+  
+  <rect class="box-fusion" x="200" y="525" width="600" height="60" rx="5"/>
+  <text class="text" x="500" y="545" text-anchor="middle">多模态融合编码器 (Multimodal Fusion Encoder)</text>
+  <text class="small-text" x="500" y="565" text-anchor="middle">CLIP、BLIP、LayoutLM等模型将不同模态映射到统一语义空间</text>
+  
+  <!-- Arrows from processing to fusion -->
+  <line class="arrow" x1="140" y1="475" x2="140" y2="510"/>
+  <line class="arrow" x1="140" y1="510" x2="250" y2="545"/>
+  
+  <line class="arrow" x1="340" y1="475" x2="340" y2="510"/>
+  <line class="arrow" x1="340" y1="510" x2="400" y2="545"/>
+  
+  <line class="arrow" x1="540" y1="475" x2="540" y2="510"/>
+  <line class="arrow" x1="540" y1="510" x2="600" y2="545"/>
+  
+  <line class="arrow" x1="740" y1="475" x2="740" y2="510"/>
+  <line class="arrow" x1="740" y1="510" x2="750" y2="545"/>
+  
+  <!-- Step 3: Multimodal Retrieval -->
+  <text class="step-title" x="50" y="620">步骤3：多模态检索与匹配</text>
+  
+  <!-- Query Processing -->
+  <rect class="box-fusion" x="50" y="635" width="250" height="80" rx="4"/>
+  <text class="text" x="175" y="655" text-anchor="middle">查询理解</text>
+  <text class="example-text" x="60" y="675">"分析设计图技术规格"</text>
+  <text class="small-text" x="60" y="690">↓ 多模态查询向量化</text>
+  <text class="small-text" x="60" y="705">[0.23, -0.15, 0.67, ...]</text>
+  
+  <!-- Similarity Search -->
+  <rect class="box-fusion" x="330" y="635" width="250" height="80" rx="4"/>
+  <text class="text" x="455" y="655" text-anchor="middle">跨模态相似度检索</text>
+  <text class="small-text" x="340" y="675">文本 ↔ 图像相关性: 0.89</text>
+  <text class="small-text" x="340" y="690">图像 ↔ 音频相关性: 0.76</text>
+  <text class="small-text" x="340" y="705">文本 ↔ 视频相关性: 0.82</text>
+  
+  <!-- Retrieved Content -->
+  <rect class="box-fusion" x="610" y="635" width="250" height="80" rx="4"/>
+  <text class="text" x="735" y="655" text-anchor="middle">检索结果</text>
+  <text class="small-text" x="620" y="675">✓ 技术规格PDF第3页</text>
+  <text class="small-text" x="620" y="690">✓ 设计图纸detail_view.jpg</text>
+  <text class="small-text" x="620" y="705">✓ 专家解说音频片段</text>
+  
+  <!-- Arrows for retrieval flow -->
+  <line class="highlight-arrow" x1="300" y1="675" x2="330" y2="675"/>
+  <line class="highlight-arrow" x1="580" y1="675" x2="610" y2="675"/>
+  
+  <!-- Step 4: Multimodal Generation -->
+  <text class="step-title" x="50" y="750">步骤4：多模态融合生成</text>
+  
+  <!-- Context Assembly -->
+  <rect class="box-output" x="100" y="765" width="200" height="80" rx="4"/>
+  <text class="text" x="200" y="785" text-anchor="middle">上下文组装</text>
+  <text class="small-text" x="110" y="805">多模态信息融合:</text>
+  <text class="small-text" x="110" y="820">文本描述 + 图像特征</text>
+  <text class="small-text" x="110" y="835">+ 音频说明</text>
+  
+  <!-- Generation -->
+  <rect class="box-output" x="350" y="765" width="200" height="80" rx="4"/>
+  <text class="text" x="450" y="785" text-anchor="middle">多模态大模型</text>
+  <text class="small-text" x="360" y="805">GPT-4V, Gemini Pro,</text>
+  <text class="small-text" x="360" y="820">Claude 3, Qwen-VL</text>
+  <text class="small-text" x="360" y="835">理解并生成回答</text>
+  
+  <!-- Final Answer -->
+  <rect class="box-output" x="600" y="765" width="250" height="80" rx="4"/>
+  <text class="text" x="725" y="785" text-anchor="middle">综合分析结果</text>
+  <text class="example-text" x="610" y="805">"根据设计图显示的尺寸规格</text>
+  <text class="example-text" x="610" y="820">和技术文档，建议优化散热</text>
+  <text class="example-text" x="610" y="835">设计以提升性能..."</text>
+  
+  <!-- Generation flow arrows -->
+  <line class="arrow" x1="300" y1="805" x2="350" y2="805"/>
+  <line class="arrow" x1="550" y1="805" x2="600" y2="805"/>
+  
+  <!-- Key Advantages -->
+  <rect fill="#0f172a" stroke="#3b82f6" stroke-width="2" x="900" y="180" width="280" height="260" rx="8"/>
+  <text class="subtitle" x="1040" y="205" text-anchor="middle">多模态RAG优势</text>
+  
+  <text class="text" x="920" y="230" fill="#4ade80">📄 丰富信息源</text>
+  <text class="small-text" x="920" y="245">整合文档、图像、音视频等</text>
+  <text class="small-text" x="920" y="260">多种媒体类型的知识</text>
+  
+  <text class="text" x="920" y="285" fill="#ef4444">🔍 跨模态检索</text>
+  <text class="small-text" x="920" y="300">用文字查询图像内容</text>
+  <text class="small-text" x="920" y="315">用图像匹配文档描述</text>
+  
+  <text class="text" x="920" y="340" fill="#a855f7">🧠 语义理解增强</text>
+  <text class="small-text" x="920" y="355">图文结合理解更准确</text>
+  <text class="small-text" x="920" y="370">上下文信息更完整</text>
+  
+  <text class="text" x="920" y="395" fill="#f59e0b">💡 应用场景广泛</text>
+  <text class="small-text" x="920" y="410">• 技术文档分析</text>
+  <text class="small-text" x="920" y="425">• 医疗影像诊断</text>
+  
+  <!-- Technical Challenges -->
+  <rect fill="#1e293b" stroke="#ef4444" stroke-width="2" x="900" y="460" width="280" height="200" rx="8"/>
+  <text class="subtitle" x="1040" y="485" text-anchor="middle">技术挑战</text>
+  
+  <text class="text" x="920" y="510" fill="#ef4444">⚡ 计算复杂度高</text>
+  <text class="small-text" x="920" y="525">多模态处理资源消耗大</text>
+  
+  <text class="text" x="920" y="550" fill="#f59e0b">🎯 对齐困难</text>
+  <text class="small-text" x="920" y="565">不同模态语义空间映射</text>
+  
+  <text class="text" x="920" y="590" fill="#a855f7">📊 评估复杂</text>
+  <text class="small-text" x="920" y="605">多维度质量评估体系</text>
+  
+  <text class="text" x="920" y="630" fill="#3b82f6">🔧 工程实现复杂</text>
+  <text class="small-text" x="920" y="645">系统架构和优化难度大</text>
+  
+  <!-- Example Use Cases -->
+  <rect fill="#0f172a" stroke="#fbbf24" stroke-width="2" x="900" y="680" width="280" height="180" rx="8"/>
+  <text class="subtitle" x="1040" y="705" text-anchor="middle">典型应用场景</text>
+  
+  <text class="text" x="920" y="730">🏥 医疗诊断助手</text>
+  <text class="small-text" x="920" y="745">影像+病历+检查报告综合分析</text>
+  
+  <text class="text" x="920" y="770">🎓 智能教育</text>
+  <text class="small-text" x="920" y="785">教材+图表+视频课程融合</text>
+  
+  <text class="text" x="920" y="810">🏭 工业检测</text>
+  <text class="small-text" x="920" y="825">产品图像+技术规格对比分析</text>
+  
+  <text class="text" x="920" y="850">💼 企业知识管理</text>
+  <text class="small-text" x="920" y="865">文档+会议录音+演示文稿整合</text>
+  
+</svg>

@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200">
+    <!-- 背景框架 -->
+    <rect width="1000" height="1200" fill="#f7f7f7"/>
+    <text x="500" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold" fill="#333">PDF文档解析全流程图</text>
+    
+    <!-- 第一阶段：文档输入与预处理 -->
+    <rect x="50" y="70" width="900" height="180" fill="#e6f3ff" rx="10" ry="10" stroke="#aad4ff" stroke-width="2"/>
+    <text x="500" y="90" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#0066cc">第一阶段：文档输入与预处理</text>
+    
+    <!-- 输入节点 -->
+    <rect x="100" y="120" width="120" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="160" y="155" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">PDF文档输入</text>
+    
+    <!-- 预处理节点 -->
+    <rect x="320" y="120" width="120" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="380" y="155" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档预处理</text>
+    
+    <!-- 元数据提取节点 -->
+    <rect x="540" y="120" width="120" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="600" y="155" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">元数据提取</text>
+    
+    <!-- 文档结构分析节点 -->
+    <rect x="760" y="120" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="830" y="155" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档结构分析</text>
+    
+    <!-- 箭头 -->
+    <line x1="220" y1="150" x2="320" y2="150" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="440" y1="150" x2="540" y2="150" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="660" y1="150" x2="760" y2="150" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 预处理说明 -->
+    <text x="380" y="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">解码、压缩处理、优化</text>
+    <text x="600" y="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">作者、日期、标题等</text>
+    <text x="830" y="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">页面数、大纲、链接分析</text>
+    
+    <!-- 第二阶段：内容分离与识别 -->
+    <rect x="50" y="270" width="900" height="360" fill="#f0f8ea" rx="10" ry="10" stroke="#c3e6a1" stroke-width="2"/>
+    <text x="500" y="290" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#336600">第二阶段：内容分离与识别</text>
+    
+    <!-- 阶段连接箭头 -->
+    <line x1="500" y1="250" x2="500" y2="270" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 内容分类节点 -->
+    <rect x="430" y="320" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="355" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">内容类型分离</text>
+    
+    <!-- 文本识别流程 -->
+    <rect x="100" y="430" width="220" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="210" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">文本识别处理</text>
+    
+    <rect x="120" y="470" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="210" y="490" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">OCR文本提取</text>
+    
+    <rect x="120" y="510" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="210" y="530" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">字体和样式识别</text>
+    
+    <rect x="120" y="550" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="210" y="570" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">文本结构化处理</text>
+    
+    <!-- 图表识别流程 -->
+    <rect x="390" y="430" width="220" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">图表识别处理</text>
+    
+    <rect x="410" y="470" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="500" y="490" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">图表区域检测</text>
+    
+    <rect x="410" y="510" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="500" y="530" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">图表类型识别</text>
+    
+    <rect x="410" y="550" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="500" y="570" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">数据点提取与分析</text>
+    
+    <!-- 图像识别流程 -->
+    <rect x="680" y="430" width="220" height="160" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="790" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold" fill="#333">图像识别处理</text>
+    
+    <rect x="700" y="470" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="790" y="490" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">图像分离与提取</text>
+    
+    <rect x="700" y="510" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="790" y="530" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">图像增强与处理</text>
+    
+    <rect x="700" y="550" width="180" height="30" fill="#f2f2f2" rx="3" ry="3" stroke="#cccccc" stroke-width="1"/>
+    <text x="790" y="570" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">图像内容识别</text>
+    
+    <!-- 内容分类到各处理模块的箭头 -->
+    <line x1="500" y1="380" x2="500" y2="400" stroke="#666666" stroke-width="1.5"/>
+    <line x1="500" y1="400" x2="210" y2="400" stroke="#666666" stroke-width="1.5"/>
+    <line x1="500" y1="400" x2="790" y2="400" stroke="#666666" stroke-width="1.5"/>
+    <line x1="210" y1="400" x2="210" y2="430" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="500" y1="400" x2="500" y2="430" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="790" y1="400" x2="790" y2="430" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    
+    <!-- 第三阶段：版面布局分析 -->
+    <rect x="50" y="650" width="900" height="200" fill="#fff2e6" rx="10" ry="10" stroke="#ffcc99" stroke-width="2"/>
+    <text x="500" y="670" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#cc6600">第三阶段：版面布局分析</text>
+    
+    <!-- 阶段连接箭头 -->
+    <line x1="500" y1="630" x2="500" y2="650" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 版面分析节点 -->
+    <rect x="200" y="700" width="220" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="310" y="735" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档物理布局分析</text>
+    
+    <!-- 逻辑结构分析节点 -->
+    <rect x="580" y="700" width="220" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="690" y="735" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档逻辑结构分析</text>
+    
+    <!-- 箭头 -->
+    <line x1="420" y1="730" x2="580" y2="730" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 物理布局分析说明 -->
+    <text x="310" y="780" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">列、段落、边距检测</text>
+    <text x="310" y="800" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">页面区域划分</text>
+    <text x="310" y="820" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">元素空间关系识别</text>
+    
+    <!-- 逻辑结构分析说明 -->
+    <text x="690" y="780" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">章节结构识别</text>
+    <text x="690" y="800" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">内容层次关系分析</text>
+    <text x="690" y="820" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">标题、正文、参考文献区分</text>
+    
+    <!-- 第四阶段：内容整合与输出 -->
+    <rect x="50" y="870" width="900" height="280" fill="#f3e6ff" rx="10" ry="10" stroke="#d8b2ff" stroke-width="2"/>
+    <text x="500" y="890" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#660099">第四阶段：内容整合与输出</text>
+    
+    <!-- 阶段连接箭头 -->
+    <line x1="500" y1="850" x2="500" y2="870" stroke="#666666" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 整合算法节点 -->
+    <rect x="430" y="930" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="965" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">内容整合算法</text>
+    
+    <!-- 数据清洗节点 -->
+    <rect x="200" y="1030" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="270" y="1065" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">数据清洗与修正</text>
+    
+    <!-- 内容重建节点 -->
+    <rect x="430" y="1030" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="1065" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文档内容重建</text>
+    
+    <!-- 格式输出节点 -->
+    <rect x="660" y="1030" width="140" height="60" fill="#ffffff" rx="5" ry="5" stroke="#666666" stroke-width="2"/>
+    <text x="730" y="1065" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">格式转换与输出</text>
+    
+    <!-- 箭头 -->
+    <line x1="500" y1="990" x2="500" y2="1010" stroke="#666666" stroke-width="1.5"/>
+    <line x1="500" y1="1010" x2="270" y2="1010" stroke="#666666" stroke-width="1.5"/>
+    <line x1="270" y1="1010" x2="270" y2="1030" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="500" y1="1010" x2="500" y2="1030" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="500" y1="1010" x2="730" y2="1010" stroke="#666666" stroke-width="1.5"/>
+    <line x1="730" y1="1010" x2="730" y2="1030" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    
+    <line x1="270" y1="1090" x2="270" y2="1110" stroke="#666666" stroke-width="1.5"/>
+    <line x1="270" y1="1110" x2="500" y2="1110" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="500" y1="1090" x2="500" y2="1110" stroke="#666666" stroke-width="1.5"/>
+    <line x1="500" y1="1110" x2="730" y2="1110" stroke="#666666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    
+    <!-- 输出格式说明 -->
+    <text x="730" y="1120" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">Markdown / JSON / 结构化文本</text>
+    
+    <!-- 箭头标记定义 -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666666" />
+        </marker>
+    </defs>
+</svg>

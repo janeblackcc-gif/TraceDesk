@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 900">
+  <!-- DrawIO Style Grid Background -->
+  <defs>
+    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+    </pattern>
+    
+    <!-- Gradient definitions -->
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4b6cb7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#182848;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="phase1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2193b0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6dd5ed;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="phase2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#834d9b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d04ed6;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="module1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3494e6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec6ead;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="module2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="module3Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f46b45;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#eea849;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="100%" height="100%" fill="white"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Title -->
+  <rect x="100" y="20" width="1000" height="60" rx="10" ry="10" fill="url(#headerGradient)"/>
+  <text x="600" y="60" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="white">Advanced RAG 全流程优化框架</text>
+  
+  <!-- Phase 1 Title -->
+  <rect x="100" y="100" width="1000" height="40" rx="10" ry="10" fill="url(#phase1Gradient)"/>
+  <text x="600" y="127" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="white">阶段1: 把相关文档拿准了</text>
+  
+  <!-- Module 1: Query Optimization -->
+  <rect x="100" y="160" width="300" height="300" rx="10" ry="10" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <rect x="100" y="160" width="300" height="40" rx="10" ry="10" fill="url(#module1Gradient)"/>
+  <text x="250" y="187" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="white">模块1: Query优化</text>
+  
+  <!-- Query Rewrite -->
+  <rect x="120" y="210" width="260" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="250" y="230" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Query Rewrite</text>
+  <text x="250" y="250" font-family="Arial" font-size="12" text-anchor="middle">通过提示词工程优化查询</text>
+  
+  <!-- Intent Detection -->
+  <rect x="120" y="270" width="260" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="250" y="290" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">意图识别</text>
+  <text x="250" y="310" font-family="Arial" font-size="12" text-anchor="middle">识别查询的真实意图</text>
+  
+  <!-- Query Expansion -->
+  <rect x="120" y="330" width="260" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="250" y="350" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Query Expansion</text>
+  <text x="250" y="370" font-family="Arial" font-size="12" text-anchor="middle">扩展查询关键词/向量</text>
+  
+  <!-- HYDE -->
+  <rect x="120" y="390" width="260" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="250" y="410" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">HYDE</text>
+  <text x="250" y="430" font-family="Arial" font-size="12" text-anchor="middle">基于假设文档的嵌入</text>
+  
+  <!-- Module 2: Document Processing -->
+  <rect x="450" y="160" width="300" height="300" rx="10" ry="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <rect x="450" y="160" width="300" height="40" rx="10" ry="10" fill="url(#module2Gradient)"/>
+  <text x="600" y="187" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="white">模块2: 文档处理优化</text>
+  
+  <!-- PDF Processing -->
+  <rect x="470" y="210" width="260" height="70" rx="5" ry="5" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+  <text x="600" y="230" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">高级PDF解析</text>
+  <text x="600" y="250" font-family="Arial" font-size="12" text-anchor="middle">表格、图片的解析+布局还原</text>
+  <text x="600" y="270" font-family="Arial" font-size="12" text-anchor="middle">表格的跨页断行处理</text>
+  
+  <!-- Document Chunking -->
+  <rect x="470" y="290" width="260" height="70" rx="5" ry="5" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+  <text x="600" y="310" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">智能分块</text>
+  <text x="600" y="330" font-family="Arial" font-size="12" text-anchor="middle">规则切分+语义切分</text>
+  <text x="600" y="350" font-family="Arial" font-size="12" text-anchor="middle">保持语义与结构完整性</text>
+  
+  <!-- Document Filtering -->
+  <rect x="470" y="370" width="260" height="70" rx="5" ry="5" fill="#c8e6c9" stroke="#388e3c" stroke-width="1"/>
+  <text x="600" y="390" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Chunk优化</text>
+  <text x="600" y="410" font-family="Arial" font-size="12" text-anchor="middle">对chunk打标签进行过滤</text>
+  <text x="600" y="430" font-family="Arial" font-size="12" text-anchor="middle">父文档法</text>
+  
+  <!-- Module 3: Query-Chunk Connection -->
+  <rect x="800" y="160" width="300" height="300" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <rect x="800" y="160" width="300" height="40" rx="10" ry="10" fill="url(#module3Gradient)"/>
+  <text x="950" y="187" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="white">模块3: Query-Chunk连接优化</text>
+  
+  <!-- Hybrid Search -->
+  <rect x="820" y="210" width="260" height="70" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="950" y="230" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">混合搜索</text>
+  <text x="950" y="250" font-family="Arial" font-size="12" text-anchor="middle">关键词检索 + 向量检索</text>
+  <text x="950" y="270" font-family="Arial" font-size="12" text-anchor="middle">多模态向量检索</text>
+  
+  <!-- Reranking -->
+  <rect x="820" y="290" width="260" height="70" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="950" y="310" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">重排序</text>
+  <text x="950" y="330" font-family="Arial" font-size="12" text-anchor="middle">基于相关性模型的重排</text>
+  <text x="950" y="350" font-family="Arial" font-size="12" text-anchor="middle">融合多种相关性信号</text>
+  
+  <!-- Embedding Training -->
+  <rect x="820" y="370" width="260" height="70" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="950" y="390" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">嵌入模型优化</text>
+  <text x="950" y="410" font-family="Arial" font-size="12" text-anchor="middle">Embedding模型训练/微调</text>
+  <text x="950" y="430" font-family="Arial" font-size="12" text-anchor="middle">领域特定embedding</text>
+  
+  <!-- Flow Arrows Phase 1 -->
+  <path d="M 400 310 L 450 310" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <polygon points="450,310 440,305 440,315" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <path d="M 750 310 L 800 310" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <polygon points="800,310 790,305 790,315" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Retrieved Docs Visual -->
+  <rect x="450" y="480" width="300" height="60" rx="10" ry="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="600" y="520" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">高质量相关文档</text>
+  
+  <!-- Connection from Module 3 to Retrieved Docs -->
+  <path d="M 950 460 L 950 510 L 750 510" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <polygon points="750,510 760,505 760,515" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Phase 2 Title -->
+  <rect x="100" y="560" width="1000" height="40" rx="10" ry="10" fill="url(#phase2Gradient)"/>
+  <text x="600" y="587" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="white">阶段2: 拿到了相关文档大模型能回答对了</text>
+  
+  <!-- Phase 2 Modules -->
+  <rect x="100" y="620" width="300" height="200" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="250" y="650" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">引用管理</text>
+  <rect x="120" y="670" width="260" height="130" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="250" y="695" font-family="Arial" font-size="16" text-anchor="middle">添加引用</text>
+  <text x="250" y="720" font-family="Arial" font-size="12" text-anchor="middle">内联引用注释</text>
+  <text x="250" y="740" font-family="Arial" font-size="12" text-anchor="middle">来源追踪</text>
+  <text x="250" y="760" font-family="Arial" font-size="12" text-anchor="middle">引用可靠性评分</text>
+  <text x="250" y="780" font-family="Arial" font-size="12" text-anchor="middle">上下文可信度估计</text>
+  
+  <rect x="450" y="620" width="300" height="200" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="600" y="650" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">模型训练</text>
+  <rect x="470" y="670" width="260" height="130" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="600" y="695" font-family="Arial" font-size="16" text-anchor="middle">LLM优化</text>
+  <text x="600" y="720" font-family="Arial" font-size="12" text-anchor="middle">检索增强微调</text>
+  <text x="600" y="740" font-family="Arial" font-size="12" text-anchor="middle">知识引用训练</text>
+  <text x="600" y="760" font-family="Arial" font-size="12" text-anchor="middle">幻觉识别/修正训练</text>
+  <text x="600" y="780" font-family="Arial" font-size="12" text-anchor="middle">领域知识适应</text>
+  
+  <rect x="800" y="620" width="300" height="200" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="950" y="650" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">提示词工程</text>
+  <rect x="820" y="670" width="260" height="130" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="950" y="695" font-family="Arial" font-size="16" text-anchor="middle">生成优化</text>
+  <text x="950" y="720" font-family="Arial" font-size="12" text-anchor="middle">检索融合提示词</text>
+  <text x="950" y="740" font-family="Arial" font-size="12" text-anchor="middle">少样本学习提示</text>
+  <text x="950" y="760" font-family="Arial" font-size="12" text-anchor="middle">思维链提示</text>
+  <text x="950" y="780" font-family="Arial" font-size="12" text-anchor="middle">结构化输出控制</text>
+  
+  <!-- Connection between phases -->
+  <path d="M 600 540 L 600 560" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <polygon points="600,560 595,550 605,550" fill="#000000" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Final Output -->
+  <rect x="450" y="840" width="300" height="40" rx="10" ry="10" fill="#4527a0" stroke="#311b92" stroke-width="2"/>
+  <text x="600" y="865" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="white">高质量RAG回答</text>
+  
+  <!-- Connections to Final Output -->
+  <path d="M 250 820 L 250 860 L 450 860" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 600 820 L 600 840" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <path d="M 950 820 L 950 860 L 750 860" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/>
+  <polygon points="450,860 460,855 460,865" fill="#000000" stroke="#000000" stroke-width="2"/>
+  <polygon points="600,840 595,830 605,830" fill="#000000" stroke="#000000" stroke-width="2"/>
+  <polygon points="750,860 740,855 740,865" fill="#000000" stroke="#000000" stroke-width="2"/>
+</svg>
