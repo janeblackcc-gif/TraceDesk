@@ -18,10 +18,12 @@ from app import __version__
 REQUIRED = {'.gitignore', '.env.example', 'README.md', 'LICENSE', 'requirements.txt', 'requirements-dev.txt',
             'app/main.py', 'scripts/start.py', 'docs/deployment.md', 'docs/architecture.md', 'docs/evaluation.md',
             '.github/workflows/tests.yml', 'tests/test_core.py', 'demo/manifest.json'}
-ROOT_FILES = {'.gitignore', '.gitattributes', '.env.example', 'README.md', 'LICENSE', 'CHANGELOG.md',
-              'CONTRIBUTING.md', 'requirements.txt', 'requirements-dev.txt', 'start_local_rag.ps1'}
-ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs'}
-PRIVATE_NAMES = {'data', '.venv', '.git', 'evidence', '.release-work', '__pycache__', '.pytest_cache'}
+ROOT_FILES = {'.gitignore', '.gitattributes', '.env.example', '.env.production.example', 'README.md', 'LICENSE', 'CHANGELOG.md',
+              'CONTRIBUTING.md', 'requirements.txt', 'requirements-dev.txt', 'requirements-lock.txt', 'requirements-dev-lock.txt',
+              'pyproject.toml', 'start_local_rag.ps1', 'alembic.ini', '.dockerignore'}
+ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs', 'alembic', 'deploy'}
+PRIVATE_NAMES = {'data', '.venv', '.git', 'evidence', '.release-work', '__pycache__', '.pytest_cache',
+                 'artifacts', 'acceptance', 'pilot', 'private'}
 TEXT_SUFFIXES = {'.py', '.md', '.json', '.jsonl', '.txt', '.toml', '.yml', '.yaml', '.ps1', '.js', '.css', '.html'}
 PRIVATE_TEXT = re.compile(r'(?<![\w])[A-Za-z]:[\\/][^\s"<>]+|-----BEGIN [A-Z ]*PRIVATE KEY-----|\b(?:ghp|gho|github_pat)_[A-Za-z0-9_]{20,}')
 MARKDOWN_LINK = re.compile(r'\]\(([^)]+)\)')
@@ -46,7 +48,7 @@ def inspect_files(root: Path, names: list[str]) -> tuple[list[dict], list[str]]:
         if (len(relative.parts) == 1 and name not in ROOT_FILES) or (len(relative.parts) > 1 and relative.parts[0] not in ROOT_DIRS):
             errors.append(f'Unreviewed top-level path: {name}')
         if (set(relative.parts) & PRIVATE_NAMES or
-                (relative.name.startswith('.env') and relative.name != '.env.example') or
+                (relative.name.startswith('.env') and relative.name not in {'.env.example', '.env.production.example'}) or
                 relative.suffix.lower() in {'.log', '.db', '.sqlite', '.sqlite3', '.gguf', '.safetensors', '.zip'} or
                 relative.name.endswith(('.db-wal', '.db-shm'))):
             errors.append(f'Private or generated file included: {name}')
@@ -57,7 +59,7 @@ def inspect_files(root: Path, names: list[str]) -> tuple[list[dict], list[str]]:
         raw = path.read_bytes()
         if len(raw) > 5 * 1024 * 1024:
             errors.append(f'File exceeds 5 MiB review threshold: {name}')
-        if relative.suffix.lower() in TEXT_SUFFIXES or name == '.env.example':
+        if relative.suffix.lower() in TEXT_SUFFIXES or name in {'.env.example', '.env.production.example'}:
             text = raw.decode('utf-8-sig')
             if PRIVATE_TEXT.search(text):
                 errors.append(f'Absolute machine path or credential-like text: {name}')

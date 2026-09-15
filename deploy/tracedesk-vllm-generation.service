@@ -1,0 +1,37 @@
+[Unit]
+Description=TraceDesk vLLM generation endpoint
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/dev/nvidia0
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/srv/tracedesk/src
+EnvironmentFile=/srv/tracedesk/vllm.env
+Environment=CUDA_VISIBLE_DEVICES=0
+Environment=HF_HUB_OFFLINE=1
+Environment=TRANSFORMERS_OFFLINE=1
+Environment=DO_NOT_TRACK=1
+Environment=HOME=/srv/tracedesk/vllm-cache/home
+Environment=XDG_CACHE_HOME=/srv/tracedesk/vllm-cache
+Environment=HF_HOME=/srv/tracedesk/vllm-cache/huggingface
+Environment=TORCHINDUCTOR_CACHE_DIR=/srv/tracedesk/vllm-cache/torchinductor
+Environment=TRITON_CACHE_DIR=/srv/tracedesk/vllm-cache/triton
+ExecStart=/srv/tracedesk/vllm-venv/bin/vllm serve ${TRACEDESK_CHAT_MODEL_PATH} --runner generate --host 127.0.0.1 --port 8000 --served-model-name ${TRACEDESK_CHAT_MODEL} --dtype ${TRACEDESK_VLLM_DTYPE} --gpu-memory-utilization ${TRACEDESK_CHAT_GPU_MEMORY_UTILIZATION} --max-model-len ${TRACEDESK_VLLM_MAX_MODEL_LEN} --max-num-seqs ${TRACEDESK_CHAT_MAX_NUM_SEQS} --disable-log-requests --disable-uvicorn-access-log
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=60
+KillSignal=SIGINT
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadOnlyPaths=/srv/tracedesk/models /srv/tracedesk/vllm-venv
+ReadWritePaths=/srv/tracedesk/vllm-cache
+LimitNOFILE=65535
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

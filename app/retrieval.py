@@ -20,6 +20,10 @@ def tokenize(text: str) -> list[str]:
 def document_text(c: dict) -> str:
     return f"{c['filename']}\n{c['heading']}\n{c['text']}"
 
+def source_order(c: dict) -> str:
+    # Migrated chunks keep RC2's deterministic tie order while public IDs are UUIDs.
+    return c.get('legacy_chunk_id') or c['id']
+
 def cosine(a: list[float], b: list[float]) -> float:
     if len(a) != len(b) or not a or not all(math.isfinite(v) for v in a + b):
         raise ValueError('向量维度或数值无效；请重建索引。')
@@ -28,7 +32,8 @@ def cosine(a: list[float], b: list[float]) -> float:
 
 def search(question: str, candidates: list[dict], method: str = 'hybrid',
            vectors: dict[str, list[float]] | None = None, query_vector: list[float] | None = None,
-           top_k: int = 5, min_dense_score: float = .50) -> list[dict]:
+           top_k: int = 5, min_dense_score: float = .50,
+           dense_scores: dict[str, float] | None = None) -> list[dict]:
     if not candidates:
         return []
     terms = set(tokenize(question))
@@ -43,11 +48,15 @@ def search(question: str, candidates: list[dict], method: str = 'hybrid',
     q_sparse = {t: sparse_idf.get(t, math.log(n + 1) + 1) for t in terms}
     q_norm = math.sqrt(sum(x*x for x in q_sparse.values())) or 1
     scores = []
+    has_dense = dense_scores is not None or (vectors is not None and query_vector is not None)
     for c, tf in zip(candidates, counts):
         length = sum(tf.values())
         bm25 = sum(idf[t] * tf[t] * 2.5 / (tf[t] + 1.5 * (.25 + .75 * length / average))
                    for t in terms if tf[t])
-        if vectors is not None and query_vector is not None:
+        if dense_scores is not None:
+            secondary = dense_scores[c['id']]
+            secondary_kind = 'dense'
+        elif vectors is not None and query_vector is not None:
             secondary = cosine(query_vector, vectors[c['id']])
             secondary_kind = 'dense'
         else:
@@ -58,13 +67,13 @@ def search(question: str, candidates: list[dict], method: str = 'hybrid',
         scores.append({**c, 'bm25': bm25, 'secondary': secondary, 'secondary_kind': secondary_kind,
                        'coverage': len(terms & tf.keys()) / len(terms)})
     def ranking(key: str, threshold: float):
-        return sorted([s for s in scores if s[key] > threshold], key=lambda s: (-s[key], s['id']))[:20]
+        return sorted([s for s in scores if s[key] > threshold], key=lambda s: (-s[key], source_order(s)))[:20]
     bm = ranking('bm25', 0)
-    other = ranking('secondary', .20 if vectors is not None else 0)
+    other = ranking('secondary', .20 if has_dense else 0)
     if method == 'bm25':
         combined = [(s, s['bm25']) for s in bm]
     elif method == 'dense':
-        if vectors is None:
+        if not has_dense:
             raise ValueError('dense 检索只在本地模型索引完成后可用。')
         combined = [(s, s['secondary']) for s in other]
     else:
@@ -77,8 +86,8 @@ def search(question: str, candidates: list[dict], method: str = 'hybrid',
         combined = [(union[cid], value) for cid, value in rrf.items()]
     # Heuristic relevance gate, NOT calibrated probability.
     combined = [(s, value) for s, value in combined if s['coverage'] >= .12 or
-                (vectors is not None and s['secondary'] >= min_dense_score)]
-    combined.sort(key=lambda pair: (-pair[1], pair[0]['id']))
+                (has_dense and s['secondary'] >= min_dense_score)]
+    combined.sort(key=lambda pair: (-pair[1], source_order(pair[0])))
     return [{**s, 'score': round(value, 6), 'rank': i + 1} for i, (s, value) in enumerate(combined[:top_k])]
 
 
@@ -108,7 +117,8 @@ def translation_language(question: str, candidates: list[dict]) -> str | None:
 
 def search_context(queries: list[str], candidates: list[dict], method: str = 'hybrid',
                    vectors: dict[str, list[float]] | None = None,
-                   query_vectors: list[list[float]] | None = None) -> list[dict]:
+                   query_vectors: list[list[float]] | None = None,
+                   query_scores: list[dict[str, float]] | None = None) -> list[dict]:
     """Balance subquestions, then add bounded adjacent text in the same document.
 
     The returned text is unchanged, and every added chunk keeps its own source ID.
@@ -118,9 +128,12 @@ def search_context(queries: list[str], candidates: list[dict], method: str = 'hy
         return []
     if query_vectors is not None and len(query_vectors) != len(queries):
         raise ValueError('查询向量数量与检索问题不一致。')
+    if query_scores is not None and len(query_scores) != len(queries):
+        raise ValueError('查询分数数量与检索问题不一致。')
     rankings = [search(query, candidates, method, vectors,
                        query_vectors[i] if query_vectors is not None else None,
-                       top_k=6, min_dense_score=.40) for i, query in enumerate(queries)]
+                       top_k=6, min_dense_score=.40,
+                       dense_scores=query_scores[i] if query_scores is not None else None) for i, query in enumerate(queries)]
     anchors = []
     seen = set()
     for rank in range(6):
@@ -140,7 +153,7 @@ def search_context(queries: list[str], candidates: list[dict], method: str = 'hy
         documents.setdefault(key, []).append(source)
     adjacent = {}
     for group in documents.values():
-        group.sort(key=lambda source: (source['page'], source['start_line'], source['end_line'], source['id']))
+        group.sort(key=lambda source: (source['page'], source['start_line'], source['end_line'], source_order(source)))
         for i, source in enumerate(group):
             adjacent[source['id']] = [group[j] for j in (i - 1, i + 1) if 0 <= j < len(group)]
     pending = list(anchors)

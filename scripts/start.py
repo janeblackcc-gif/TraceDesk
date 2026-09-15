@@ -25,7 +25,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, help='Override TRACEDESK_PORT for this invocation')
     parser.add_argument('--check', action='store_true', help='Print diagnostics as JSON and exit')
-    parser.add_argument('--require-models', action='store_true', help='Require the configured local Ollama models')
+    parser.add_argument('--require-models', action='store_true', help='Require the configured local model provider and models')
     args = parser.parse_args()
     if sys.version_info < (3, 11):
         print('TraceDesk requires Python 3.11+; Python 3.13 is recommended.', file=sys.stderr)
@@ -34,7 +34,9 @@ def main() -> int:
         import uvicorn
         from app import __version__
         from app.config import Settings
-        from app.providers import Ollama, ModelUnavailable
+        from app.models.factory import create_provider
+        from app.models.vllm import vllm_version_supported
+        from app.providers import ModelUnavailable
     except ImportError as exc:
         print(f'Missing dependency ({exc.name}). Run: python -m pip install -r requirements.txt', file=sys.stderr)
         return 1
@@ -42,27 +44,36 @@ def main() -> int:
         settings = Settings.load()
         if args.port is not None:
             settings = replace(settings, port=args.port)
+        endpoints = ({'embedding': settings.vllm_embed_url, 'generation': settings.vllm_chat_url}
+                     if settings.model_provider == 'vllm' else {'ollama': settings.ollama_url})
         report = {'status': 'passed', 'version': __version__, 'python': sys.version.split()[0],
                   'web_url': f'http://127.0.0.1:{settings.port}', 'port_available': port_available(settings.port),
-                  'data_dir': str(settings.data_dir), 'ollama_url': settings.ollama_url,
+                  'data_dir': str(settings.data_dir), 'model_provider': settings.model_provider,
+                  'model_endpoints': endpoints,
                   'embedding': settings.embedding_model, 'generation': settings.generation_model,
                   'dependencies': {name: version(name) for name in ('fastapi', 'uvicorn', 'pydantic', 'httpx', 'pypdf', 'python-multipart', 'python-dotenv')},
                   'model_check': {'checked': False}}
         if args.require_models:
-            provider = Ollama(settings=settings)
+            provider = create_provider(settings)
             try:
                 state = provider.status()
                 report['model_check'] = {'checked': True, **state}
-                if state['ready']:
+                if state['ready'] and settings.model_provider == 'ollama':
                     runtime_version = provider._request('/api/version').get('version', '')
                     report['model_check']['runtime_version'] = runtime_version
                     match = re.match(r'^(\d+)\.(\d+)\.(\d+)', runtime_version)
                     if not match or tuple(int(part) for part in match.groups()) < (0, 31, 2):
                         report.update(status='failed', error='Ollama 0.31.2+ is required for structured Qwen3.5 replies; 0.33.3 is tested.')
+                elif state['ready']:
+                    runtime_version = provider.runtime_version()
+                    report['model_check']['runtime_version'] = runtime_version
+                    if settings.model_provider == 'vllm' and not vllm_version_supported(runtime_version):
+                        report.update(status='failed', error='vLLM 0.8.5+ is required by the configured Qwen models.')
                 else:
-                    report.update(status='failed', error='Configured local models are unavailable. Start Ollama and install both model tags.')
+                    report.update(status='failed', error='Configured local model service or model IDs are unavailable.')
             finally:
-                provider.client.close()
+                if hasattr(provider, 'client'):
+                    provider.client.close()
         if args.check or report['status'] != 'passed':
             print(json.dumps(report, ensure_ascii=False, indent=2))
             return 0 if report['status'] == 'passed' else 2

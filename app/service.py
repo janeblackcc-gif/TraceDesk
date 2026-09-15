@@ -7,7 +7,8 @@ import uuid
 from pathlib import Path
 from .ingest import InputError
 from .store import Store
-from .providers import Ollama, ModelUnavailable
+from .providers import ModelUnavailable
+from .models.factory import create_provider
 from .citations import MAX_QUOTE_CHARS
 from .retrieval import search, document_text, retrieval_queries, search_context, translation_language
 
@@ -19,7 +20,7 @@ class IndexRequired(InputError):
 class Service:
     def __init__(self, path: str | Path, provider=None):
         self.store = Store(path)
-        self.provider = provider or Ollama()
+        self.provider = provider or create_provider()
         self.lock = threading.RLock()
 
     def load_demo(self) -> dict:
@@ -114,9 +115,10 @@ class Service:
         if profile == 'ollama':
             key = self.provider.model_key()
             language = translation_language(effective, candidates)
-            if language is not None and isinstance(self.provider, Ollama):
+            planner = getattr(self.provider, 'plan_queries', None)
+            if language is not None and callable(planner):
                 try:
-                    translated = self.provider.plan_queries(effective, language)
+                    translated = planner(effective, language)
                 except ModelUnavailable as exc:
                     response['query_planning'] = {'status': 'literal_fallback', 'message': str(exc)}
                 else:

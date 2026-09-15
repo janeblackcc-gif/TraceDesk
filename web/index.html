@@ -28,7 +28,7 @@
     <div class="scope-bar" aria-label="本次问答的检索范围">
       <label>知识库<select id="collection-select"><option value="">尚未导入</option></select></label>
       <label>版本<select id="version-select"><option value="">—</option></select></label>
-      <label class="profile-label">回答模式<select id="profile-select"><option value="evidence">证据模式 · 无需模型</option><option value="ollama">本地 RAG · Ollama</option></select></label>
+      <label class="profile-label">回答模式<select id="profile-select"><option value="evidence">证据模式 · 无需模型</option><option value="ollama">本地 RAG · vLLM</option></select></label>
       <div class="scope-explainer"><span class="scope-lock">⌑</span><span>只检索所选版本<small>不自动混用旧文档</small></span></div>
     </div>
     <div id="demo-banner" class="demo-banner"><div><strong>从一个可验证的例子开始。</strong><span>载入原创 Atlas 演示文档，体验新旧版本、故障排查和引用定位。</span></div><button id="load-demo" class="button primary">载入演示 <span aria-hidden="true">↗</span></button></div>
@@ -54,10 +54,10 @@
     <div class="panel eval-details"><h2>逐题检查</h2><p id="eval-meta" class="small muted"></p><div class="table-scroll"><table><thead><tr><th>题目</th><th>分组</th><th>版本</th><th>结果</th><th>Recall@5</th></tr></thead><tbody id="eval-rows"></tbody></table></div></div>
   </section>
   <section id="settings-view" class="view" aria-labelledby="settings-heading"><div class="page-intro"><div class="eyebrow">LOCAL BY CHOICE</div><h1 id="settings-heading">资料留在本机。<span>能力按需开启。</span></h1><p class="subtitle">证据模式随时可用；完整 RAG 需要你安装本地模型并建立向量索引。</p></div>
-    <div class="settings-grid"><div class="panel settings-card"><span class="tag">开箱体验</span><h2>证据模式</h2><p>BM25 + 词项 TF-IDF 融合检索，展示原文摘录和精确来源。不运行生成模型，不将词项向量伪称为语义嵌入。</p><div class="status-line"><span class="status-dot"></span> 无需模型 · 无需 API Key</div></div><div class="panel settings-card"><span class="tag">可选完整链路</span><h2>本地 RAG</h2><p>Ollama 嵌入 + 生成，结构化回答、逐条引用校验。服务不可用时明确报错，不自动转发到云端。</p><div id="model-status" class="status-line muted">尚未检查本地服务</div></div></div>
-    <div class="panel setup-card"><h2>本地模型</h2><p>Ollama 0.33.3</p><pre><code>qwen3-embedding:0.6b-q8_0
-qwen3.5:4b-q4_K_M</code></pre><button id="check-models" class="button secondary">检查本地模型</button></div>
-    <div class="notice"><strong>隐私边界：</strong>服务仅面向本机单人使用，SQLite 数据未加密；有电脑访问权限的人仍可能读取。请勿修改为外网监听或导入未经授权的资料。不开启遥测，不调用云端模型；本机 Ollama 服务也应保持可信且仅使用本地权重。</div>
+    <div class="settings-grid"><div class="panel settings-card"><span class="tag">开箱体验</span><h2>证据模式</h2><p>BM25 + 词项 TF-IDF 融合检索，展示原文摘录和精确来源。不运行生成模型，不将词项向量伪称为语义嵌入。</p><div class="status-line"><span class="status-dot"></span> 无需模型 · 无需 API Key</div></div><div class="panel settings-card"><span class="tag">可选完整链路</span><h2>本地 RAG</h2><p>vLLM 嵌入 + 生成，结构化回答、逐条引用校验。服务不可用时明确报错，不自动转发到云端。</p><div id="model-status" class="status-line muted">尚未检查本地服务</div></div></div>
+    <div class="panel setup-card"><h2>本地模型</h2><p>vLLM OpenAI-compatible endpoints</p><pre><code>Qwen/Qwen3-Embedding-0.6B
+Qwen/Qwen3-4B-Instruct-2507</code></pre><button id="check-models" class="button secondary">检查本地模型服务</button></div>
+    <div class="notice"><strong>隐私边界：</strong>服务仅面向本机单人使用，SQLite 数据未加密；有电脑访问权限的人仍可能读取。请勿修改为外网监听或导入未经授权的资料。不开启遥测，不调用云端模型；本机 vLLM 服务也应保持可信且仅使用本地权重。</div>
   </section>
 </main></div>
 <dialog id="source-dialog" class="source-dialog" aria-labelledby="source-title"><div class="drawer-head"><div><div class="eyebrow">SOURCE EVIDENCE</div><h2 id="source-title">来源原文</h2><p id="source-meta" class="small muted"></p></div><button id="close-source" class="icon-button" aria-label="关闭来源">✕</button></div><div class="drawer-note">行号来自解析文本；PDF 页号为文件页序号，不是原版面坐标高亮。</div><div id="source-lines" class="source-lines"></div></dialog>

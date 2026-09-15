@@ -32,12 +32,12 @@ jobs:
           python-version: ${{ matrix.python }}
           cache: pip
           cache-dependency-path: |
-            requirements.txt
-            requirements-dev.txt
+            requirements-lock.txt
+            requirements-dev-lock.txt
       - name: Install
         run: |
           $ErrorActionPreference = 'Stop'
-          python -m pip install -r requirements-dev.txt
+          python -m pip install --require-hashes -r requirements-dev-lock.txt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m pip check
           exit $LASTEXITCODE
@@ -46,6 +46,15 @@ jobs:
           $ErrorActionPreference = 'Stop'
           python -m pytest -q
           exit $LASTEXITCODE
+      - name: Verify dependency locks and API contract
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python scripts/check_locks.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/check_openapi.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/check_eval_dataset.py --check-schema eval/schema_v2.json
+          exit $LASTEXITCODE
       - name: Check startup and release contents
         run: |
           $ErrorActionPreference = 'Stop'
@@ -53,3 +62,58 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python scripts/release_check.py --output evidence/ci_release_check.json
           exit $LASTEXITCODE
+
+  postgresql:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.6-pg18-trixie@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
+        env:
+          POSTGRES_USER: tracedesk_ci
+          POSTGRES_PASSWORD: isolated-ci-fixture-only
+          POSTGRES_DB: tracedesk_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tracedesk_ci -d tracedesk_ci"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      PYTHONUTF8: '1'
+      # Disposable CI credential, never a deployment password.
+      TRACEDESK_TEST_DATABASE_URL: postgresql+psycopg://tracedesk_ci:isolated-ci-fixture-only@127.0.0.1:5432/tracedesk_ci
+      TRACEDESK_PARSER_TEST_IMAGE: tracedesk-parser:ci
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - name: Install industrial dependencies
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m pip install --require-hashes -r requirements-dev-lock.txt
+          exit $LASTEXITCODE
+      - name: Build isolated parser
+        run: |
+          $ErrorActionPreference = 'Stop'
+          docker build --file deploy/parser.Dockerfile --tag tracedesk-parser:ci .
+          exit $LASTEXITCODE
+      - name: PostgreSQL migrations and complete regression
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python scripts/run_industrial_checks.py --postgres-container ${{ job.services.postgres.id }} --output artifacts/ci-industrial
+          exit $LASTEXITCODE
+      - name: Preserve industrial test evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: industrial-checks
+          path: artifacts/ci-industrial/
+          if-no-files-found: error
+          retention-days: 14

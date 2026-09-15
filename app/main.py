@@ -12,7 +12,8 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from .ingest import InputError, MAX_BYTES
 from . import __version__
 from .config import Settings
-from .providers import ModelUnavailable, Ollama
+from .providers import ModelUnavailable
+from .models.factory import create_provider
 from .service import ROOT, Service, IndexRequired
 
 class AskBody(BaseModel):
@@ -63,7 +64,10 @@ class BodyLimit:
 
 def create_app(db_path: str | Path | None = None, provider=None) -> FastAPI:
     settings = Settings.load()
-    service = Service(db_path or settings.data_dir / 'tracedesk.db', provider or Ollama(settings=settings))
+    if settings.database_url is not None and db_path is None:
+        from .application import create_application
+        return create_application(settings)
+    service = Service(db_path or settings.data_dir / 'tracedesk.db', provider or create_provider(settings))
     @asynccontextmanager
     async def lifespan(app):
         yield

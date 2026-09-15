@@ -28,7 +28,9 @@ flowchart LR
 | app/ingest.py | 格式、大小、编码检查，按标题和文本行分块 |
 | app/store.py | SQLite存储、版本范围、文档生命周期与向量 |
 | app/retrieval.py | BM25、向量余弦相似度、RRF融合与有界上下文扩展 |
-| app/providers.py | Ollama嵌入、受约束生成与模型状态 |
+| app/providers.py | 共享的结构化生成契约与引用校验 |
+| app/models/factory.py | 按配置选择本地模型 provider，不做静默回退 |
+| app/models/ollama.py / vllm.py | Ollama兼容路径与vLLM OpenAI协议适配、超时/取消/身份校验 |
 | app/citations.py | 本轮来源编号及原文引用构造 |
 | app/service.py | 问答编排、最终引用校验、拒答与降级 |
 | app/main.py | HTTP接口、请求限制、单人操作锁和静态网页 |
@@ -60,8 +62,9 @@ generation_assessment记录模型判断、缺失事实、revision_count、revisi
 
 ## 配置与运行
 
-每个进程按环境变量、项目.env、默认值的顺序读取配置，数据目录基于项目根目录解析。模型服务仅允许本机HTTP地址，网页绑定127.0.0.1，使用单个worker和串行操作锁。
+每个进程按环境变量、项目.env、默认值的顺序读取配置，数据目录基于项目根目录解析。模型服务仅允许本机HTTP地址，网页绑定127.0.0.1，使用单个worker和串行操作锁。正式团队配置固定
+`TRACEDESK_MODEL_PROVIDER=vllm`，generation/embedding分别连接8000/8001；`profile=ollama`仅是现有请求协议的兼容别名，实际运行时由provider配置决定。
 
-嵌入上下文为8192；生成上下文为16384，最大输出3072 tokens，temperature=0、seed=42、think=false。这组约束仅表示当前请求设置，不保证跨运行得到逐字相同的答案。硬件、模型digest与实测耗时见[RC2报告](rc2-evaluation.md)。
+历史Ollama兼容请求使用嵌入上下文8192、生成上下文16384、最大输出3072 tokens、temperature=0、seed=42和think=false；vLLM适配器发送跨协议通用的temperature、seed、max_tokens和json_object，应用侧继续用严格Pydantic schema、引用校验和一次修正保护字段契约。实际上下文由服务端启动参数决定，这些约束不保证跨运行得到逐字相同的答案，目标主机必须重新实测。硬件、模型digest与历史耗时见[RC2报告](rc2-evaluation.md)。
 
 数据库和原始问答记录留在本机数据与实验目录；公开报告通过独立导出收录已核对的示例数据。暂未实现账号、跨用户权限、OCR、长期对话记忆和跨版本自动合并。

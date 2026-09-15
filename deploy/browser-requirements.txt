@@ -1,0 +1,2 @@
+# Optional acceptance tooling; uses installed Edge, with no browser download.
+playwright==1.62.0

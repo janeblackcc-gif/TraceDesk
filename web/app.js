@@ -64,7 +64,7 @@ function updateLibraryScope() {const selected = scope(); $('#library-scope').tex
 }
 function modeChanged() {
   const ollama = $('#profile-select').value === 'ollama';
-  $('#mode-description').textContent = ollama ? '仅连接本地 Ollama · ⌘ / Ctrl + Enter 发送' : '原文摘录，不是大模型生成 · ⌘ / Ctrl + Enter 发送';
+  $('#mode-description').textContent = ollama ? '仅连接本地 vLLM · ⌘ / Ctrl + Enter 发送' : '原文摘录，不是大模型生成 · ⌘ / Ctrl + Enter 发送';
   $('#ask-button').replaceChildren(document.createTextNode(ollama ? '生成回答 ' : '查找证据 '), el('span', '', '↑'));
   resetConversation();
 }

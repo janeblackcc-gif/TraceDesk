@@ -1,0 +1,126 @@
+# Linux single-host deployment. Host networking keeps vLLM/DB/API on loopback.
+# Explicit image references must be immutable tag@sha256 digests at release time.
+x-runtime: &runtime
+  image: ${TRACEDESK_APP_IMAGE:?Set a pinned app image}
+  network_mode: host
+  user: "65532:65532"
+  read_only: true
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=134217728"]
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  restart: unless-stopped
+  environment: &environment
+    TRACEDESK_DEPLOYMENT: production
+    TRACEDESK_DATA_DIR: ${TRACEDESK_DATA_DIR:?Set the same absolute Linux path on host and container}
+    TRACEDESK_PUBLIC_ORIGIN: ${TRACEDESK_PUBLIC_ORIGIN:?Set the real HTTPS origin}
+    TRACEDESK_MODEL_PROVIDER: vllm
+    TRACEDESK_VLLM_CHAT_URL: ${TRACEDESK_VLLM_CHAT_URL:-http://127.0.0.1:8000}
+    TRACEDESK_VLLM_EMBED_URL: ${TRACEDESK_VLLM_EMBED_URL:-http://127.0.0.1:8001}
+    TRACEDESK_EMBED_MODEL: ${TRACEDESK_EMBED_MODEL:-Qwen/Qwen3-Embedding-0.6B}
+    TRACEDESK_CHAT_MODEL: ${TRACEDESK_CHAT_MODEL:-Qwen/Qwen3-4B-Instruct-2507}
+    TRACEDESK_EMBED_MODEL_DIGEST: ${TRACEDESK_EMBED_MODEL_DIGEST:?Set the pinned embedding model digest}
+    TRACEDESK_CHAT_MODEL_DIGEST: ${TRACEDESK_CHAT_MODEL_DIGEST:?Set the pinned chat model digest}
+    DATABASE_URL_FILE: /run/secrets/database_url
+  secrets: [database_url]
+  volumes:
+    - type: bind
+      source: ${TRACEDESK_DATA_DIR}
+      target: ${TRACEDESK_DATA_DIR}
+  depends_on:
+    postgres: {condition: service_healthy}
+    migrate: {condition: service_completed_successfully}
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg18-trixie@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tracedesk
+      POSTGRES_DB: tracedesk
+      POSTGRES_PASSWORD_FILE: /run/secrets/database_password
+    secrets: [database_password]
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["postgres:/var/lib/postgresql"]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U tracedesk -d tracedesk"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    <<: *runtime
+    restart: "no"
+    command: ["-m", "alembic", "upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  web:
+    <<: *runtime
+    environment:
+      <<: *environment
+      TRACEDESK_BOOTSTRAP_TOKEN_FILE: /run/secrets/bootstrap_token
+    secrets: [database_url, bootstrap_token]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/readyz', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  parse-worker:
+    <<: *runtime
+    stop_grace_period: 120s
+    image: ${TRACEDESK_PARSE_WORKER_IMAGE:?Set a pinned worker image with Docker CLI}
+    command: ["-m", "app.jobs.worker", "--kind", "parse", "--parser-image", "${TRACEDESK_PARSER_IMAGE:?Set a pinned parser image}"]
+    group_add: ["${DOCKER_SOCKET_GID:?Set the host Docker socket group}"]
+    volumes:
+      - type: bind
+        source: ${TRACEDESK_DATA_DIR}
+        target: ${TRACEDESK_DATA_DIR}
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+
+  index-worker:
+    <<: *runtime
+    stop_grace_period: 120s
+    command: ["-m", "app.jobs.worker", "--kind", "index"]
+
+  query-worker:
+    <<: *runtime
+    stop_grace_period: 120s
+    command: ["-m", "app.jobs.worker", "--kind", "query"]
+
+  gc-worker:
+    <<: *runtime
+    stop_grace_period: 120s
+    command: ["-m", "app.jobs.worker", "--kind", "gc"]
+    environment:
+      <<: *environment
+      XDG_DATA_HOME: ${TRACEDESK_DATA_DIR}/.user-data
+
+  proxy:
+    image: ${TRACEDESK_PROXY_IMAGE:?Set a pinned nginx image}
+    network_mode: host
+    user: "65532:65532"
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=134217728"]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    entrypoint: [nginx]
+    command: ["-g", "daemon off;"]
+    volumes: ["./nginx.conf:/etc/nginx/nginx.conf:ro"]
+    secrets: [tls_certificate, tls_private_key]
+    depends_on:
+      web: {condition: service_healthy}
+
+volumes:
+  postgres:
+
+secrets:
+  database_url: {file: "${TRACEDESK_SECRET_DIR:?Set restricted secret directory}/database_url"}
+  database_password: {file: "${TRACEDESK_SECRET_DIR}/database_password"}
+  bootstrap_token: {file: "${TRACEDESK_SECRET_DIR}/bootstrap_token"}
+  tls_certificate: {file: "${TRACEDESK_SECRET_DIR}/tls_certificate"}
+  tls_private_key: {file: "${TRACEDESK_SECRET_DIR}/tls_private_key"}

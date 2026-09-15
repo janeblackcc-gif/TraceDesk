@@ -1,0 +1,9 @@
+{
+  "requirements.txt": "988bc92295f41dfd419eac9fd1a3ec77eb2c3836636891acba0e90d43cde6ba4",
+  "requirements-dev.txt": "aac0f89c008ade07883c0ccc3a8f2246ab0e82489376a772c0276186740d664e",
+  "deploy/quality-requirements.txt": "42a185561fe1e531ef407fba56228217ff57f1b63daeb55daa6227e3375eeec5",
+  "deploy/parser-requirements.txt": "bf4178ebb1f289644881b8992ec3e4485a91ce707c73039cf35e16b11bbaece5",
+  "requirements-lock.txt": "a90be0993458cd0f3be656a5cee0c03046e01886e000e24bed751a7b7e89d264",
+  "requirements-dev-lock.txt": "6d88ec69357753bab66fe38531f6114e834e66d8796ad839e23b4d6860121b2e",
+  "deploy/parser-requirements-lock.txt": "d1e7cc37a310f719a006621d0a657bc7845386682c344fd8be003078ff4c0a6c"
+}

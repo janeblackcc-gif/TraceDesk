@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TraceDesk private evaluation dataset v2",
+  "files": {
+    "dataset_manifest.json": {
+      "additionalProperties": false,
+      "properties": {
+        "format_version": {
+          "const": 2,
+          "title": "Format Version",
+          "type": "integer"
+        },
+        "dataset_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "corpus_manifest_path": {
+          "title": "Corpus Manifest Path",
+          "type": "string"
+        },
+        "corpus_manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Corpus Manifest Sha256",
+          "type": "string"
+        },
+        "cases_path": {
+          "title": "Cases Path",
+          "type": "string"
+        },
+        "cases_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Cases Sha256",
+          "type": "string"
+        },
+        "labels_path": {
+          "title": "Labels Path",
+          "type": "string"
+        },
+        "labels_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Labels Sha256",
+          "type": "string"
+        },
+        "sealed_holdout": {
+          "title": "Sealed Holdout",
+          "type": "boolean"
+        },
+        "split_policy": {
+          "const": "source_and_template_group",
+          "title": "Split Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format_version",
+        "dataset_id",
+        "name",
+        "version",
+        "created_at",
+        "corpus_manifest_path",
+        "corpus_manifest_sha256",
+        "cases_path",
+        "cases_sha256",
+        "labels_path",
+        "labels_sha256",
+        "sealed_holdout",
+        "split_policy"
+      ],
+      "title": "DatasetManifest",
+      "type": "object"
+    },
+    "corpus_manifest.json": {
+      "$defs": {
+        "CorpusDocument": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "title": "Path",
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "title": "Sha256",
+              "type": "string"
+            },
+            "size_bytes": {
+              "minimum": 0,
+              "title": "Size Bytes",
+              "type": "integer"
+            },
+            "owner": {
+              "maxLength": 200,
+              "minLength": 1,
+              "title": "Owner",
+              "type": "string"
+            },
+            "authorization_reference": {
+              "maxLength": 300,
+              "minLength": 1,
+              "title": "Authorization Reference",
+              "type": "string"
+            },
+            "authorized_uses": {
+              "items": {
+                "enum": [
+                  "evaluation",
+                  "pilot",
+                  "production"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Authorized Uses",
+              "type": "array"
+            },
+            "authorization_expires_at": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Authorization Expires At"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "size_bytes",
+            "owner",
+            "authorization_reference",
+            "authorized_uses"
+          ],
+          "title": "CorpusDocument",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "format_version": {
+          "const": 1,
+          "title": "Format Version",
+          "type": "integer"
+        },
+        "corpus_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Corpus Id",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "retention_policy_reference": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Retention Policy Reference",
+          "type": "string"
+        },
+        "documents": {
+          "items": {
+            "$ref": "#/$defs/CorpusDocument"
+          },
+          "minItems": 1,
+          "title": "Documents",
+          "type": "array"
+        }
+      },
+      "required": [
+        "format_version",
+        "corpus_id",
+        "version",
+        "created_at",
+        "retention_policy_reference",
+        "documents"
+      ],
+      "title": "CorpusManifest",
+      "type": "object"
+    },
+    "cases.jsonl_row": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "split": {
+          "enum": [
+            "dev",
+            "holdout"
+          ],
+          "title": "Split",
+          "type": "string"
+        },
+        "task_type": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Task Type",
+          "type": "string"
+        },
+        "answerability": {
+          "enum": [
+            "answerable",
+            "unanswerable"
+          ],
+          "title": "Answerability",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "blocker"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "source_group": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Source Group",
+          "type": "string"
+        },
+        "template_group": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Template Group",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "split",
+        "task_type",
+        "answerability",
+        "severity",
+        "source_group",
+        "template_group",
+        "question"
+      ],
+      "title": "EvalCase",
+      "type": "object"
+    },
+    "labels.private.jsonl_row": {
+      "$defs": {
+        "EvidencePassage": {
+          "additionalProperties": false,
+          "properties": {
+            "document_sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "title": "Document Sha256",
+              "type": "string"
+            },
+            "quote": {
+              "maxLength": 4000,
+              "minLength": 8,
+              "title": "Quote",
+              "type": "string"
+            },
+            "quote_sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "title": "Quote Sha256",
+              "type": "string"
+            }
+          },
+          "required": [
+            "document_sha256",
+            "quote",
+            "quote_sha256"
+          ],
+          "title": "EvidencePassage",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "required_facts": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Facts",
+          "type": "array"
+        },
+        "evidence_groups": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/EvidencePassage"
+            },
+            "type": "array"
+          },
+          "title": "Evidence Groups",
+          "type": "array"
+        },
+        "forbidden_claims": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Claims",
+          "type": "array"
+        },
+        "reviewer_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reviewer Ids",
+          "type": "array"
+        },
+        "dispute_status": {
+          "default": "none",
+          "enum": [
+            "none",
+            "unresolved",
+            "resolved"
+          ],
+          "title": "Dispute Status",
+          "type": "string"
+        },
+        "adjudicator_id": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adjudicator Id"
+        }
+      },
+      "required": [
+        "case_id",
+        "required_facts",
+        "reviewer_ids"
+      ],
+      "title": "EvalLabel",
+      "type": "object"
+    }
+  }
+}

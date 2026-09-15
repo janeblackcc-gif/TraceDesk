@@ -1,0 +1,5 @@
+# Separate reproducible developer/CI tools; not installed into the runtime image.
+pip-audit==2.10.1
+mypy==2.3.1
+ruff==0.16.6
+uv==0.11.15

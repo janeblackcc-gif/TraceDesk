@@ -8,6 +8,7 @@ data/
 # Local installations, model files, databases and raw experiment output.
 .env.*
 !.env.example
+!.env.production.example
 *.log
 *.db
 *.db-*
@@ -47,3 +48,43 @@ htmlcov/
 !/docs/human-evaluation.md
 !/docs/rc2-evaluation.md
 /datasets/tracedesk_ops/preflight.json
+
+# Industrial source and reproducible checks; raw artifacts remain local.
+!/docs/industrial/
+!/docs/adr/
+!/docs/traceability.csv
+!/scripts/freeze_baseline.py
+!/scripts/check_traceability.py
+!/scripts/migrate_sqlite.py
+!/scripts/check_database.py
+!/scripts/run_industrial_checks.py
+!/scripts/backup_database.py
+!/scripts/retain_database.py
+!/scripts/check_openapi.py
+!/scripts/check_locks.py
+.mypy_cache/
+.ruff_cache/
+!/scripts/industrial_browser_smoke.py
+!/scripts/industrial_model_smoke.py
+!/scripts/vllm_protocol_smoke.py
+!/scripts/portfolio_report.py
+!/scripts/portfolio_smoke.py
+!/scripts/target_browser_smoke.py
+!/scripts/materialize_eval_dev_view.py
+!/scripts/run_retrieval_ablation.py
+!/scripts/select_retrieval_candidate.py
+!/scripts/prepare_generation_review.py
+!/scripts/quality_readiness.py
+!/scripts/quality_report.py
+!/scripts/pilot_report.py
+!/scripts/__init__.py
+!/scripts/create_test_certificate.ps1
+artifacts/
+acceptance/
+pilot/
+eval/real/private/
+.local-secrets/
+
+# Local third-party training material may contain nested repositories, secrets,
+# caches, model assets, and documents without redistribution permission.
+/大模型训练营之rag资料/

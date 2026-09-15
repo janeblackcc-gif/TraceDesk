@@ -93,7 +93,7 @@ class Ollama:
                 raise ValueError('non-object response')
             return body
         except (httpx.HTTPError, ValueError) as exc:
-            raise ModelUnavailable('本地模型服务不可用、模型未安装或请求超时。请在设置中检查 Ollama；未自动改用云端。') from exc
+            raise ModelUnavailable('本地模型服务不可用、模型未安装或请求超时；请检查已配置的本地 provider。未自动改用云端。') from exc
 
     def status(self) -> dict:
         try:

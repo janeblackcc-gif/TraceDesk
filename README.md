@@ -2,7 +2,7 @@
 
 面向技术文档交接的本地RAG工作台。按知识库和版本查找资料，生成带原文引用的回答，并在资料不足或引用失败时明确提示。
 
-当前已发布的预发布版本为 **0.2.0rc2**，面向可复现的本地单人部署。后端使用FastAPI与SQLite，网页为原生HTML/CSS/JavaScript，本地模型通过Ollama调用。复杂论文问答仍存在实质性错误，继续保持预发布状态。
+当前已发布的预发布版本为 **0.2.0rc2**，面向可复现的本地单人部署。后端使用FastAPI与SQLite，网页为原生HTML/CSS/JavaScript；历史单人回归使用Ollama，正式团队部署改用vLLM的OpenAI兼容服务。复杂论文问答仍存在实质性错误，继续保持预发布状态。
 
 ![本地RAG回答与逐条原文引用](docs/assets/workspace-desktop.png)
 
@@ -32,7 +32,7 @@ py -3.13 -m venv .venv
 
 ## 启用本地RAG
 
-安装并启动Ollama，测试版本为0.33.3。准备两个本地模型：
+以下是保留的Windows/Ollama兼容路径，测试版本为0.33.3。准备两个本地模型：
 
 ```powershell
 ollama pull qwen3-embedding:0.6b-q8_0
@@ -41,9 +41,9 @@ ollama pull qwen3.5:4b-q4_K_M
 pwsh -NoProfile -File ./start_local_rag.ps1
 ```
 
-在知识库页面导入资料并建立本地向量索引，再切换到本地RAG模式。模型权重单独下载，不包含在仓库或发布包中。
+在知识库页面导入资料并建立本地向量索引，再切换到本地RAG模式。模型权重单独下载，不包含在仓库或发布包中。正式团队部署不使用这条路径，改按[工业化运维配置](docs/industrial/operations.md)启动两个受控vLLM端点，并先运行协议探针。
 
-可使用项目根目录.env配置数据目录、端口和模型，参考[配置示例](.env.example)。环境变量优先；Ollama默认地址为http://127.0.0.1:11434。端口已占用时可传入--port 8766。完整安装、Linux命令和排错见[部署文档](docs/deployment.md)。
+可使用项目根目录.env配置数据目录、端口、provider和模型，参考[配置示例](.env.example)。环境变量优先；兼容模式默认地址为http://127.0.0.1:11434，正式vLLM配置使用8000/8001两个loopback端点。端口已占用时可传入--port 8766。完整安装、Linux命令和排错见[部署文档](docs/deployment.md)。
 
 ## 评测结果
 
@@ -57,17 +57,23 @@ RC2依据首轮8题真实论文问题的人工评分0/8修复了跨页检索和�
 
 ## 开发与发布
 
+工业化改造已实现 PostgreSQL 数据底座、账号与知识库权限、隔离解析、版本索引、异步问答、vLLM适配、运维工具和团队前端；
+本机 readiness 检查已完成，但这些新增能力尚未作为正式团队产品发布。进度见[工业化实施状态](docs/industrial/status.md)，
+验证方法见[工业化开发说明](docs/industrial/development.md)，验收汇总规则见[工程验收说明](docs/industrial/acceptance.md)。
+
+截至 2026-09-15，临时 Ubuntu 22.04/RTX 5090 系统 VM 已完成 Docker Compose、PostgreSQL/pgvector、隔离 parser、vLLM generation/embedding、合成 parse/index/query、认证浏览器、单进程模型故障恢复、数据库/worker 恢复、合成备份恢复和本地不可变双镜像回滚。真实评测已准备 40 道双人复核题并封存 28 dev/12 holdout；当前只完成 dev 的 BM25 检索基线，dense/hybrid 与生成质量实验仍等待 GPU，holdout 运行次数保持为 0。12 题 holdout 在当前 Wilson 95% 置信策略下不足以形成正式质量 PASS，需要先确定新的样本量方案。正式 30 分钟/50,000 chunks/20 用户/5 并发容量验收、受信任域名/TLS、真实资料规模恢复、registry 镜像发布和真实用户试用也尚未完成。临时主机证据不得扩写为生产发布、长期可用性或正式容量结论。
+
 ```powershell
 ./.venv/Scripts/python.exe -m pip install -r requirements-dev.txt
 ./.venv/Scripts/python.exe -m pytest -q
 ./.venv/Scripts/python.exe scripts/release_check.py
 ```
 
-代码结构见[架构说明](docs/architecture.md)，参与开发见[贡献说明](CONTRIBUTING.md)，版本进度见[验收清单](docs/release-plan.md)与[更新记录](CHANGELOG.md)。
+代码结构见[架构说明](docs/architecture.md)，参与开发见[贡献说明](CONTRIBUTING.md)，版本进度见[验收清单](docs/release-plan.md)与[更新记录](CHANGELOG.md)。团队模式的部署、备份和升级边界见[运维配置](docs/industrial/operations.md)。
 
 ## 边界
 
-本版本使用单个worker，仅监听本机回环地址，不提供多人账号与权限隔离。文件上限10 MiB，PDF最多100页；不支持扫描件OCR和加密PDF。较大的知识库、复杂提示注入、真实用户任务及不同GPU仍需专门验证。
+RC2 兼容路径仍是单 worker、本机回环和单人模式；团队模式提供账号与知识库权限，但需要 PostgreSQL、TLS 和独立 worker，尚未完成目标环境发布验收。文件上限10 MiB，PDF最多100页；不支持扫描件OCR和加密PDF。较大的知识库、复杂提示注入、真实用户任务及不同GPU仍需专门验证。
 
 跨语言检索扩展有助于补充证据，但不保证模型正确理解公式、表格和算法范围。论文复现需要回到原文逐项核对，不应直接采用本版生成的算法步骤或复杂度推导。
 
