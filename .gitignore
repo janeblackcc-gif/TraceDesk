@@ -57,9 +57,14 @@ htmlcov/
 !/scripts/check_traceability.py
 !/scripts/migrate_sqlite.py
 !/scripts/check_database.py
+!/scripts/check_deployment.py
+!/scripts/check_eval_dataset.py
 !/scripts/run_industrial_checks.py
 !/scripts/backup_database.py
 !/scripts/retain_database.py
+!/scripts/acceptance.py
+!/scripts/capacity_report.py
+!/scripts/upgrade_database.py
 !/scripts/check_openapi.py
 !/scripts/check_locks.py
 .mypy_cache/

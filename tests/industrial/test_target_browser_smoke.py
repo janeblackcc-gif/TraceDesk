@@ -1,11 +1,28 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
 from scripts.target_browser_smoke import parse_origin, read_credentials, safe_origin
+
+
+def test_safe_helpers_import_without_optional_playwright() -> None:
+    code = """
+import builtins
+original_import = builtins.__import__
+def guarded_import(name, *args, **kwargs):
+    if name == 'playwright' or name.startswith('playwright.'):
+        raise ModuleNotFoundError("blocked optional browser dependency")
+    return original_import(name, *args, **kwargs)
+builtins.__import__ = guarded_import
+import scripts.target_browser_smoke
+"""
+    result = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, check=False)
+    assert result.returncode == 0, result.stderr
 
 
 def test_parse_origin_accepts_path_free_https() -> None:

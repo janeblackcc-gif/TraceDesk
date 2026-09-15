@@ -5,6 +5,9 @@ extend-exclude = ["artifacts", ".release-work"]
 [tool.ruff.lint]
 select = ["F", "E9"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true

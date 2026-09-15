@@ -14,10 +14,11 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import SplitResult, urlsplit
 
-from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright
+if TYPE_CHECKING:
+    from playwright.sync_api import Browser, BrowserContext, Page
 
 
 COOKIE_NAME = '__Host-tracedesk-session'
@@ -85,6 +86,12 @@ def run_browser(
     *,
     ignore_https_errors: bool,
 ) -> None:
+    try:
+        from playwright.sync_api import sync_playwright
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            'target browser smoke requires deploy/browser-requirements.txt and a Playwright browser installation'
+        ) from exc
     status_path = output / 'status.json'
     stage = 'launch'
     browser: Browser | None = None

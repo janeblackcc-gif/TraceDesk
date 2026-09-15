@@ -1,10 +1,12 @@
 import hashlib
 import json
+import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from app.operations.eval_dataset import validate_dataset
+from app.operations.eval_dataset import schema_bundle, validate_dataset
 
 
 def write_json(path, value):
@@ -65,6 +67,21 @@ def test_formal_dataset_gate_records_only_counts_and_hashes(tmp_path):
     report = validate_dataset(tmp_path, formal=True)
     assert report['status'] == 'passed' and report['cases'] == 40 and report['holdout_cases'] == 20
     assert len(report['dataset_hash']) == 64 and 'question' not in report and 'quote' not in report
+
+
+def test_schema_check_compares_json_structure_not_formatting(tmp_path):
+    schema_path = tmp_path / 'schema.json'
+    schema_path.write_text(json.dumps(schema_bundle(), separators=(',', ':')), encoding='utf-8')
+    command = [sys.executable, 'scripts/check_eval_dataset.py', '--check-schema', str(schema_path)]
+
+    matching = subprocess.run(command, capture_output=True, text=True, check=False)
+    assert matching.returncode == 0, matching.stdout + matching.stderr
+
+    changed = schema_bundle()
+    changed['title'] = 'changed'
+    schema_path.write_text(json.dumps(changed), encoding='utf-8')
+    different = subprocess.run(command, capture_output=True, text=True, check=False)
+    assert different.returncode == 1
 
 
 def test_gate_rejects_hash_changes_leakage_missing_review_and_expired_authorization(tmp_path):
