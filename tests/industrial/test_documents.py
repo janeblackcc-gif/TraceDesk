@@ -112,6 +112,12 @@ def test_http_upload_worker_container_and_authorized_source(database, tmp_path):
         response = client.post(f'/api/v1/knowledge-bases/{kb}/documents', files={'file': ('deploy.md', b'# Deploy\nPort 8088.')}, headers={'Idempotency-Key': 'http-1'})
         assert response.status_code == 202, response.text
         revision_id, job_id = response.json()['revision_id'], response.json()['job_id']
+        if os.name != 'nt':
+            # Production workers create objects as UID 65532, the same identity used
+            # by the parser container. GitHub's runner creates this synthetic object
+            # as its host UID, so grant read-only access without weakening the parser.
+            source_path = next((service.objects.root / 'sha256').glob('*/*'))
+            source_path.chmod(0o644)
         queue = JobRepository(database)
         lease = queue.claim('http-fixture-worker', ('parse',))
         assert ParseHandler(database, service.objects, DockerParser(image, timeout=30)).run(queue, lease) == 'succeeded'
