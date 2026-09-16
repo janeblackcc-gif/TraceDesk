@@ -1,6 +1,6 @@
 # 扩展真实质量数据集与样本量方案
 
-状态：数据集准备门禁已完成。60 条 dev 已完成双人复核、4 项裁决；140 条 holdout 已完成题目、答案、事实、200 段逐字证据及两份独立人工复核，0 分歧、0 一致拒绝。23 份新增文档均已核验官方仓库固定 commit，在线获取内容与本地文件逐字节一致；完整 200-case 数据集已通过 `check_eval_dataset.py --formal` 并封存。检索、生成、代码 commit 和正式质量阈值均已冻结，metadata readiness 为 `ready-for-first-holdout`；holdout 推理运行次数仍为 0。
+状态：本方案已经执行完毕并得到正式 FAIL。60 条 dev 已完成双人复核、4 项裁决；140 条 holdout 的数据准备、封存、阈值事先冻结、唯一一次 RTX 5090/vLLM 0.10.2 推理和模型输出双人独立评分均已完成。两份输出评分 0 实质分歧，正式报告为 `failed`：strict 55/140、high/blocker facts 11/120、no-answer recall 49/60、false refusal 66/80；claim support 40/40 但置信度不足，泄漏和严重错误为 0。该 holdout 已消耗且禁止重跑，后续修复只能使用 dev；新的正式声明必须使用全新未暴露 holdout。
 
 适用范围：T-060 至 T-064。新数据集暂定 ID 为 `tracedesk-prd-real-eval-v2`。当前 v1 的 dev 结果只用于开发决策。2026-09-16 在核对 schema 和编号时，开发代理提前看到了 v1 的 12 条 holdout 问题文本；未读取其答案、标签、证据、来源正文或模型输出，也从未执行 holdout。按本方案的隔离规则，这 12 条已失去正式 holdout 资格，在 v2 中全部降级为 dev。
 

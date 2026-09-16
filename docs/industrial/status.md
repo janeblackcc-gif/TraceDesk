@@ -28,7 +28,7 @@
 | T-060/T-061 | v1 历史证据保留；v2 替代数据集已封存 | v1 的 10 份授权文档、40 题和双标记录保留，旧 12 条 holdout 因问题文本提前暴露而降级为 dev；全新 v2 holdout 140 条已完成双标、溯源和正式数据集封存，并已进入唯一一次 T-064 生成 |
 | T-062 | v1 历史选择保留；v2 dev 五臂选择完成 | v2 的 60 条 dev/15 份文档/650 chunks 已物理隔离；BM25 证据组 Recall@4=86/92，dense=59/92，最佳 hybrid=69/92；仅 BM25 eligible 并选定，冻结结果用于唯一一次 holdout 生成 |
 | T-063 | prompt-v2 已选为非正式 dev generation 候选 | 双评 0 实质分歧；点估计全部达标但固定 dev 小分母使报告保持 `insufficient-confidence`。质量负责人明确接受该限制，选择证据不宣称 PASS，也不授权 holdout |
-| T-064 | 唯一一次 holdout 生成完成；等待双人输出复核 | 冻结配置在 RTX 5090/vLLM 0.10.2 上生成 140/140 条，25 answered、115 abstained、0 error；原始输出与复核模板已封存并验哈希，`rerun_allowed=false`。尚未聚合质量报告，不是质量 PASS |
+| T-064 | 唯一一次正式 holdout 已聚合：FAIL | 两名复核者各完成 140 条，0 实质分歧；strict 55/140、high/blocker facts 11/120、no-answer recall 49/60、false refusal 66/80，正式报告为 `failed`。claim support 40/40 但置信度不足；泄漏和严重错误均为 0。该 holdout 禁止重跑 |
 | T-070/T-071 | 本机验证通过 | 白名单 JSON 日志、OTel span、Prometheus、审计分页权限、存储/任务 readiness、保留策略 |
 | T-072 | 本机及 GitHub CI 全门禁通过 | 依赖锁和 pip-audit、strict mypy、ruff、OpenAPI 快照、CI 检查；最新 `main` run 的 5 个 job 全部成功 |
 | T-073 | 隔离构造库及目标 VM 合成恢复通过 | 目标无卡 VM 完成 PG custom dump + objects、独立校验、全新数据库/目录恢复、33 表指纹和应用读取；授权真实资料规模下的 RPO/RTO 仍待演练 |
@@ -106,11 +106,13 @@
 - `quality_thresholds.json` 已按原草案阈值冻结，SHA-256 为 `1fae09b79e9cdea5b08365a4a87f8ecc0d9a7e30f4dcf4c72901bbd2e8705f59`，绑定 T-062 retrieval 和已提交的 T-063 generation 选择哈希。冻结后的 metadata readiness 状态为 `ready-for-first-holdout`、0 blocker，报告 SHA-256 为 `b513f8914495be5f72a52ca2fbf46d1bf9324d6938775b108d29f3623d5bdf5b`；`holdout_accessed_for_scoring=false`、运行次数 0，尚未消耗唯一一次正式 holdout。
 - 唯一一次 v2 holdout 生成于 2026-09-16 在 RTX 5090/vLLM 0.10.2 上完成，运行提交为 `44cab309b0e4ec88679336d51cbe488af30d4667`。claim SHA-256 为 `65f05fe8d8a062cfe62c88f3d96d9e801ef727acbb13af1facb1c29fbb53099f`，明确 `holdout_run_number=1`、`rerun_allowed=false`；140 条全部生成，25 answered、115 abstained、0 error，检索 P50/P95 为 80.938/88.189 ms，生成 P50/P95 为 833.673/1931.322 ms。输出 SHA-256 为 `dfe629fffc3b780ab0317dbf64ed3520256e3b49f5f7cca6b80ec3eaeea90465`，待评分模板 SHA-256 为 `6e6b9ad34dbf4cdb5a59fa71f66e61fe320ff765976acfaaff0e06fbe52f4a17`，状态 SHA-256 为 `9a4492186c32826a3ab9c0fd562f7f855051e961b0a64fde2120e07c0a5d1e45`。证据归档 SHA-256 为 `ad1dd5b8ffbc600919c7c1e6375772290a6bfc0bc0c19b6d961cf251dc14a981`；本地与远端逐文件验哈希一致。该结果仅为 `generation-only`，完成两名复核者独立评分、分歧裁决和 `quality_report.py --split holdout` 聚合前不得宣称质量 PASS。
 - 正式运行完成后 generation 服务已停止，RTX 5090 显存回落至 1 MiB。运行前两次环境问题均在原子 claim 创建前失败，分别为 Python 3.10 `hashlib.file_digest` 兼容性和专用 vLLM 环境缺少锁定的 `pypdf==6.18.0`；最终安装 wheel 的 SHA-256 与 `requirements-lock.txt` 一致，失败记录没有覆盖正式输出。
+- 两名人工复核者随后各完成 140 条输出评分，冻结字段/输出哈希绑定错误 0、11 个实质评分字段分歧 0；85 条 notes 措辞差异在最终文件中同时保留，无需第三人裁决。Scorer A/B SHA-256 分别为 `da46cc33f29ea546b9d233d088848a580eff0cc1ca65333cb7a1a3db4f17181f` 和 `7f3df7f336af90b362bbd1eacdcabbd5d88310dbebd9b171c358b40349f39052`；最终评分 SHA-256 为 `bd4a77c4c43119eaee5e0faf85577abffae15e50d9b34f28c17fa9aa1d655610`，reconciliation SHA-256 为 `9620a70865a0968c9d38c455a11fce3b70078bd12e0e4a81fc909fea12b24268`。
+- 首轮正式 holdout 报告 `t064-first-holdout-20260916-01.json` 为 `failed`、`formal=true`，SHA-256 为 `3ec114be5a4091e2e59ebf071c16765054e2f916847a4949bff9673e6e365025`。strict task pass 为 55/140（39.29%），high/blocker fact completeness 为 11/120（9.17%），no-answer recall 为 49/60（81.67%），false refusal 为 66/80（82.50%），均明确失败；claim support 为 40/40，但 Wilson 95% 下界 0.912378 低于 0.95，只能记为 `insufficient-confidence`。scope/version leakage 和 severe error 均为 0。该结果永久保留且禁止针对同一 holdout 调参或重跑；若修复后仍要建立正式质量声明，必须只用 dev 定位并另建未暴露的全新 holdout。
 
 ## 接续顺序
 
 1. P0/P1 短期简历证据轨道已完成；当前临时 VM 的模型和 Compose 服务均已停止，可由操作者在控制台关机并按预算决定是否释放实例。受信任域名/TLS 属于长期公开访问阶段。
-2. v2 唯一一次 140-case holdout 生成已经完成并封存，禁止重跑或根据结果调整检索、prompt、模型和阈值。现在由两名复核者分别复制 `generation-review.template.jsonl` 独立评分，完成后比较分歧、裁决并聚合首轮 holdout 质量报告。
+2. v2 唯一一次 140-case holdout 已完成双评并正式判定 FAIL，禁止重跑或针对该 holdout 调参。后续只能在 dev 上做失败分类和修复；如需新的正式质量结论，必须先准备来源和模板组均未暴露的全新 holdout。
 3. 如仍追求正式工业化容量结论，在目标环境执行至少 30 分钟、50,000 chunks、20 用户、5 并发和 10 场景验收，保存 `capacity_report.py --formal` 证据。
 4. 先补充资料的 pilot 授权，再由真实用户完成持续试用并记录任务结果、核验耗时、严重错误和责任人签字；最后生成 target-release manifest。
 
@@ -120,7 +122,7 @@
 
 - 首批部署边界、是否已有 OIDC：暂按单组织内网、本地账号。
 - 真实数据迁移的管理员身份：由真实操作者提供，测试账号不能成为真实管理员。
-- M6：v1 历史证据保留，旧 holdout 因问题文本提前暴露已降级。v2 数据集、dev 选择、阈值冻结和唯一一次 140 条 holdout 生成均已完成；仍需两名复核者对模型输出独立评分、处理分歧并聚合正式质量报告。
+- M6：v1 历史证据保留，旧 holdout 因问题文本提前暴露已降级；v2 唯一一次正式 holdout 已完成并判定 FAIL。若后续修复后继续申请正式质量放行，需要全新的未暴露 holdout 资料、编题和双标输入；现有 v2 只保留为失败证据。
 - M8：正式 30 分钟/50k chunk 容量窗口和预算；短期 Linux/GPU 核心 smoke 已完成。
 - M9：资料的 pilot 授权、真实用户、试用周期与责任人确认。
 
