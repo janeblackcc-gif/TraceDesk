@@ -26,6 +26,8 @@
 
 完成行使用 `record_status=completed-review`。未评分的 `null` 模板不能通过正式 schema，也不能生成 PASS。
 
+当前 v2 prompt-v2 工作包位于 `dev-only-v2-20260916-01/experiments/t063-generation-v2-prompt-v2-20260916-01/`。A/B 个人文件保留单个 reviewer ID 和 `record_status=reviewed`；完成对比后生成的最终合并文件填写两个 reviewer ID、`dispute_status`，并改为 `completed-review`。本轮两份评分的实质字段和 notes 均一致，无需人工裁决。
+
 ## T-064 默认阈值草案
 
 - scope leakage、version leakage、严重错误：均为 0；
@@ -35,12 +37,13 @@
 - no-answer recall：至少 90%；
 - false refusal：不超过 10%。
 
-汇总同时报告分子、分母和双侧 Wilson 95% 区间。点估计达标但区间越过阈值时只能记为 `insufficient-confidence`，不能记为 PASS。当前 12 题 holdout 是有效封存集，但不足以让 strict task pass、no-answer recall 和 false refusal 在该置信策略下取得正式 PASS；如坚持正式置信放行，需要在不查看当前 holdout 结果的前提下建立更大的新数据集版本并重新封存。
+汇总同时报告分子、分母和双侧 Wilson 95% 区间。点估计达标但区间越过阈值时只能记为 `insufficient-confidence`，不能记为 PASS。旧 v1 的 12 条 holdout 因问题文本提前暴露已经降级为 dev，不再用于正式评测；替代的 v2 已封存 140 条全新 holdout，其中 80 条 answerable、60 条 unanswerable，并包含 120 个 high/blocker required facts。claim 分母只能在首次模型输出后观察，因此 readiness 将其记录为运行后置信度检查而不是运行前 blocker；若实际 claim 分母不足，只能保留首轮结果并报告 `insufficient-confidence`，不得补题或重跑。
 
 ## 命令
 
 ```powershell
 ./.venv/Scripts/python.exe scripts/select_retrieval_candidate.py <t062-run> --output <t062-run>/candidate-selection.json
+./.venv/Scripts/python.exe scripts/run_generation_eval.py --dev-view <dev-view> --retrieval-run <t062-run> --output <dev-view>/experiments/<t063-run>
 ./.venv/Scripts/python.exe scripts/prepare_generation_review.py --dev-view <dev-view> --output <dev-view>/reviews/t063-generation-review.template.jsonl
 ./.venv/Scripts/python.exe scripts/quality_readiness.py --dataset <private-dataset> --thresholds <private-dataset>/quality_thresholds.draft.json --write-draft
 ./.venv/Scripts/python.exe scripts/quality_readiness.py --dataset <private-dataset> --thresholds <thresholds> --retrieval-selection <selection> --output <private-dataset>/quality-readiness/<run>.json

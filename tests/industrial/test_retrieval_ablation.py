@@ -8,6 +8,7 @@ import pytest
 from app.operations.eval_dataset import validate_dataset
 from scripts.materialize_eval_dev_view import materialize
 from scripts.prepare_generation_review import prepare
+from scripts.run_generation_eval import run as run_generation
 from scripts.run_retrieval_ablation import run
 from scripts.select_retrieval_candidate import select
 
@@ -20,6 +21,23 @@ class FakeEmbeddingProvider:
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         return [[1.0, 0.0] if "开发" in text or "dev" in text else [0.0, 1.0] for text in texts]
+
+
+class FakeGenerationProvider:
+    generation = "fixture-generation"
+    generation_digest = "b" * 64
+
+    def runtime_version(self) -> str:
+        return "0.10.2"
+
+    def generate(self, question: str, evidence: list[dict]) -> dict[str, object]:
+        assert question
+        assert evidence
+        return {
+            "abstain": False,
+            "claims": [{"text": "fixture", "citations": [{"chunk_id": evidence[0]["id"], "quote": "fixture"}]}],
+            "generation_assessment": {"decision": "answer"},
+        }
 
 
 def write_json(path: Path, value: dict) -> None:
@@ -62,6 +80,7 @@ def formal_fixture(root: Path) -> Path:
     labels = []
     for index in range(40):
         split = "dev" if index < 20 else "holdout"
+        unanswerable = index == 19
         digest = sha256(dev_document if split == "dev" else holdout_document)
         quote = "开发环境服务端口是 8088。" if split == "dev" else "留出环境服务端口是 9099。"
         cases.append(
@@ -69,18 +88,18 @@ def formal_fixture(root: Path) -> Path:
                 "id": f"Q{index:03d}",
                 "split": split,
                 "task_type": "configuration",
-                "answerability": "answerable",
+                "answerability": "unanswerable" if unanswerable else "answerable",
                 "severity": "high",
                 "source_group": f"{split}-source",
                 "template_group": f"{split}-template-{index}",
-                "question": f"{split} 环境服务端口是多少？编号 {index}",
+                "question": "火星量子电梯的许可编号是什么？" if unanswerable else f"{split} 环境服务端口是多少？编号 {index}",
             }
         )
         labels.append(
             {
                 "case_id": f"Q{index:03d}",
                 "required_facts": ["默认端口数值"],
-                "evidence_groups": [[{
+                "evidence_groups": [] if unanswerable else [[{
                     "document_sha256": digest,
                     "quote": quote,
                     "quote_sha256": hashlib.sha256(quote.encode("utf-8")).hexdigest(),
@@ -136,7 +155,7 @@ def test_materialized_dev_view_excludes_holdout_and_runs_sparse_ablation(tmp_pat
     status = run(view, view / "experiments" / "sparse")
     assert status["status"] == "completed-sparse-only"
     assert status["cases"] == 20
-    assert status["gold_evidence_groups_resolved"] == 20
+    assert status["gold_evidence_groups_resolved"] == 19
     assert all(item["hit_at_4"]["rate"] == 1 for item in status["variant_summaries"].values())
     persisted = (view / "experiments" / "sparse" / "rows.private.jsonl").read_text(encoding="utf-8")
     assert "环境服务端口是多少" not in persisted
@@ -158,6 +177,8 @@ def test_materialized_dev_view_excludes_holdout_and_runs_sparse_ablation(tmp_pat
 
     model_status = run(view, view / "experiments" / "model", FakeEmbeddingProvider())
     assert model_status["status"] == "completed-dev-retrieval"
+    model_config = json.loads((view / "experiments" / "model" / "config.json").read_text(encoding="utf-8"))
+    assert model_config["scope"] == "t062-dev-only-retrieval-ablation"
     assert set(model_status["variant_summaries"]) == {
         "bm25-single-no-adjacency",
         "dense-single-no-adjacency",
@@ -173,6 +194,23 @@ def test_materialized_dev_view_excludes_holdout_and_runs_sparse_ablation(tmp_pat
     )
     assert selected["status"] == "selected-dev-candidate"
     assert selected["selected_variant"] == "bm25-single-no-adjacency"
+
+    generated = run_generation(
+        view,
+        view / "experiments" / "model",
+        view / "experiments" / "generation",
+        FakeGenerationProvider(),
+    )
+    assert generated["status"] == "completed-dev-generation"
+    assert generated["cases"] == 20
+    assert generated["system_status_counts"] == {"answered": 19, "abstained": 1, "error": 0}
+    assert generated["completed_reviews"] == 0
+    generation_config = json.loads((view / "experiments" / "generation" / "config.json").read_text(encoding="utf-8"))
+    assert generation_config["holdout_rows_loaded"] == 0
+    assert generation_config["holdout_runs_completed"] == 0
+    review_rows = (view / "experiments" / "generation" / "generation-review.template.jsonl").read_text(encoding="utf-8")
+    assert "环境服务端口是多少" not in review_rows
+    assert '"record_status": "pending-review"' in review_rows
 
 
 def test_runner_rejects_a_hash_valid_view_containing_a_holdout_case(tmp_path: Path) -> None:

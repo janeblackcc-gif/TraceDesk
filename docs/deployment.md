@@ -45,6 +45,8 @@ Ubuntu 22.04 系统镜像还需安装 `python3.10-dev` 和 `build-essential`，�
 `Python.h: No such file or directory` 失败。systemd 模板见 `deploy/tracedesk-vllm-generation.service`、
 `deploy/tracedesk-vllm-embedding.service` 和 `deploy/vllm-systemd.env.example`。模板显式把 HOME、Triton 和
 TorchInductor 缓存指向 `/srv/tracedesk/vllm-cache`，以兼容 `ProtectHome=true`。
+生成端点的 `TRACEDESK_VLLM_MAX_MODEL_LEN` 必须保持为 `16384`，与应用的生成上下文契约一致；若降到
+`8192`，较长 evidence 在一次结构修复后可能因 prompt 与 `3072` 输出预算之和超限而被 vLLM 以 HTTP 400 拒绝。
 
 在主机上先复制 `docs/industrial/vllm-smoke.env.example` 为私有的 `.env.vllm-smoke`，填入两个模型revision对应的64位digest，再运行协议探针：
 

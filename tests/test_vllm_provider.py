@@ -88,6 +88,10 @@ def test_vllm_chat_protocol_uses_json_object_and_openai_response(tmp_path):
     assert payload['response_format'] == {'type': 'json_object'}
     assert 'required_fact' in payload['messages'][0]['content']
     assert '禁止使用 fact' in payload['messages'][0]['content']
+    assert 'requirements 数组必须包含 1 到 6 项' in payload['messages'][0]['content']
+    assert '使用最少数量的 requirements' in payload['messages'][0]['content']
+    assert '不得把对象与属性机械组合' in payload['messages'][0]['content']
+    assert '忽略与问题实体无关的 evidence' in payload['messages'][0]['content']
     assert not {'think', 'keep_alive', 'options', 'format'} & set(payload)
 
 

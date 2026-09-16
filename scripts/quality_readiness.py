@@ -45,6 +45,19 @@ def _selection_ready(path: Path | None, expected_status: str) -> tuple[bool, str
     return value.get("status") == expected_status, sha256_file(path)
 
 
+def _confidence_preflight_blockers(
+    requirements: dict[str, tuple[int | None, int]],
+) -> list[str]:
+    blockers: list[str] = []
+    for name, (available, required) in requirements.items():
+        # Output-dependent denominators, such as factual claims, do not exist
+        # until the one permitted holdout run. They are evaluated after that
+        # run and may yield insufficient-confidence, but cannot block it.
+        if available is not None and available < required:
+            blockers.append(f"{name.upper()}_WILSON_CONFIDENCE_INSUFFICIENT")
+    return blockers
+
+
 def check(
     dataset: Path,
     thresholds_path: Path,
@@ -127,11 +140,16 @@ def check(
         "no_answer_recall": (len(unanswerable), minimum_perfect_denominator(limits.no_answer_recall_min, "min")),
         "false_refusal": (len(answerable), minimum_perfect_denominator(limits.false_refusal_max, "max")),
     }
-    for name, (available, required) in confidence_requirements.items():
-        if available is None:
-            blockers.append(f"{name.upper()}_DENOMINATOR_NOT_YET_OBSERVED")
-        elif available < required:
-            blockers.append(f"{name.upper()}_WILSON_CONFIDENCE_INSUFFICIENT")
+    blockers.extend(_confidence_preflight_blockers(confidence_requirements))
+    runtime_only_confidence_checks = {
+        name: {
+            "status": "pending-first-run",
+            "minimum_observed_denominator": required,
+            "insufficient_result": "insufficient-confidence",
+        }
+        for name, (available, required) in confidence_requirements.items()
+        if available is None
+    }
     result = {
         "schema_version": 1,
         "status": "ready-for-first-holdout" if not blockers else "blocked",
@@ -154,6 +172,7 @@ def check(
         },
         "confidence_policy": "two-sided Wilson 95%; a point estimate alone cannot produce PASS",
         "confidence_feasibility": feasibility,
+        "runtime_only_confidence_checks": runtime_only_confidence_checks,
         "blockers": sorted(blockers),
         "holdout_accessed_for_scoring": False,
         "decision": "This command is a metadata preflight only and never executes or scores holdout.",

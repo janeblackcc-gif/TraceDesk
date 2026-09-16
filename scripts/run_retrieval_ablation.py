@@ -1,4 +1,4 @@
-"""Run CPU-only, dev-only sparse retrieval and adjacency ablations."""
+"""Run dev-only sparse and optional frozen-vLLM retrieval ablations."""
 from __future__ import annotations
 
 import argparse
@@ -413,7 +413,7 @@ def run(
     )
     config = {
         "schema_version": 1,
-        "scope": "t062-dev-only-sparse-ablation",
+        "scope": "t062-dev-only-retrieval-ablation",
         "formal_claim": "none",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "source_dataset_id": view_manifest["source_dataset_id"],

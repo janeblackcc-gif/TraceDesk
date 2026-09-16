@@ -31,6 +31,7 @@ def _structured_json_hint(schema: JSON_DICT) -> str:
         return (
             '\n输出键名必须逐字使用 required_fact、source_ids、evidence_finding、supported、answer；'
             '禁止使用 fact、finding 或其他别名。每个 requirement 必须同时包含这五个键。'
+            'requirements 数组必须包含 1 到 6 项；子问题超过 6 个时合并同类事实，不得输出第 7 项。'
             '示例结构：{"requirements":[{"required_fact":"...","source_ids":[],'
             '"evidence_finding":"...","supported":false,"answer":""}]}。'
         )
