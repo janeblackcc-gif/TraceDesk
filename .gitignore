@@ -80,6 +80,7 @@ htmlcov/
 !/scripts/select_retrieval_candidate.py
 !/scripts/prepare_generation_review.py
 !/scripts/run_generation_eval.py
+!/scripts/run_holdout_eval.py
 !/scripts/quality_readiness.py
 !/scripts/quality_report.py
 !/scripts/pilot_report.py

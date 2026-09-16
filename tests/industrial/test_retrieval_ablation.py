@@ -1,6 +1,6 @@
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -9,6 +9,7 @@ from app.operations.eval_dataset import validate_dataset
 from scripts.materialize_eval_dev_view import materialize
 from scripts.prepare_generation_review import prepare
 from scripts.run_generation_eval import run as run_generation
+from scripts.run_holdout_eval import CLAIM_NAME, run as run_holdout
 from scripts.run_retrieval_ablation import run
 from scripts.select_retrieval_candidate import select
 
@@ -80,7 +81,7 @@ def formal_fixture(root: Path) -> Path:
     labels = []
     for index in range(40):
         split = "dev" if index < 20 else "holdout"
-        unanswerable = index == 19
+        unanswerable = index in {19, 39}
         digest = sha256(dev_document if split == "dev" else holdout_document)
         quote = "开发环境服务端口是 8088。" if split == "dev" else "留出环境服务端口是 9099。"
         cases.append(
@@ -136,6 +137,8 @@ def formal_fixture(root: Path) -> Path:
         {
             "status": "sealed",
             "dataset_hash": report["dataset_hash"],
+            "holdout_cases": 20,
+            "holdout_source_groups": 1,
             "policy": {"holdout_runs_completed": 0},
         },
     )
@@ -227,3 +230,124 @@ def test_runner_rejects_a_hash_valid_view_containing_a_holdout_case(tmp_path: Pa
     write_json(manifest_path, manifest)
     with pytest.raises(ValueError, match="dev-only boundary"):
         run(view, view / "experiments" / "invalid")
+
+
+def frozen_holdout_inputs(dataset: Path) -> tuple[Path, Path, Path, str]:
+    report = validate_dataset(dataset, formal=True)
+    evidence = dataset / "frozen-evidence"
+    evidence.mkdir()
+    retrieval = evidence / "retrieval-selection.json"
+    write_json(
+        retrieval,
+        {
+            "status": "selected-dev-candidate",
+            "dataset_hash": report["dataset_hash"],
+            "selected_variant": "bm25-single-no-adjacency",
+        },
+    )
+    commit = "c" * 40
+    generation = evidence / "generation-selection.json"
+    runner = Path(__file__).resolve().parents[2] / "scripts" / "run_holdout_eval.py"
+    write_json(
+        generation,
+        {
+            "status": "selected-dev-generation",
+            "dataset_hash": report["dataset_hash"],
+            "holdout_rows_loaded": 0,
+            "holdout_runs_completed": 0,
+            "generation_model": FakeGenerationProvider.generation,
+            "generation_model_digest": FakeGenerationProvider.generation_digest,
+            "vllm_version": "0.10.2",
+            "code_commit": commit,
+            "code_commit_verified": True,
+            "code_sha256": {"scripts/run_holdout_eval.py": sha256(runner)},
+        },
+    )
+    now = datetime.now(timezone.utc)
+    thresholds = evidence / "quality_thresholds.json"
+    write_json(
+        thresholds,
+        {
+            "schema_version": 1,
+            "status": "frozen",
+            "dataset_hash": report["dataset_hash"],
+            "created_at": (now - timedelta(minutes=2)).isoformat(),
+            "frozen_at": (now - timedelta(minutes=1)).isoformat(),
+            "confidence_level": 0.95,
+            "retrieval_selection_sha256": sha256(retrieval),
+            "generation_selection_sha256": sha256(generation),
+            "limits": {
+                "scope_leakage_max": 0,
+                "version_leakage_max": 0,
+                "severe_errors_max": 0,
+                "strict_task_pass_min": 0.85,
+                "high_severity_fact_completeness_min": 0.95,
+                "claim_support_min": 0.95,
+                "no_answer_recall_min": 0.9,
+                "false_refusal_max": 0.1,
+            },
+        },
+    )
+    return thresholds, retrieval, generation, commit
+
+
+def test_first_holdout_run_is_streamed_and_cannot_be_repeated(tmp_path: Path) -> None:
+    dataset = formal_fixture(tmp_path / "dataset")
+    thresholds, retrieval, generation, commit = frozen_holdout_inputs(dataset)
+    output = dataset / "holdout-runs" / "first-run"
+
+    status = run_holdout(
+        dataset,
+        thresholds,
+        retrieval,
+        generation,
+        output,
+        FakeGenerationProvider(),
+        code_commit=commit,
+    )
+
+    assert status["status"] == "completed-first-holdout-generation"
+    assert status["cases"] == 20
+    assert status["holdout_runs_completed"] == 1
+    assert status["rerun_allowed"] is False
+    assert (dataset / CLAIM_NAME).is_file()
+    output_rows = [json.loads(line) for line in (output / "outputs.private.jsonl").read_text(encoding="utf-8").splitlines()]
+    review_rows = [
+        json.loads(line)
+        for line in (output / "generation-review.template.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert len(output_rows) == len(review_rows) == 20
+    assert {row["split"] for row in output_rows} == {"holdout"}
+    assert {row["split"] for row in review_rows} == {"holdout"}
+    assert all(row["record_status"] == "pending-review" for row in review_rows)
+    assert "9099" not in (output / "generation-review.template.jsonl").read_text(encoding="utf-8")
+    with pytest.raises(FileExistsError, match="already been claimed"):
+        run_holdout(
+            dataset,
+            thresholds,
+            retrieval,
+            generation,
+            dataset / "holdout-runs" / "forbidden-rerun",
+            FakeGenerationProvider(),
+            code_commit=commit,
+        )
+
+
+def test_holdout_preflight_mismatch_does_not_create_claim(tmp_path: Path) -> None:
+    dataset = formal_fixture(tmp_path / "dataset")
+    thresholds, retrieval, generation, commit = frozen_holdout_inputs(dataset)
+    value = json.loads(thresholds.read_text(encoding="utf-8"))
+    value["retrieval_selection_sha256"] = "d" * 64
+    write_json(thresholds, value)
+
+    with pytest.raises(ValueError, match="inconsistent"):
+        run_holdout(
+            dataset,
+            thresholds,
+            retrieval,
+            generation,
+            dataset / "holdout-runs" / "invalid",
+            FakeGenerationProvider(),
+            code_commit=commit,
+        )
+    assert not (dataset / CLAIM_NAME).exists()
