@@ -17,7 +17,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app.config import Settings  # noqa: E402
-from app.evaluation import percentile  # noqa: E402
 from app.models.vllm import VLLM  # noqa: E402
 from app.operations.eval_dataset import (  # noqa: E402
     CorpusManifest,
@@ -31,6 +30,7 @@ from app.providers import ModelUnavailable  # noqa: E402
 from scripts.run_generation_eval import (  # noqa: E402
     GenerationProvider,
     canonical_sha256,
+    percentile,
     sha256_file,
 )
 from scripts.run_retrieval_ablation import balanced_anchors, build_candidates, load_jsonl, relative_file  # noqa: E402

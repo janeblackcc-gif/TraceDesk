@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import platform
 import sys
 import time
@@ -15,7 +16,6 @@ from typing import Any, Protocol, TypeVar
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from app.evaluation import percentile  # noqa: E402
 from app.config import Settings  # noqa: E402
 from app.ingest import chunks, parse  # noqa: E402
 from app.models.factory import create_provider  # noqa: E402
@@ -47,6 +47,13 @@ MODEL_VARIANTS = (
     {"name": "hybrid-literal-multi-no-adjacency", "method": "hybrid", "multi_query": True, "adjacency": False},
     {"name": "hybrid-literal-multi-with-adjacency", "method": "hybrid", "multi_query": True, "adjacency": True},
 )
+
+
+def percentile(values: list[float], percent: float) -> float:
+    if not values:
+        return 0
+    ordered = sorted(values)
+    return ordered[min(len(ordered) - 1, math.ceil(len(ordered) * percent) - 1)]
 
 
 def sha256_bytes(value: bytes) -> str:

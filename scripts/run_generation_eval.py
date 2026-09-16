@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import platform
 import sys
 import time
@@ -16,7 +17,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app.config import Settings  # noqa: E402
-from app.evaluation import percentile  # noqa: E402
 from app.models.vllm import VLLM  # noqa: E402
 from app.providers import ModelUnavailable  # noqa: E402
 from scripts.run_retrieval_ablation import build_candidates, load_dev_view  # noqa: E402
@@ -29,6 +29,13 @@ class GenerationProvider(Protocol):
     def runtime_version(self) -> str: ...
 
     def generate(self, question: str, evidence: list[dict[str, Any]]) -> dict[str, object]: ...
+
+
+def percentile(values: list[float], percent: float) -> float:
+    if not values:
+        return 0
+    ordered = sorted(values)
+    return ordered[min(len(ordered) - 1, math.ceil(len(ordered) * percent) - 1)]
 
 
 def sha256_bytes(value: bytes) -> str:
