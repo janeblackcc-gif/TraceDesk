@@ -14,8 +14,11 @@ MAX_METADATA_BYTES = 16 * 1024 * 1024
 
 
 def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
     with path.open('rb') as stream:
-        return hashlib.file_digest(stream, 'sha256').hexdigest()
+        while block := stream.read(1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def relative_file(value: str) -> str:

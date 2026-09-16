@@ -18,8 +18,11 @@ from app.operations.quality_eval import QualityLimits, QualityThresholds, wilson
 
 
 def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
     with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        while block := stream.read(1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def load_jsonl(path: Path, model: type[EvalCase] | type[EvalLabel]) -> list[EvalCase | EvalLabel]:
