@@ -13,10 +13,16 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
 
 
-def fixture(root, *, count=40, sealed=True):
+def rewrite_jsonl(root, manifest, filename, hash_field, rows):
+    path = root / filename
+    path.write_text('\n'.join(json.dumps(row, ensure_ascii=False) for row in rows) + '\n', encoding='utf-8')
+    manifest[hash_field] = hashlib.sha256(path.read_bytes()).hexdigest()
+    write_json(root / 'dataset_manifest.json', manifest)
+
+
+def fixture(root, *, count=40, sealed=True, content='服务端口是 8088。修改配置后需要重启服务。\n', quote='服务端口是 8088。'):
     documents = root / 'documents'
     documents.mkdir(parents=True)
-    content = '服务端口是 8088。修改配置后需要重启服务。\n'
     document = documents / 'deployment.md'
     document.write_text(content, encoding='utf-8')
     digest = hashlib.sha256(document.read_bytes()).hexdigest()
@@ -35,7 +41,6 @@ def fixture(root, *, count=40, sealed=True):
     }
     corpus_path = root / 'corpus_manifest.json'
     write_json(corpus_path, corpus)
-    quote = '服务端口是 8088。'
     quote_hash = hashlib.sha256(quote.encode()).hexdigest()
     cases, labels = [], []
     for index in range(count):
@@ -57,6 +62,7 @@ def fixture(root, *, count=40, sealed=True):
         'cases_path': cases_path.name, 'cases_sha256': hashlib.sha256(cases_path.read_bytes()).hexdigest(),
         'labels_path': labels_path.name, 'labels_sha256': hashlib.sha256(labels_path.read_bytes()).hexdigest(),
         'sealed_holdout': sealed, 'split_policy': 'source_and_template_group',
+        'authoring_status': 'final', 'semantic_review_status': 'final',
     }
     write_json(root / 'dataset_manifest.json', manifest)
     return manifest, cases, labels
@@ -117,3 +123,70 @@ def test_gate_rejects_hash_changes_leakage_missing_review_and_expired_authorizat
     write_json(tmp_path / 'expired' / 'dataset_manifest.json', manifest)
     with pytest.raises(ValueError, match='authorization has expired'):
         validate_dataset(tmp_path / 'expired')
+
+
+def test_gate_rejects_placeholder_questions(tmp_path):
+    manifest, cases, _ = fixture(tmp_path)
+    cases[0]['question'] = 'Generated configuration question for deployment.md'
+    rewrite_jsonl(tmp_path, manifest, 'cases.jsonl', 'cases_sha256', cases)
+
+    with pytest.raises(ValueError, match='placeholder'):
+        validate_dataset(tmp_path, formal=True)
+
+
+def test_gate_rejects_gold_quote_that_does_not_resolve_to_a_chunk(tmp_path):
+    first_line = 'A' * 845
+    second_line = 'B' * 20
+    content = f'{first_line}\n{second_line}\n'
+    cross_boundary_quote = f'{first_line[-8:]}\n{second_line[:8]}'
+    fixture(tmp_path, content=content, quote=cross_boundary_quote)
+
+    with pytest.raises(ValueError, match='source chunk'):
+        validate_dataset(tmp_path, formal=True)
+
+
+@pytest.mark.parametrize('placeholder', [
+    'Generated required fact 1 for deployment.md',
+    'Reference answer for deployment.md',
+    '待填写：默认端口数值',
+])
+def test_gate_rejects_placeholder_label_text(tmp_path, placeholder):
+    manifest, _, labels = fixture(tmp_path)
+    labels[0]['required_facts'] = [placeholder]
+    rewrite_jsonl(tmp_path, manifest, 'labels.private.jsonl', 'labels_sha256', labels)
+
+    with pytest.raises(ValueError, match='placeholder'):
+        validate_dataset(tmp_path, formal=True)
+
+
+def test_gate_rejects_duplicate_questions_after_normalization(tmp_path):
+    manifest, cases, _ = fixture(tmp_path)
+    cases[1]['question'] = f'  {cases[0]["question"]}  '
+    rewrite_jsonl(tmp_path, manifest, 'cases.jsonl', 'cases_sha256', cases)
+
+    with pytest.raises(ValueError, match='unique after normalization'):
+        validate_dataset(tmp_path, formal=True)
+
+
+def test_formal_gate_rejects_dominant_holdout_template_group(tmp_path):
+    manifest, cases, _ = fixture(tmp_path)
+    for case in cases:
+        if case['split'] == 'holdout':
+            case['template_group'] = 'template-holdout-shared'
+    rewrite_jsonl(tmp_path, manifest, 'cases.jsonl', 'cases_sha256', cases)
+
+    with pytest.raises(ValueError, match='20%'):
+        validate_dataset(tmp_path, formal=True)
+
+
+@pytest.mark.parametrize(('field', 'value'), [
+    ('authoring_status', 'draft'),
+    ('semantic_review_status', 'pending'),
+])
+def test_formal_gate_requires_final_authoring_and_semantic_review(tmp_path, field, value):
+    manifest, _, _ = fixture(tmp_path)
+    manifest[field] = value
+    write_json(tmp_path / 'dataset_manifest.json', manifest)
+
+    with pytest.raises(ValueError, match='final authoring and semantic review'):
+        validate_dataset(tmp_path, formal=True)

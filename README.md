@@ -61,7 +61,7 @@ RC2依据首轮8题真实论文问题的人工评分0/8修复了跨页检索和�
 本机 readiness 检查已完成，但这些新增能力尚未作为正式团队产品发布。进度见[工业化实施状态](docs/industrial/status.md)，
 验证方法见[工业化开发说明](docs/industrial/development.md)，验收汇总规则见[工程验收说明](docs/industrial/acceptance.md)。
 
-截至 2026-09-15，临时 Ubuntu 22.04/RTX 5090 系统 VM 已完成 Docker Compose、PostgreSQL/pgvector、隔离 parser、vLLM generation/embedding、合成 parse/index/query、认证浏览器、单进程模型故障恢复、数据库/worker 恢复、合成备份恢复和本地不可变双镜像回滚。真实评测已准备 40 道双人复核题并封存 28 dev/12 holdout；当前只完成 dev 的 BM25 检索基线，dense/hybrid 与生成质量实验仍等待 GPU，holdout 运行次数保持为 0。12 题 holdout 在当前 Wilson 95% 置信策略下不足以形成正式质量 PASS，需要先确定新的样本量方案。正式 30 分钟/50,000 chunks/20 用户/5 并发容量验收、受信任域名/TLS、真实资料规模恢复、registry 镜像发布和真实用户试用也尚未完成。临时主机证据不得扩写为生产发布、长期可用性或正式容量结论。
+截至 2026-09-17，Ubuntu 22.04/RTX 5090 目标 VM 已完成 Docker Compose、PostgreSQL/pgvector、隔离 parser、vLLM generation/embedding、认证浏览器、模型/数据库/worker 故障恢复、合成备份恢复和不可变双镜像回滚。T-075 正式容量门禁已通过：1,807.5 秒、50,000 active chunks、20 用户、5 并发、10 场景和 1,478 个样本，稳态错误率为 0，API/evidence/queue/RAG P95 均满足预设上限，OOM、数据损坏和越界为 0。修复版离线 dev 回归可作为带边界的开发集证据，但已消耗的 v2 holdout 因占位内容和金标不可解析被判定为基准无效，不能形成正式模型质量结论。受信任域名/TLS、真实资料规模恢复、registry 发布切换和真实用户试用仍未完成；容量结果也不得扩写为生产 SLA 或长期可用性。
 
 ```powershell
 ./.venv/Scripts/python.exe -m pip install -r requirements-dev.txt

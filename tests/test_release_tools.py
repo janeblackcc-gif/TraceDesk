@@ -59,6 +59,16 @@ def test_release_accepts_authorized_reference_data_but_checks_notebooks(tmp_path
         tmp_path, names + ['大模型训练营之rag资料/data/example.ipynb'])[1])
 
 
+def test_release_accepts_capacity_loadtest_sources(tmp_path):
+    names = release_tree(tmp_path)
+    source = tmp_path / 'loadtests/capacity_runtime.py'
+    source.parent.mkdir()
+    source.write_text('"""Capacity runtime."""\n', encoding='utf-8')
+    entries, errors = inspect_files(tmp_path, names + ['loadtests/capacity_runtime.py'])
+    assert not errors
+    assert any(entry['path'] == 'loadtests/capacity_runtime.py' for entry in entries)
+
+
 def test_dataset_preflight_does_not_modify_frozen_files():
     directory = Path(__file__).resolve().parents[1] / 'datasets/tracedesk_ops'
     before = {path: path.read_bytes() for path in directory.rglob('*') if path.is_file()}

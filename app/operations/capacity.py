@@ -7,7 +7,7 @@ import re
 import statistics
 from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
-from typing import Literal
+from typing import Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -159,8 +159,11 @@ def _file(root: Path, relative: str) -> Path:
 
 
 def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
     with path.open('rb') as stream:
-        return hashlib.file_digest(stream, 'sha256').hexdigest()
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def _samples(path: Path) -> list[CapacitySample]:
@@ -239,13 +242,15 @@ def evaluate_capacity(directory: Path, *, formal: bool = False) -> dict[str, obj
         failures.append('RESOURCE_SAMPLES_BELOW_20')
     if resource:
         window = max(1, len(resource) // 10)
-        rss_growth = max(0, int(statistics.median(item.rss_bytes for item in resource[-window:]) -
-                                statistics.median(item.rss_bytes for item in resource[:window])))
+        rss_values = [cast(int, item.rss_bytes) for item in resource]
+        rss_growth = max(0, int(statistics.median(rss_values[-window:]) -
+                                statistics.median(rss_values[:window])))
         vram = [item for item in resource if item.vram_bytes is not None]
         if vram:
             vwindow = max(1, len(vram) // 10)
-            vram_growth = max(0, int(statistics.median(item.vram_bytes for item in vram[-vwindow:]) -
-                                     statistics.median(item.vram_bytes for item in vram[:vwindow])))
+            vram_values = [cast(int, item.vram_bytes) for item in vram]
+            vram_growth = max(0, int(statistics.median(vram_values[-vwindow:]) -
+                                     statistics.median(vram_values[:vwindow])))
     if rss_growth > manifest.max_rss_growth_bytes:
         failures.append('RSS_GROWTH_EXCEEDED')
     if vram_growth > manifest.max_vram_growth_bytes:

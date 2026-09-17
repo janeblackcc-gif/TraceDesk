@@ -23,7 +23,8 @@ ROOT_FILES = {'.gitignore', '.gitattributes', '.env.example', '.env.production.e
               'CONTRIBUTING.md', 'requirements.txt', 'requirements-dev.txt', 'requirements-lock.txt', 'requirements-dev-lock.txt',
               'pyproject.toml', 'start_local_rag.ps1', 'alembic.ini', '.dockerignore'}
 REFERENCE_DIRS = {'大模型训练营之rag资料'}
-ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs', 'alembic', 'deploy'} | REFERENCE_DIRS
+ROOT_DIRS = {'.github', 'app', 'web', 'tests', 'demo', 'eval', 'datasets', 'scripts', 'docs', 'alembic', 'deploy',
+             'loadtests'} | REFERENCE_DIRS
 PRIVATE_NAMES = {'data', '.venv', '.git', 'evidence', '.release-work', '__pycache__', '.pytest_cache',
                  'artifacts', 'acceptance', 'pilot', 'private'}
 TEXT_SUFFIXES = {'.py', '.md', '.json', '.jsonl', '.txt', '.toml', '.yml', '.yaml', '.ps1', '.js', '.css', '.html', '.ipynb'}

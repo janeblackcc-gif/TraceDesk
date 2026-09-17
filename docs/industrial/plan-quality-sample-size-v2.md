@@ -1,6 +1,6 @@
 # 扩展真实质量数据集与样本量方案
 
-状态：本方案已经执行完毕并得到正式 FAIL。60 条 dev 已完成双人复核、4 项裁决；140 条 holdout 的数据准备、封存、阈值事先冻结、唯一一次 RTX 5090/vLLM 0.10.2 推理和模型输出双人独立评分均已完成。两份输出评分 0 实质分歧，正式报告为 `failed`：strict 55/140、high/blocker facts 11/120、no-answer recall 49/60、false refusal 66/80；claim support 40/40 但置信度不足，泄漏和严重错误为 0。该 holdout 已消耗且禁止重跑，后续修复只能使用 dev；新的正式声明必须使用全新未暴露 holdout。
+状态：本方案已经执行完毕，但 v2 事后判定为无效质量基准，不能解释为有效的模型质量 FAIL。60 条 dev 已完成双人复核、4 项裁决；140 条 holdout 的数据准备、封存、阈值事先冻结、唯一一次 RTX 5090/vLLM 0.10.2 推理和模型输出双人独立评分均已完成。原聚合报告机械返回 `failed`：strict 55/140、high/blocker facts 11/120、no-answer recall 49/60、false refusal 66/80；claim support 40/40 但置信度不足，泄漏和严重错误为 0。事后发现 holdout 问题、参考答案和 required facts 仍为占位模板，部分金标证据不能落入实际 chunks，检索输入严重退化。因此该 holdout 已消耗且禁止重跑，模型质量结论为未定；新的正式声明必须使用全新未暴露的 v3 holdout。
 
 适用范围：T-060 至 T-064。新数据集暂定 ID 为 `tracedesk-prd-real-eval-v2`。当前 v1 的 dev 结果只用于开发决策。2026-09-16 在核对 schema 和编号时，开发代理提前看到了 v1 的 12 条 holdout 问题文本；未读取其答案、标签、证据、来源正文或模型输出，也从未执行 holdout。按本方案的隔离规则，这 12 条已失去正式 holdout 资格，在 v2 中全部降级为 dev。
 
@@ -114,3 +114,12 @@ answerable 任务至少覆盖直接查找、多事实综合、步骤/顺序、�
 - 两名复核者随后完成 prompt-v2 的全部待评行；A/B 各 60 行、0 pending、0 holdout，冻结字段与输出绑定一致，实质判定和 notes 均为 0 分歧。最终合并评分已通过严格 schema 校验。
 - prompt-v2 dev 报告为 `insufficient-confidence`、`formal=false`：strict 60/60、high/blocker facts 27/27、claim support 120/120、no-answer recall 20/20、false refusal 0/40，泄漏和严重错误均为 0。点估计全部达标，但 27 个高严重度 facts 和 20 个 unanswerable cases 的 Wilson 95% 下界不足；不得将该结果改写为 PASS，也不得为提高置信度重复运行同一输出。阈值和 140 条 holdout 仍未触碰。
 - 质量负责人明确接受该限制并将 prompt-v2 选为非正式 dev generation 候选；选择证据完整绑定模型、检索、输出、评分、报告和代码文件哈希，仍声明 `formal=false`、`formal_claim=none`。入选管线随后提交并推送至 `9606f70f29cec406496f55c221a38cac7ed00eab`，派生选择证据绑定该 commit；`quality_thresholds.json` 已冻结并绑定 T-062/T-063 选择哈希。最终 metadata readiness 为 `ready-for-first-holdout`、0 blocker，holdout 仍为 0 次。
+
+## 2026-09-16 正式运行后的有效性复核
+
+- 唯一一次 holdout 已运行并完成双评，原始 `formal=true` 报告返回 `failed`；该报告、claim、输出和评分是不可改写的历史证据，同一 holdout 禁止重跑。
+- 内容核查发现 140/140 个问题仍是按文件名生成的占位模板；80 个 answerable 参考答案和 200 个 required facts 也是占位模板。33/200 个金标证据组不能解析到冻结 parser/chunker 的当前 chunks。
+- 140 题只形成 2 个唯一检索上下文签名。80 个 answerable case 中只有 14 个检索到正确文档，只有 4 个命中至少一个可解析金标证据。因此 strict、事实完整度、拒答等数值主要测量无效输入，不能作为模型质量估计。
+- 模型运行本身为 140/140 完成、0 error；40/40 已生成 claims 获当前上下文支持，且 scope/version leakage 和 severe error 均为 0。这些事实支持“推理链路工作正常”，但不构成质量 PASS，也不能把原报告修复为有效 FAIL。
+- 门禁缺口是：只检查非空、数量、哈希、逐字引文、split 隔离和复核绑定，没有拒绝占位模板、要求 authoring 最终态、强制所有 answerable 金标解析到实际 chunks，或检测近重复问题与退化检索上下文。复核工作流也未对语义真实性形成阻断。
+- 正确终态是 `holdout consumed`、`benchmark invalid`、`model quality inconclusive`、`FA-19 blocked`。v2 的 18 份 holdout 来源和模板已暴露，只能降为 dev 调试材料；若继续正式质量路线，须先新增上述 CPU 数据门禁，再准备来源和模板组都未暴露的 v3 数据集，通过全部门禁后才租 GPU 执行唯一一次正式运行。

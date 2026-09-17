@@ -37,11 +37,16 @@
 - no-answer recall：至少 90%；
 - false refusal：不超过 10%。
 
-汇总同时报告分子、分母和双侧 Wilson 95% 区间。点估计达标但区间越过阈值时只能记为 `insufficient-confidence`，不能记为 PASS。旧 v1 的 12 条 holdout 因问题文本提前暴露已经降级为 dev，不再用于正式评测；替代的 v2 已封存 140 条全新 holdout，其中 80 条 answerable、60 条 unanswerable，并包含 120 个 high/blocker required facts。claim 分母只能在首次模型输出后观察，因此 readiness 将其记录为运行后置信度检查而不是运行前 blocker；若实际 claim 分母不足，只能保留首轮结果并报告 `insufficient-confidence`，不得补题或重跑。
+汇总同时报告分子、分母和双侧 Wilson 95% 区间。点估计达标但区间越过阈值时只能记为 `insufficient-confidence`，不能记为 PASS。旧 v1 的 12 条 holdout 因问题文本提前暴露已经降级为 dev；替代的 v2 虽完成 140 条唯一一次运行，但事后确认占位内容和不可解析金标使基准无效，同样不得再支持正式质量结论。v3 的样本量和分母须按 [v3 独立质量基准准备协议](plan-quality-sample-size-v3.md) 重新预注册。claim 分母只能在首次模型输出后观察，因此 readiness 将其记录为运行后置信度检查而不是运行前 blocker；若实际 claim 分母不足，只能保留首轮结果并报告 `insufficient-confidence`，不得补题或重跑。
+
+## 数据集 CPU 门禁
+
+在物化 dev view 或租用 GPU 前，先用新的报告路径运行 `check_eval_dataset.py --formal`。正式数据集必须显式记录 `authoring_status=final` 和 `semantic_review_status=final`；默认的 `draft/pending` 仅允许非正式准备。校验还会阻断占位问题和标签、标准化重复问题、holdout 模板组占比超过 20%、跨 split 分组泄漏，以及不能落入当前 parser/chunker 实际 chunk 的金标引文。机械校验通过不替代两名 reviewer 的真实语义复核。
 
 ## 命令
 
 ```powershell
+./.venv/Scripts/python.exe scripts/check_eval_dataset.py <private-dataset> --formal --report <new-dataset-report.json>
 ./.venv/Scripts/python.exe scripts/select_retrieval_candidate.py <t062-run> --output <t062-run>/candidate-selection.json
 ./.venv/Scripts/python.exe scripts/run_generation_eval.py --dev-view <dev-view> --retrieval-run <t062-run> --output <dev-view>/experiments/<t063-run>
 ./.venv/Scripts/python.exe scripts/prepare_generation_review.py --dev-view <dev-view> --output <dev-view>/reviews/t063-generation-review.template.jsonl

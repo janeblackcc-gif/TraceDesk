@@ -93,7 +93,8 @@ def formal_fixture(root: Path) -> Path:
                 "severity": "high",
                 "source_group": f"{split}-source",
                 "template_group": f"{split}-template-{index}",
-                "question": "火星量子电梯的许可编号是什么？" if unanswerable else f"{split} 环境服务端口是多少？编号 {index}",
+                "question": (f"火星量子电梯的许可编号是什么？编号 {index}"
+                             if unanswerable else f"{split} 环境服务端口是多少？编号 {index}"),
             }
         )
         labels.append(
@@ -127,6 +128,8 @@ def formal_fixture(root: Path) -> Path:
         "cases_sha256": sha256(cases_path),
         "labels_path": labels_path.name,
         "labels_sha256": sha256(labels_path),
+        "authoring_status": "final",
+        "semantic_review_status": "final",
         "sealed_holdout": True,
         "split_policy": "source_and_template_group",
     }

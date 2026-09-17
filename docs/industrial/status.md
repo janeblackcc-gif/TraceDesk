@@ -25,15 +25,15 @@
 | T-041–T-044/vLLM | 适配层、目标协议、合成全链路及单进程恢复通过 | RTX 5090 32GB 系统 VM 上 generation/embedding 4/4 协议通过，并完成 PostgreSQL + secure parser + parse/index/query；两个模型端点各单次 SIGKILL 后应用返回 `partial/MODEL_CONNECTION_FAILED`，systemd 自动恢复后重新 `answered`；正式质量和容量仍待门禁 |
 | T-050–T-052 | 编码及本机验证通过 | 异步问答、状态/trace/导出、旧来源鉴权适配、权限与资料 epoch 复核、partial 语义 |
 | T-053 | 本机团队及目标认证浏览器 smoke 通过 | `browser-team-20260911-05` 完成 10 项本机隔离验收；`compshare-p1-browser-20260915-02` 在目标公网入口完成登录、Cookie/CSRF、证据查询、引用、导出和登出共 8 项 |
-| T-060/T-061 | v1 历史证据保留；v2 替代数据集已封存 | v1 的 10 份授权文档、40 题和双标记录保留，旧 12 条 holdout 因问题文本提前暴露而降级为 dev；全新 v2 holdout 140 条已完成双标、溯源和正式数据集封存，并已进入唯一一次 T-064 生成 |
-| T-062 | v1 历史选择保留；v2 dev 五臂选择完成 | v2 的 60 条 dev/15 份文档/650 chunks 已物理隔离；BM25 证据组 Recall@4=86/92，dense=59/92，最佳 hybrid=69/92；仅 BM25 eligible 并选定，冻结结果用于唯一一次 holdout 生成 |
-| T-063 | prompt-v2 已选为非正式 dev generation 候选 | 双评 0 实质分歧；点估计全部达标但固定 dev 小分母使报告保持 `insufficient-confidence`。质量负责人明确接受该限制，选择证据不宣称 PASS，也不授权 holdout |
-| T-064 | 唯一一次正式 holdout 已聚合：FAIL | 两名复核者各完成 140 条，0 实质分歧；strict 55/140、high/blocker facts 11/120、no-answer recall 49/60、false refusal 66/80，正式报告为 `failed`。claim support 40/40 但置信度不足；泄漏和严重错误均为 0。该 holdout 禁止重跑 |
+| T-060/T-061 | v1 历史证据保留；v2 已消耗但事后判定基准无效 | v1 的 10 份授权文档、40 题和双标记录保留，旧 12 条 holdout 因问题文本提前暴露而降级为 dev；v2 holdout 的封存和唯一一次生成已完成，但事后核查发现题目、答案和事实仍是占位模板，且部分金标证据不能解析到当前 chunks，因此不能支持模型质量结论 |
+| T-062 | v1/v2 历史选择保留；修复版 dev 回归已完成 | 在不改问题和 required facts 的前提下修复 54 处金标边界并剔除 3 个不可靠 case，得到 57 题/15 份文档/650 chunks；BM25 Hit@4=36/37、证据组 Recall@4=79/85，邻接上下文完整率=37/37 |
+| T-063 | prompt-v2 非正式 dev 结果已复核并迁移到修复版 | 复用问题与输出哈希完全一致的既有生成和双评结果；57/57 strict task pass、112/112 claims 有证据、误拒答 0/37，但固定 dev 小分母使总报告保持 `insufficient-confidence`、`formal=false` |
+| T-064 | v2 唯一一次 holdout 已聚合；基准无效、模型质量未定 | 原报告机械聚合为 `failed`，但事后确认 140/140 问题、80 个参考答案和 200 个 required facts 均为占位模板，33/200 个金标证据组不能解析到当前 chunks，140 题仅形成 2 种检索上下文；该报告作为失败过程证据永久保留，不能解释为有效的模型质量 FAIL 或 PASS，v2 禁止重跑，FA-19 继续阻塞 |
 | T-070/T-071 | 本机验证通过 | 白名单 JSON 日志、OTel span、Prometheus、审计分页权限、存储/任务 readiness、保留策略 |
 | T-072 | 本机及 GitHub CI 全门禁通过 | 依赖锁和 pip-audit、strict mypy、ruff、OpenAPI 快照、CI 检查；最新 `main` run 的 5 个 job 全部成功 |
 | T-073 | 隔离构造库及目标 VM 合成恢复通过 | 目标无卡 VM 完成 PG custom dump + objects、独立校验、全新数据库/目录恢复、33 表指纹和应用读取；授权真实资料规模下的 RPO/RTO 仍待演练 |
 | T-074 | 隔离库迁移/失败回滚及目标双镜像健康回滚通过 | 0005→0006 成功/DDL 失败回滚已演练；目标无卡 VM 以两个本地不可变 image ID 完成旧→新→旧→新切换且每阶段 HTTPS READY；正式 registry `tag@sha256` 发布切换仍待真实发布窗口 |
-| T-075 | 判定器已实现；正式负载驱动和目标容量待完成 | `capacity_report.py` 可执行正式证据判定；30 分钟、50k chunk、20 用户、5 并发和 10 场景的真实驱动/证据尚未提供 |
+| T-075 | 目标环境正式容量门禁通过 | Ubuntu 22.04/RTX 5090 上完成 1,807.5 秒、50,000 active chunks、20 用户、5 并发、10 场景真实负载；1,478 samples、稳态错误率 0，四类 P95 均达标，OOM/数据损坏/越界为 0，RSS 增长约 47.0 MiB、VRAM 增长 0。证据下载验哈后目标实例已自动关机 |
 | P-PORTFOLIO | P0、P1 短期简历证据轨道完成 | Ubuntu 22.04/RTX 5090 系统 VM 上完成 Compose、PostgreSQL、secure parser、vLLM、合成 parse/index/query、公网 health-only、外部 Edge 认证链、1/2/5 混合端点短探针、generation/embedding 单进程故障降级与自动恢复，以及数据库重启、单次 query-worker 租约恢复、备份/全新目标恢复和双镜像健康回滚 |
 | T-080 | 本机 readiness 已汇总；正式放行阻塞 | `acceptance-local-20260911-04`：14 PASS、7 SKIPPED-BLOCKED；target-release 不可伪造 |
 | T-081 | 证据 schema、聚合器和执行协议完成；真实试用未执行 | 仍需 pilot 授权、真实用户任务、事先阈值和责任人签字；现有资料仅授权 evaluation，不能直接用于试用 |
@@ -55,7 +55,7 @@
 - 临时 GPU smoke 使用 vLLM `0.10.2`、Torch `2.8.0+cu128`、Transformers `4.57.6`、Tokenizers `0.22.1` 和 `huggingface-hub 0.36.0`；未固定 Transformers 时的 5.17.0 tokenizer 失败和完整 JSON Schema 空白循环均保留在早期 artifact，当前适配器已记录并规避这些已复现问题。
 - 本轮收尾复验：全量 `pytest` 为 231 passed、73 skipped；strict mypy 覆盖 12 个文件、Ruff、OpenAPI、release check、冻结基线校验均通过。Compose 模板配置哈希为 `227024e04eed17f9e0bec601122879ca406612f9717b76784002e80ef414bb92`。
 - 所有历史失败日志和早期浏览器/模型记录保持不变；后续成功结果不覆盖失败记录。
-- 上述本机模型、浏览器和恢复记录不等于目标容量、生产部署或真实用户试用；当前正式 holdout 也只完成 generation-only，尚未完成人工评分和质量聚合。
+- 上述本机模型、浏览器和恢复记录不等于目标容量、生产部署或真实用户试用；v2 holdout 已完成生成、双评和聚合，但基准本身事后判定无效，不能形成模型质量结论。
 - P0 portfolio smoke dry-run 已验证独立 `scope=portfolio-smoke` 证据格式；10 项回归测试通过，全量 pytest 为 241 passed、73 skipped，报告状态为 `fixture`，不构成容量或发布证据。计划与命令见 [plan-portfolio-smoke.md](plan-portfolio-smoke.md)。
 - `artifacts/compshare-p1-cpu-20260914/`：优云智算无卡模式完成 Docker 29.1.3、Compose 2.40.3、PostgreSQL/Alembic 0006、HTTPS 和隔离 parser 预检；模型 revision 及逐文件 manifest 已核验。
 - `artifacts/compshare-p1-gpu-20260914/status-final.json`：上海二 B 的 Ubuntu 22.04.4/RTX 5090 32GB、驱动 570.153.02 上，vLLM 0.10.2 协议 4/4 和合成 PostgreSQL + parser + parse/index/query 全链路通过；短 1/2/5 混合 chat/embedding 探针全部成功。它明确为 `formal_claim=none`，不是质量、holdout 或正式容量证据。
@@ -108,12 +108,21 @@
 - 正式运行完成后 generation 服务已停止，RTX 5090 显存回落至 1 MiB。运行前两次环境问题均在原子 claim 创建前失败，分别为 Python 3.10 `hashlib.file_digest` 兼容性和专用 vLLM 环境缺少锁定的 `pypdf==6.18.0`；最终安装 wheel 的 SHA-256 与 `requirements-lock.txt` 一致，失败记录没有覆盖正式输出。
 - 两名人工复核者随后各完成 140 条输出评分，冻结字段/输出哈希绑定错误 0、11 个实质评分字段分歧 0；85 条 notes 措辞差异在最终文件中同时保留，无需第三人裁决。Scorer A/B SHA-256 分别为 `da46cc33f29ea546b9d233d088848a580eff0cc1ca65333cb7a1a3db4f17181f` 和 `7f3df7f336af90b362bbd1eacdcabbd5d88310dbebd9b171c358b40349f39052`；最终评分 SHA-256 为 `bd4a77c4c43119eaee5e0faf85577abffae15e50d9b34f28c17fa9aa1d655610`，reconciliation SHA-256 为 `9620a70865a0968c9d38c455a11fce3b70078bd12e0e4a81fc909fea12b24268`。
 - 首轮正式 holdout 报告 `t064-first-holdout-20260916-01.json` 为 `failed`、`formal=true`，SHA-256 为 `3ec114be5a4091e2e59ebf071c16765054e2f916847a4949bff9673e6e365025`。strict task pass 为 55/140（39.29%），high/blocker fact completeness 为 11/120（9.17%），no-answer recall 为 49/60（81.67%），false refusal 为 66/80（82.50%），均明确失败；claim support 为 40/40，但 Wilson 95% 下界 0.912378 低于 0.95，只能记为 `insufficient-confidence`。scope/version leakage 和 severe error 均为 0。该结果永久保留且禁止针对同一 holdout 调参或重跑；若修复后仍要建立正式质量声明，必须只用 dev 定位并另建未暴露的全新 holdout。
+- 事后内容核查推翻了该报告作为模型质量估计的有效性：140/140 个问题仍是 `Generated ... question for <filename>` 类占位文本，80 个 answerable 参考答案和 200 个 required facts 也都是占位文本；33/200 个金标证据组无法解析到冻结 parser/chunker 生成的当前 chunks。BM25 对 140 题只产生 2 个唯一检索上下文签名，80 个 answerable 中只有 14 个检索到正确文档、仅 4 个命中任一可解析金标证据。0 个运行错误、40/40 已生成事实获上下文支持，只能说明 vLLM 链路运行正常，不能修复数据基准失效。
+- 根因是数据准备和门禁缺陷：现有 schema/校验只检查非空、数量、哈希、原文引文、分组隔离和复核绑定，没有拒绝占位模板、要求最终 authoring 状态、强制金标落入实际 chunks 或检查问题/检索上下文退化；两轮复核也只完成结构化接受项，未阻止占位内容封存。因此当前正确结论为“v2 holdout 已消耗、benchmark invalid、model quality inconclusive、FA-19 blocked”。原始 claim、模型输出、双评和 `formal=true/failed` 报告均保持不改。
+- 为尽快形成可用于简历且不夸大的开发集证据，现有 60 条真实 dev 经当前 parser/chunker 重新核对：54 处仅修正金标引文的 chunk 边界，问题与 required facts 均未改，另剔除 3 个无法可靠修复的 case，形成 57 题、15 份文档、650 chunks 的修复版离线 dev 回归。CPU 门禁通过，85/85 个金标证据组均可解析；BM25 Hit@4 为 36/37（97.3%）、证据组 Recall@4 为 79/85（92.9%），加入邻接上下文后完整率为 37/37。因问题及系统输出哈希不变，复用既有 Qwen3-4B 输出与双人复核：57/57 strict task pass、112/112 claims 有证据、20/20 不可回答题正确拒答、误拒答 0/37，scope/version leakage 和 severe error 均为 0。公开脱敏摘要见 `artifacts/resume-quality-repaired-20260916-01/summary.json`；该证据明确为 `formal=false`、`insufficient-confidence`，不是独立正式 holdout。
+- T-075 首个零成本 readiness 产物见 `artifacts/t075-readiness-20260916-01/`：20 份确定性合成 Markdown 共 19,650,000 bytes，经当前 `parse()`/`chunks()` 逐文件验证为每份 2,500 chunks、合计精确 50,000；manifest 标记 `formal_claim=none`，仅作为后续真实上传、解析和索引的输入。新增驱动入口同时固化 `nvidia-smi`、Compose v2 和无网络/只读/零 capability parser 沙箱三项成本保护预检；当前未开机目标未产生任何正式样本。
+- T-075 开机前收口完成：`artifacts/t075-local-readiness-20260917-01/` 产生 10 场景/312 条本机结构样本（四类时延各 60 条），正式负面对照仅因 `TARGET_ENVIRONMENT_REQUIRED` 失败；目标端 `execute` 会真实上传/解析/索引、核对恰好 50,000 active chunks 和至少 20 active users、执行 5 并发/至少 30 分钟负载，并采集 OOM、RSS、VRAM、queue depth 与恢复证据。开机前 revision 04 启动包作为历史输入保留，正式成功运行使用修复后的 revision 10（SHA-256 `34821bca7a50427d15b334f826076b7e527c82424febefbd45baf09992412225`）。
+- T-075 首次目标执行完成 20/20 文档解析与 50,000 chunks 索引，但发布包目录缺少 `.git` 导致环境取证阶段失败；失败归档保留在 `artifacts/t075-target-runs/t075-formal-20260916-171003/`。驱动器现允许以已验哈的 `bundle-sha256` 作为无 Git 发布包的代码身份，定向测试 13 passed。
+- 首轮 30 分钟正式负载完整执行但仅因生成服务重启前后读取到不同显存利用率配置而触发 `VRAM_GROWTH_EXCEEDED`；原失败报告保留在 `artifacts/t075-target-runs/t075-formal-resume-20260916-192600/`，未修改阈值或覆盖失败。服务按当前配置稳定后复跑。
+- 最终目标报告 `artifacts/t075-target-runs/t075-formal-resume-20260916-200000/evidence/t075-formal-resume-20260916-200000/run/report.json` 为 `formal=true/status=passed`：运行 1,807.485 秒，50,000 active chunks、20 active users、5 并发、10 场景、1,478 samples、稳态错误率 0；API/evidence/queue/RAG P95 分别为 64.742/22.316/86.028/28,662.322 ms，最大查询队列 20，RSS 增长 49,307,648 bytes、VRAM 增长 0，0 OOM、0 数据损坏、0 scope leak。归档 SHA-256 为 `db363bd8998957858e44db2378e7deb1bef3f73e95e1007d1ca683aa1d066ad2`，下载验哈成功后自动关机请求已执行，随后 SSH 连接超时确认实例不可达。
+- T-075 本地收尾复验：独立 `capacity_report.py --formal` 重算仍为 PASS；全量 pytest `292 passed, 74 skipped, 2 warnings`，容量定向测试 `15 passed`，Ruff、Python 3.13 strict mypy（6 个容量模块）、PowerShell 语法和 `git diff --check` 通过。release check 除保留的 `.agents` 交接文件外对 696 个发布文件通过；本机没有可用 Bash，目标 shell 脚本已由远端成功执行至退出码 0。
 
 ## 接续顺序
 
-1. P0/P1 短期简历证据轨道已完成；当前临时 VM 的模型和 Compose 服务均已停止，可由操作者在控制台关机并按预算决定是否释放实例。受信任域名/TLS 属于长期公开访问阶段。
-2. v2 唯一一次 140-case holdout 已完成双评并正式判定 FAIL，禁止重跑或针对该 holdout 调参。后续只能在 dev 上做失败分类和修复；如需新的正式质量结论，必须先准备来源和模板组均未暴露的全新 holdout。
-3. 如仍追求正式工业化容量结论，在目标环境执行至少 30 分钟、50,000 chunks、20 用户、5 并发和 10 场景验收，保存 `capacity_report.py --formal` 证据。
+1. P0/P1 短期简历证据轨道已完成；目标实例已自动关机并确认 SSH 不可达，是否释放云盘/实例由操作者按是否还需保留远端数据决定。受信任域名/TLS 属于长期公开访问阶段。
+2. 修复版 57-case 离线 dev 回归已足够支撑带边界说明的简历项目指标；v2 无效 holdout 保持封存且禁止重跑。全新 v3 holdout 仅在后续需要正式质量放行时再启动，不再阻塞当前简历交付。
+3. T-075 已完成并通过目标环境正式容量门禁；保留首次取证失败、首轮显存基线失败和最终 PASS 三组证据，不为简历重复烧卡。后续容量工作只在代码、模型配置或目标硬件发生实质变化时重跑。
 4. 先补充资料的 pilot 授权，再由真实用户完成持续试用并记录任务结果、核验耗时、严重错误和责任人签字；最后生成 target-release manifest。
 
 本文件为当前实施状态入口；原始规范和历史质量失败保持不变，不另建重复任务追踪器。
@@ -122,8 +131,7 @@
 
 - 首批部署边界、是否已有 OIDC：暂按单组织内网、本地账号。
 - 真实数据迁移的管理员身份：由真实操作者提供，测试账号不能成为真实管理员。
-- M6：v1 历史证据保留，旧 holdout 因问题文本提前暴露已降级；v2 唯一一次正式 holdout 已完成并判定 FAIL。若后续修复后继续申请正式质量放行，需要全新的未暴露 holdout 资料、编题和双标输入；现有 v2 只保留为失败证据。
-- M8：正式 30 分钟/50k chunk 容量窗口和预算；短期 Linux/GPU 核心 smoke 已完成。
+- M6：v1 历史证据保留，旧 holdout 因问题文本提前暴露已降级；v2 唯一一次 holdout 已消耗且基准无效。若继续申请正式质量放行，需要全新的未暴露 v3 来源/模板组、真实语义编题和双标输入；现有 v2 只保留为过程失败证据和 dev 调试材料。
 - M9：资料的 pilot 授权、真实用户、试用周期与责任人确认。
 
 独立工程工作继续进行；这些条件仅阻塞对应的数据搬迁、质量放行、部署或试用步骤。

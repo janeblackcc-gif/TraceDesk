@@ -36,6 +36,9 @@ htmlcov/
 /start_macos.command
 /scripts/*
 !/scripts/start.py
+!/scripts/capacity_driver.py
+!/scripts/t075_target_execute.sh
+!/scripts/t075_launch_via_learn_ssh.ps1
 !/scripts/run_baseline.py
 !/scripts/run_challenge.py
 !/scripts/check_ops_dataset.py

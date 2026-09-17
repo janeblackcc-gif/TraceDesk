@@ -19,6 +19,85 @@
 
 本机合成测试只验证统计、边界和 FAIL 判定，不能作为 T-075 或 FA-18 的容量证据。
 
+## T-075 正式结果
+
+2026-09-17 在 Ubuntu 22.04.4、RTX 5090 32 GB、PostgreSQL 18.6、pgvector 0.8.6 和
+vLLM 0.10.2 的目标环境完成正式门禁。最终 run 持续 1,807.485 秒，直接 SQL 证明为
+50,000 active chunks、20 active users，负载使用 5 并发并覆盖全部 10 个场景；共记录
+1,478 samples，稳态错误率为 0。
+
+| 指标 | 实测 | 门槛 |
+|---|---:|---:|
+| API P95 | 64.742 ms | ≤ 500 ms |
+| evidence P95 | 22.316 ms | ≤ 2,000 ms |
+| queue P95 | 86.028 ms | ≤ 2,000 ms |
+| RAG total P95 | 28,662.322 ms | ≤ 30,000 ms |
+| 最大 query queue depth | 20 | ≤ 20 |
+| RSS 增长 | 49,307,648 bytes（约 47.0 MiB） | ≤ 512 MiB |
+| VRAM 增长 | 0 | ≤ 1 GiB |
+
+报告无失败项，OOM、数据损坏和 scope leak 均为 0。证据归档 SHA-256 为
+`db363bd8998957858e44db2378e7deb1bef3f73e95e1007d1ca683aa1d066ad2`，本地下载后已再次验哈；
+`launcher-status.json` 记录远端退出码 0、证据已下载且已请求自动关机。该结论是受控目标环境容量测试，
+不是生产 SLA、线上流量或长期可用性声明。
+
+## T-075 驱动 readiness
+
+先在不计费环境生成由当前 parser 实际复核的精确 50,000-chunk 输入：
+
+```powershell
+./.venv/Scripts/python.exe scripts/capacity_driver.py prepare-corpus --output artifacts/t075-readiness-<run-id>
+```
+
+目标实例开机后，必须先执行成本保护预检；任一项失败都停止正式跑批：
+
+```powershell
+./.venv/Scripts/python.exe scripts/capacity_driver.py preflight --output artifacts/t075-preflight-<run-id>
+```
+
+预检依次验证 `nvidia-smi`、`docker compose version`，以及与 parse worker 一致的
+`docker run --rm --network none --read-only --cap-drop ALL alpine true`。语料 manifest 和
+preflight 均固定 `formal_claim=none`；它们不生成 `samples.jsonl`，不能单独提交给正式判定器。
+
+预检通过后再执行目标准备。凭据文件必须位于证据目录之外，并且只包含
+`admin_email`、`admin_password`、`user_password`；驱动器不会把密码、Cookie 或 CSRF token 写入状态文件。
+
+```powershell
+./.venv/Scripts/python.exe scripts/capacity_driver.py provision `
+  --base-url https://<target> `
+  --credentials-file <private-credentials.json> `
+  --corpus-root artifacts/t075-readiness-<run-id> `
+  --output artifacts/t075-provision-<run-id>
+```
+
+该步骤复用或创建专用 KB，确保管理员加 19 个测试用户共 20 个注册用户，上传 20 份语料，
+等待真实 parse jobs 和自动 index job 成功，并确认知识库已有 active generation。它仍是 readiness；
+正式开始前还要直接从 PostgreSQL 固定 active chunks、active users 与镜像 digest 的原始查询证据。
+
+### 开机后的单入口执行
+
+2026-09-17 已完成阶段 A–E 的零成本准备。最终修复版启动包位于
+`artifacts/t075-launch-bundle-20260917-10/`，共 34 个成员，不含凭据或私有评测数据；归档 SHA-256 为
+`34821bca7a50427d15b334f826076b7e527c82424febefbd45baf09992412225`。本机 readiness 覆盖 10 个场景、
+312 条结构样本；它只验证驱动和正式门禁边界，`formal_claim=none`。
+
+目标 VM 开机并确认 SSH 可达后，在仓库根目录运行：
+
+```powershell
+pwsh -NoProfile -File scripts/t075_launch_via_learn_ssh.ps1
+```
+
+脚本只通过 LearnSSH 别名 `tracedesk-compshare-p1` 操作远端。默认流程是：校验本地包和现有管理员凭据、
+唯一发现当前项目/生产 env/HTTPS origin、上传并复核 SHA-256、创建隔离容量盘、把现有四个镜像固定为
+本机 registry 的 `tag@sha256`、启动服务、执行正式预检、建 50,000 chunks 和 20 用户、运行至少 30 分钟
+的 10 场景负载、下载并验证证据归档，最后安排远端自动关机。5 小时硬超时会终止目标进程；目标脚本会在
+正常或异常退出时打包已产生的证据。准备阶段或普通执行错误会保持开机，便于立即修复；只有正式运行成功且
+证据下载验哈完成，或达到 5 小时硬超时，才自动关机。`-KeepRunning` 可禁止这两种自动关机。
+
+如果自动发现得到多个生产 env，脚本会在上传和正式跑批前停止并保持开机；此时应显式同时传入
+`-ProjectRoot`、`-SourceEnv` 和 `-PublicOrigin`，不能只覆盖其中一项。正式结论以下载后的
+`capacity_report.json` 为准，报告可能 PASS 或 FAIL，启动器本身不预设结论。
+
 ## 短期 portfolio smoke
 
 为预算受限的一次性 Linux/GPU 部署，另设独立的 `scope=portfolio-smoke` 轨道，详见

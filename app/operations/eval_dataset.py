@@ -3,14 +3,31 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from app.ingest import InputError, chunks, parse
+
 SHA256 = r'^[0-9a-f]{64}$'
 MAX_METADATA_BYTES = 16 * 1024 * 1024
+PLACEHOLDER_PATTERNS = (
+    re.compile(
+        r'^(?:generated\b.{0,200}\b(?:question|reference\s+answer|required\s+fact|forbidden\s+claim)'
+        r'\b.{0,80}\bfor\b|(?:reference\s+answer|required\s+fact|forbidden\s+claim)\b.{0,80}\bfor\b)',
+        re.IGNORECASE,
+    ),
+    re.compile(r'^(?:placeholder|todo|tbd)(?:\b|\s*[:：])', re.IGNORECASE),
+    re.compile(r'^(?:占位|待填写|示例(?:问题|答案|事实)?)(?:\s*[:：]|\s|$)'),
+)
+
+
+def _is_placeholder(value: str) -> bool:
+    normalized = ' '.join(value.split())
+    return any(pattern.search(normalized) is not None for pattern in PLACEHOLDER_PATTERNS)
 
 
 def sha256_file(path: Path) -> str:
@@ -140,6 +157,8 @@ class DatasetManifest(StrictModel):
     cases_sha256: str = Field(pattern=SHA256)
     labels_path: str
     labels_sha256: str = Field(pattern=SHA256)
+    authoring_status: Literal['draft', 'final'] = 'draft'
+    semantic_review_status: Literal['pending', 'final'] = 'pending'
     sealed_holdout: bool
     split_policy: Literal['source_and_template_group']
 
@@ -220,6 +239,8 @@ def validate_dataset(directory: Path, *, formal: bool = False) -> dict[str, obje
     }
     if observed_hashes != expected_hashes:
         raise ValueError('Dataset component hash mismatch')
+    if formal and (manifest.authoring_status != 'final' or manifest.semantic_review_status != 'final'):
+        raise ValueError('Formal release data requires final authoring and semantic review')
     corpus = CorpusManifest.model_validate_json(corpus_path.read_text(encoding='utf-8-sig'))
     cases = [item for item in _jsonl(cases_path, EvalCase) if isinstance(item, EvalCase)]
     labels = [item for item in _jsonl(labels_path, EvalLabel) if isinstance(item, EvalLabel)]
@@ -233,6 +254,7 @@ def validate_dataset(directory: Path, *, formal: bool = False) -> dict[str, obje
         raise ValueError('Corpus document paths and hashes must be unique')
     now = datetime.now(timezone.utc)
     document_paths: dict[str, Path] = {}
+    chunks_by_document: dict[str, tuple[str, ...]] = {}
     for document in corpus.documents:
         path = _safe_file(root, document.path)
         if path.stat().st_size != document.size_bytes or sha256_file(path) != document.sha256:
@@ -243,26 +265,42 @@ def validate_dataset(directory: Path, *, formal: bool = False) -> dict[str, obje
         if path.suffix.lower() not in {'.md', '.txt', '.pdf'}:
             raise ValueError('Corpus contains an unsupported document type')
         document_paths[document.sha256] = path
+        try:
+            _, pages = parse(path.name, path.read_bytes())
+            chunks_by_document[document.sha256] = tuple(item['text'] for item in chunks(pages))
+        except InputError as exc:
+            raise ValueError('Corpus document cannot be parsed with the current parser') from exc
     split_by_source: dict[str, str] = {}
     split_by_template: dict[str, str] = {}
     reviewer_ids = set()
     quotes_by_document: dict[str, set[str]] = {}
+    question_fingerprints: set[str] = set()
     for case in cases:
-        for mapping, group in ((split_by_source, case.source_group), (split_by_template, case.template_group)):
-            previous = mapping.setdefault(group, case.split)
+        if _is_placeholder(case.question):
+            raise ValueError('Dataset question contains a placeholder pattern')
+        question_fingerprint = ' '.join(case.question.casefold().split())
+        if question_fingerprint in question_fingerprints:
+            raise ValueError('Dataset questions must be unique after normalization')
+        question_fingerprints.add(question_fingerprint)
+        for mapping, group_key in ((split_by_source, case.source_group), (split_by_template, case.template_group)):
+            previous = mapping.setdefault(group_key, case.split)
             if previous != case.split:
                 raise ValueError('Source or template group leaks across dev and holdout')
         label = labels_by_case[case.id]
+        if any(_is_placeholder(value) for value in [*label.required_facts, *label.forbidden_claims, *label.reviewer_ids]):
+            raise ValueError('Dataset label contains a placeholder pattern')
         reviewer_ids.update(label.reviewer_ids)
         if case.answerability == 'answerable':
             if len(label.evidence_groups) != len(label.required_facts):
                 raise ValueError('Answerable cases require one evidence group per required fact')
         elif label.evidence_groups:
             raise ValueError('Unanswerable cases cannot contain gold evidence groups')
-        for group in label.evidence_groups:
-            for passage in group:
+        for evidence_group in label.evidence_groups:
+            for passage in evidence_group:
                 if passage.document_sha256 not in documents_by_hash:
                     raise ValueError('Gold evidence references a document outside the authorized corpus')
+                if not any(passage.quote.strip() in text for text in chunks_by_document[passage.document_sha256]):
+                    raise ValueError('Gold quote is not present in a source chunk')
                 quotes_by_document.setdefault(passage.document_sha256, set()).add(passage.quote.strip())
         if formal:
             if len(label.reviewer_ids) < 2:
@@ -278,10 +316,19 @@ def validate_dataset(directory: Path, *, formal: bool = False) -> dict[str, obje
     splits = {item.split for item in cases}
     if formal and (len(cases) < 40 or splits != {'dev', 'holdout'} or not manifest.sealed_holdout):
         raise ValueError('Formal release data requires 40 cases, both splits and a sealed holdout')
+    holdout_cases = [item for item in cases if item.split == 'holdout']
+    holdout_template_counts = {
+        group: sum(item.template_group == group for item in holdout_cases)
+        for group in {item.template_group for item in holdout_cases}
+    }
+    if formal and any(count * 5 > len(holdout_cases) for count in holdout_template_counts.values()):
+        raise ValueError('Formal holdout template groups cannot exceed 20% of cases')
     frozen_payload = {
         'format_version': manifest.format_version,
         'dataset_id': manifest.dataset_id,
         'version': manifest.version,
+        'authoring_status': manifest.authoring_status,
+        'semantic_review_status': manifest.semantic_review_status,
         'sealed_holdout': manifest.sealed_holdout,
         'split_policy': manifest.split_policy,
         **observed_hashes,
@@ -299,5 +346,7 @@ def validate_dataset(directory: Path, *, formal: bool = False) -> dict[str, obje
         'holdout_cases': sum(item.split == 'holdout' for item in cases),
         'reviewers': len(reviewer_ids),
         'unresolved_disputes': sum(item.dispute_status == 'unresolved' for item in labels),
+        'authoring_status': manifest.authoring_status,
+        'semantic_review_status': manifest.semantic_review_status,
         'sealed_holdout': manifest.sealed_holdout,
     }

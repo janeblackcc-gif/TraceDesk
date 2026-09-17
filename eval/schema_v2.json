@@ -60,6 +60,24 @@
           "title": "Labels Sha256",
           "type": "string"
         },
+        "authoring_status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "final"
+          ],
+          "title": "Authoring Status",
+          "type": "string"
+        },
+        "semantic_review_status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "final"
+          ],
+          "title": "Semantic Review Status",
+          "type": "string"
+        },
         "sealed_holdout": {
           "title": "Sealed Holdout",
           "type": "boolean"
